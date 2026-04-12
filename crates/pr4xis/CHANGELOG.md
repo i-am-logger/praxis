@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.0](https://github.com/i-am-logger/pr4xis/compare/pr4xis-v0.5.0...pr4xis-v0.6.0) (2026-04-12)
+
+
+### Features
+
+* derive macros — #[derive(Entity)] + define_category! + define_dense_category! ([e598947](https://github.com/i-am-logger/pr4xis/commit/e598947d89ff36d1e4d84ac09ad1720915034483))
+
 ## [0.5.0](https://github.com/i-am-logger/pr4xis/compare/pr4xis-v0.4.0...pr4xis-v0.5.0) (2026-04-12)
 
 
