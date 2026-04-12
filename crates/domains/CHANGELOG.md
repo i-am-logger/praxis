@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.7.0](https://github.com/i-am-logger/pr4xis/compare/pr4xis-domains-v0.6.0...pr4xis-domains-v0.7.0) (2026-04-12)
+
+
+### Features
+
+* derive macros — #[derive(Entity)] + define_category! + define_dense_category! ([e598947](https://github.com/i-am-logger/pr4xis/commit/e598947d89ff36d1e4d84ac09ad1720915034483))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * pr4xis bumped from 0.5.0 to 0.6.0
+
 ## [0.6.0](https://github.com/i-am-logger/pr4xis/compare/pr4xis-domains-v0.5.0...pr4xis-domains-v0.6.0) (2026-04-12)
 
 
