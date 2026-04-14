@@ -4,10 +4,6 @@
 
 Provable Ontologies for Levin's Bioelectric Framework via Functors, Adjunctions, and Machine-Verified Axioms
 
-## Target
-
-Biosystems, Journal of Theoretical Biology, or Entropy (where Fields & Levin 2022 was published)
-
 ## Abstract
 
 Dr. Michael Levin's bioelectric framework proposes that endogenous membrane

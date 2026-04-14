@@ -4,10 +4,6 @@
 
 How Categorical Adjunctions Automatically Identify Missing Distinctions in Biological Knowledge Representation
 
-## Target
-
-Biosystems, Journal of Theoretical Biology, or Applied Category Theory (ACT)
-
 ## Abstract
 
 We present a methodology for automatically detecting missing distinctions in
