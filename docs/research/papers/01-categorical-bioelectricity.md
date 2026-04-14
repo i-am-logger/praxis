@@ -241,14 +241,49 @@ multi-scale nature of biological competency. This formalization provides a
 rigorous foundation for bioelectric medicine and demonstrates that category
 theory is a practical tool for biological knowledge representation.
 
-## Code Availability
+## Code & Verification
 
 All ontology source code, tests, and documentation are available at:
-https://github.com/i-am-logger/burp/tree/main/crates/praxis
+
+**https://github.com/i-am-logger/pr4xis**
+
+### Re-deriving every numerical claim in this paper
+
+```bash
+git clone https://github.com/i-am-logger/pr4xis
+cd pr4xis
+cargo test --workspace
+cargo test -p pr4xis-domains test_full_chain_collapse_measurement -- --nocapture
+```
+
+The first command runs the full test suite (4,855 tests across the workspace as of the document date; `cargo test --workspace` re-counts on every run). The second prints the live per-adjunction collapse percentages cited throughout this paper — including the 85.2% molecular-bioelectric round-trip loss that triggered the Kv discovery.
+
+### Specific files
+
+- `crates/domains/src/natural/biomedical/` — the 14 biomedical domain ontologies (biology, molecular, bioelectricity, biochemistry, biophysics, mechanobiology, immunology, pharmacology, pathology, hematology, electrophysiology, regeneration, chemistry, acoustics)
+- `crates/domains/src/natural/biomedical/adjunctions.rs` — the three adjunctions (`MolecularBioelectricAdjunction`, `PharmacologyMolecularAdjunction`, `BiologyBioelectricAdjunction`) with their `unit` and `counit` implementations and the test suite that verifies them
+- `crates/domains/src/formal/meta/gap_analysis.rs` — the live computational analysis (`analyze_molecular_bioelectric()`, `analyze_biology_bioelectric()`, `analyze_pharmacology_molecular()`, `test_full_chain_collapse_measurement`)
+- `crates/domains/src/natural/biomedical/molecular/ontology.rs` — `MolecularEntity` enum (Kv, Piezo1, Piezo2, etc.) and the `MolecularFunctionalContext` / `ContextDef` resolution that closed the Kv gap
+- `crates/domains/src/natural/biomedical/biology/bioelectricity_functor.rs` — `BiologyToBioelectric` (left adjoint of the Biology-Bioelectric adjunction)
+- `crates/domains/src/natural/biomedical/molecular/bioelectricity_functor.rs` — `MolecularToBioelectric` (left adjoint of the Molecular-Bioelectric adjunction)
+- `crates/domains/src/natural/biomedical/bioelectricity/molecular_functor.rs` — `BioelectricToMolecular` (right adjoint)
+
+### Test-command index for the load-bearing claims
+
+| Claim in paper | Re-derivation |
+|---|---|
+| Workspace test count | `cargo test --workspace 2>&1 \| grep "test result"` |
+| Functor laws hold for `MolecularToBioelectric` | `cargo test -p pr4xis-domains test_functor_laws -- --nocapture` (within the relevant module) |
+| Three adjunctions exist with verified unit/counit | `cargo test -p pr4xis-domains adjunctions::tests` |
+| The 85.2% / 82.6% / 68.0% / 92.3% percentages | `cargo test -p pr4xis-domains test_full_chain_collapse_measurement -- --nocapture` |
+| Kv gap is resolved by `ContextDef` | `cargo test -p pr4xis-domains test_kv_gap_is_resolved_by_context` |
+| Piezo gap is resolved by `ContextDef` | `cargo test -p pr4xis-domains test_piezo_gap_is_resolved_by_context` |
+
+The numerical counts in the abstract and Section 3 (12 domains, 839 tests, 21 functors, 275 entities, 130 axioms, 26 opposition pairs, 12 causal graphs, 100+ cause-effect relationships) are subset counts specific to the bioelectric stack at the time the paper was drafted. They are approximate; current values may differ as the workspace evolves. The ground-truth values are always re-derivable from the codebase via `find`, `grep`, and the `cargo test` commands above.
 
 ## References
 
-(See docs/papers/CITATIONS.md for complete bibliography — 70+ papers)
+(See docs/papers/references.md for complete bibliography — 70+ papers)
 
 Key references:
 - Levin M (2014). Molecular bioelectrics in developmental biology. Mol Biol Cell.

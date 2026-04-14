@@ -346,15 +346,43 @@ related domains, and let the unit/counit tell you what you missed.
 - Universal dual-role pattern for all ion channels
 - Generalizability to non-biological domain pairs
 
-## Code
+## Code & Verification
 
-846 machine-verified tests. All source at:
-https://github.com/i-am-logger/burp/tree/main/crates/praxis
+All source code, tests, and the live computational analysis are available at:
 
-Key files:
-- `science/adjunctions.rs` — 3 adjunction implementations
-- `science/molecular/ontology.rs` — ContextDef with dual roles
-- `science/bioelectricity/molecular_functor.rs` — right adjoint (BioelectricToMolecular)
+**https://github.com/i-am-logger/pr4xis**
+
+### Re-deriving the percentages in this paper
+
+```bash
+git clone https://github.com/i-am-logger/pr4xis
+cd pr4xis
+cargo test -p pr4xis-domains test_full_chain_collapse_measurement -- --nocapture
+```
+
+The output prints the live per-adjunction loss percentages from the actual functor implementations. Every percentage in the table in §3.5 (Generalization) — 85.2% molecular-bioelectric unit loss, 78.9% counit loss, 68.0% pharmacology-molecular unit, 70.4% counit, 82.6% biology-bioelectric unit, 78.9% counit — is computed live by this single command. They are not estimates; they will update automatically as the biomedical ontologies evolve.
+
+The Kv discovery (§3.2 — the round-trip `Kv → IonChannelModulation → GlyR` collapse) is verified by:
+
+```bash
+cargo test -p pr4xis-domains test_kv_gap_is_resolved_by_context
+```
+
+This test demonstrates both the gap (Kv collapses on the round-trip) and the resolution (`ContextDef::resolve` distinguishes `(Kv, Constitutive)` from `(Kv, Therapeutic)`).
+
+### Key files
+
+- `crates/domains/src/natural/biomedical/adjunctions.rs` — the three adjunction implementations (`MolecularBioelectricAdjunction`, `PharmacologyMolecularAdjunction`, `BiologyBioelectricAdjunction`) with `unit` and `counit` and the test suite
+- `crates/domains/src/natural/biomedical/molecular/ontology.rs` — `MolecularEntity` enum, `MolecularFunctionalContext`, and the `ContextDef` resolution that closed the Kv gap
+- `crates/domains/src/natural/biomedical/molecular/bioelectricity_functor.rs` — `MolecularToBioelectric` (left adjoint of adjunction 1)
+- `crates/domains/src/natural/biomedical/bioelectricity/molecular_functor.rs` — `BioelectricToMolecular` (right adjoint)
+- `crates/domains/src/natural/biomedical/biology/bioelectricity_functor.rs` — `BiologyToBioelectric` (left adjoint of adjunction 3)
+- `crates/domains/src/natural/biomedical/bioelectricity/biology_functor.rs` — `BioelectricToBiology` (right adjoint)
+- `crates/domains/src/natural/biomedical/pharmacology/molecular_functor.rs` — `PharmacologyToMolecular` (left adjoint of adjunction 2)
+- `crates/domains/src/natural/biomedical/molecular/pharmacology_functor.rs` — `MolecularToPharmacology` (right adjoint)
+- `crates/domains/src/formal/meta/gap_analysis.rs` — `analyze_molecular_bioelectric()`, `analyze_pharmacology_molecular()`, `analyze_biology_bioelectric()`, `test_full_chain_collapse_measurement` — the live computational analysis driving every number in this paper
+
+The "846 machine-verified tests" count in §2 is the bioelectric subset at the time of drafting; the current workspace total is 4,855 tests across all domains, re-derivable via `cargo test --workspace`.
 
 ## References
 

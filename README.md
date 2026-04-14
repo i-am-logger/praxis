@@ -106,6 +106,7 @@ Install, run the CLI, and write your first interaction with the engine: **[docs/
 | [Domain catalog](docs/reference/domain-catalog.md) | The 106 ontologies in the workspace and how they are organized |
 | [Gap detection](docs/research/gap-detection.md) | The bioelectricity Kv discovery — a concrete result you can verify |
 | [Novelty](docs/research/novelty.md) | What is new about pr4xis, what is prior art, what is pending verification |
+| [Draft papers](docs/research/papers/) | Three publication-bound drafts: categorical bioelectricity, adjunction-based gap detection, and the ontology-diagnostics meta-ontology |
 | [Paper outline](docs/research/paper-outline.md) | Draft architecture paper |
 
 ## License

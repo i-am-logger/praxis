@@ -175,16 +175,45 @@ natural extension of the olog framework that Spivak did not explore.
 2. Intermediate domains should measurably reduce loss ratios
 3. The loss thresholds should be stable across different scientific domains
 
-## Code
+## Code & Verification
 
-894 machine-verified tests. All source at:
-github.com/i-am-logger/pr4xis (framework)
+All source code, tests, and the live computational analysis are at:
 
-Key files:
-- `science/meta_ontology/ontology.rs` — the meta-ontology (29 entities, 13 axioms)
-- `science/gap_analysis.rs` — computational proof (3 adjunctions analyzed)
-- `science/adjunctions.rs` — adjunction implementations
-- `science/molecular/ontology.rs` — ContextDef resolution
+**https://github.com/i-am-logger/pr4xis**
+
+### Re-deriving every numerical claim
+
+```bash
+git clone https://github.com/i-am-logger/pr4xis
+cd pr4xis
+cargo test --workspace
+cargo test -p pr4xis-domains test_full_chain_collapse_measurement -- --nocapture
+```
+
+The first command runs the full workspace test suite. The second prints the live per-adjunction collapse percentages cited in this paper — including the 85.2% molecular-bioelectric round-trip loss that the meta-ontology classifies as "high loss → IntermediateDomain recommended".
+
+### Key files
+
+- **The meta-ontology itself** lives at `crates/domains/src/formal/meta/ontology_diagnostics/ontology.rs` — the `define_ontology!` block that encodes the 29 entities, the 14-step methodology pipeline, and the 13 axioms about ontology engineering. The directory also contains `collapse_patterns.rs` (the loss-threshold classifications) and a `README.md`.
+- **The computational gap analysis** is at `crates/domains/src/formal/meta/gap_analysis.rs` — the live functions (`analyze_molecular_bioelectric()`, `analyze_pharmacology_molecular()`, `analyze_biology_bioelectric()`, `test_full_chain_collapse_measurement`) that compute the collapse percentages from the actual functor implementations every test run.
+- **The three adjunctions** themselves live at `crates/domains/src/natural/biomedical/adjunctions.rs` — `MolecularBioelectricAdjunction`, `PharmacologyMolecularAdjunction`, `BiologyBioelectricAdjunction`, each with `unit` and `counit` implementations and the test suite that verifies them.
+- **The Kv gap and its `ContextDef` resolution** live at `crates/domains/src/natural/biomedical/molecular/ontology.rs` — the `MolecularEntity` enum, the `MolecularFunctionalContext` enum, and the `ContextDef` impl that disambiguates `(Kv, Constitutive)` from `(Kv, Therapeutic)`.
+
+### Test-command index for the load-bearing claims
+
+| Claim in paper | Re-derivation |
+|---|---|
+| Workspace test count | `cargo test --workspace 2>&1 \| grep "test result"` |
+| The meta-ontology compiles and validates | `cargo test -p pr4xis-domains formal::meta::ontology_diagnostics` |
+| The gap-analysis runner produces the percentages | `cargo test -p pr4xis-domains test_full_chain_collapse_measurement -- --nocapture` |
+| Molecular-Bioelectric loss = 85.2% | (same command — 4 unique targets from 27 entities) |
+| Pharmacology-Molecular loss = 68.0% | (same command) |
+| Biology-Bioelectric loss = 82.6% | (same command) |
+| The Kv gap is detected and resolved | `cargo test -p pr4xis-domains test_kv_gap_is_resolved_by_context` |
+| All adjunctions have at least one gap (`EveryAdjunctionHasGaps`) | `cargo test -p pr4xis-domains test_all_adjunctions_have_gaps` |
+| The unit-loss > counit-loss asymmetry | `cargo test -p pr4xis-domains test_unit_loss_greater_than_counit_loss` |
+
+The "894 machine-verified tests" count in §1 is the meta-ontology subset at the time of drafting. The workspace total is 4,855 tests, re-derivable via `cargo test --workspace`. Both numbers update automatically with the codebase.
 
 ## References
 
