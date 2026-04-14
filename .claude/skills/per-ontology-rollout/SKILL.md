@@ -30,7 +30,9 @@ In order, with each step's failure halting the rest:
 
 5. **Invoke [`per-ontology-mermaid-external`](../per-ontology-mermaid-external/SKILL.md)** to generate the cross-ontology connections diagram and insert it into the same README.
 
-6. **Run `cargo test -p pr4xis-domains <ontology-name>`** to confirm the new files (which are markdown, not Rust) haven't somehow disturbed any build script or test runner.
+6. **Relocate cited PDFs into `<ontology-dir>/papers/`**. For each primary source in the newly generated `citings.md` that resolves to a PDF in `docs/papers/`, `git mv` the PDF into `<ontology-dir>/papers/` (create the directory if needed) and update the citings.md link to `papers/<filename>.pdf`. If the same PDF is cited by multiple ontologies, leave it in `docs/papers/` and link across — do not duplicate.
+
+7. **Run `cargo test -p pr4xis-domains <ontology-name>`** to confirm the new files (which are markdown, not Rust) haven't somehow disturbed any build script or test runner.
 
 ## Output
 

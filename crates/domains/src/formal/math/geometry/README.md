@@ -85,7 +85,7 @@ Plus the auto-generated structural axioms from `define_ontology!` (category laws
 
 ## Functors
 
-No cross-domain functors yet — see [Compose via functor](../../../../../docs/use/compose-via-functor.md) to add one. Geometry is a foundational ontology that other domains (rotation, rigid motion, control theory) compose against; the functors will land as those other domains gain explicit geometric morphisms.
+No cross-domain functors yet — see [Compose via functor](../../../../../../docs/use/compose-via-functor.md) to add one. Geometry is a foundational ontology that other domains (rotation, rigid motion, control theory) compose against; the functors will land as those other domains gain explicit geometric morphisms.
 
 ## Files
 
