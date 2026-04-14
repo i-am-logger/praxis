@@ -9,6 +9,8 @@ Every published source this ontology stands on. Entries below are drawn from the
 - Hewitt 1973: Actor Model
 - Lamport 1978: *Time, Clocks and the Ordering of Events in a Distributed System*
 
+- **Local PDF:** [`papers/hoare-csp-1978.pdf`](papers/hoare-csp-1978.pdf) — Hoare 1978
+
 ## Cross-references
 
 - Workspace bibliography: [`docs/papers/references.md`](../../../../../../docs/papers/references.md)

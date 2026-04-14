@@ -9,6 +9,8 @@ Every published source this ontology stands on. Entries below are drawn from the
 - Shannon 1948: *A Mathematical Theory of Communication* (entropy, KL divergence)
 - Mahalanobis 1936: *On the generalised distance in statistics*
 
+- **Local PDF:** [`papers/kolmogorov_1933_foundations.pdf`](papers/kolmogorov_1933_foundations.pdf) — Kolmogorov 1933
+
 ## Cross-references
 
 - Workspace bibliography: [`docs/papers/references.md`](../../../../../../docs/papers/references.md)

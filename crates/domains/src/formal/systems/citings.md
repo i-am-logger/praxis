@@ -10,6 +10,8 @@ Every published source this ontology stands on. Entries below are drawn from the
 - Beer 1972: *Brain of the Firm*
 - Meadows 2008: *Thinking in Systems*
 
+- **Local PDF:** [`papers/ashby-introduction-to-cybernetics-1956.pdf`](papers/ashby-introduction-to-cybernetics-1956.pdf) — Ashby 1956
+
 ## Cross-references
 
 - Workspace bibliography: [`docs/papers/references.md`](../../../../../docs/papers/references.md)

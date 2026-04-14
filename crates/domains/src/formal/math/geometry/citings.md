@@ -8,6 +8,8 @@ Every published source this ontology stands on. Entries below are drawn from the
 - Avigad et al. 2009: *A Formal System for Euclid's Elements* (formalization approach)
 - Kahan: *Axioms for Fields and Vector Spaces* (vector-space axiomatization)
 
+- **Local PDF:** [`papers/avigad_2009_formal_euclid.pdf`](papers/avigad_2009_formal_euclid.pdf) — Avigad et al. 2009
+
 ## Cross-references
 
 - Workspace bibliography: [`docs/papers/references.md`](../../../../../../docs/papers/references.md)

@@ -13,6 +13,8 @@ Every published source this ontology stands on. Entries below are drawn from the
 - Smith 1982: *Reflection and Semantics in a Procedural Language*
 - Maes 1987: *Computational Reflection*
 
+- **Local PDF:** [`papers/conant-ashby-good-regulator-1970.pdf`](papers/conant-ashby-good-regulator-1970.pdf) — Conant & Ashby 1970
+
 ## Cross-references
 
 - Workspace bibliography: [`docs/papers/references.md`](../../../../../../docs/papers/references.md)

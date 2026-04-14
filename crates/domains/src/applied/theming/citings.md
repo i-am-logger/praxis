@@ -14,6 +14,10 @@ Every published source this ontology stands on. Entries below are drawn from the
 - Cleveland & McGill 1984: *Graphical Perception* (perceptual task ranking)
 - Harel 1987: *Statecharts* (mode graphs, parallel regions)
 
+- **Local PDF:** [`papers/cleveland-mcgill-graphical-perception-1984.pdf`](papers/cleveland-mcgill-graphical-perception-1984.pdf) — Cleveland & McGill 1984
+- **Local PDF:** [`papers/harel-statecharts-1987.pdf`](papers/harel-statecharts-1987.pdf) — Harel 1987
+- **Local PDF:** [`papers/porter-duff-compositing-1984.pdf`](papers/porter-duff-compositing-1984.pdf) — Porter & Duff 1984
+
 ## Cross-references
 
 - Workspace bibliography: [`docs/papers/references.md`](../../../../../docs/papers/references.md)
