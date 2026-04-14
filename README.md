@@ -49,7 +49,6 @@ pr4xis solves both. It runs on formal scientific knowledge humans have already a
 | **Cross-domain reasoning** | Implicit blending, no guarantees | Proven connections between domains |
 | **Undo / redo / branch** | None — each completion is final | Built in: undo, redo, branch from any prior state |
 | **Missing knowledge** | Doesn't know what it doesn't know | Detects gaps automatically |
-| **Compute footprint** | GPU clusters, terabytes of weights | Single core, one Rust binary, megabytes |
 
 ## Demo
 
