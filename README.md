@@ -3,8 +3,15 @@
 </p>
 
 <p align="center">
-  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/"><img src="https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg" alt="License"/></a>
+  <a href="https://nixos.org/"><img src="https://img.shields.io/badge/built_with-nix-5277C3?logo=nixos&logoColor=white" alt="Built with Nix"/></a>
+  <a href="https://github.com/i-am-logger/pr4xis/actions/workflows/ci.yml"><img src="https://github.com/i-am-logger/pr4xis/actions/workflows/ci.yml/badge.svg?branch=master" alt="CI"/></a>
+  <a href="https://codecov.io/gh/i-am-logger/pr4xis"><img src="https://img.shields.io/codecov/c/github/i-am-logger/pr4xis?label=coverage" alt="Coverage"/></a>
+  <a href="https://codecov.io/gh/i-am-logger/pr4xis"><img src="https://img.shields.io/codecov/c/github/i-am-logger/pr4xis?flag=tests&label=test%20results" alt="Test Results"/></a>
+  <img src="https://img.shields.io/badge/proofs-4855-brightgreen" alt="Proofs"/>
+  <img src="https://img.shields.io/badge/functors-61-blue" alt="Functors"/>
+  <img src="https://img.shields.io/tokei/lines/github/i-am-logger/pr4xis?label=lines&color=yellow" alt="Lines of Code"/>
   <a href="https://www.rust-lang.org/"><img src="https://img.shields.io/badge/Rust-2024-orange?logo=rust&logoColor=white" alt="Rust"/></a>
+  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/"><img src="https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg" alt="License"/></a>
   <a href="https://pr4xis.dev"><img src="https://img.shields.io/badge/demo-pr4xis.dev-blue" alt="Live Demo"/></a>
 </p>
 
@@ -13,14 +20,6 @@
 **pr4xis is a new kind of AI: axiomatic, not statistical.** Where LLMs predict the next token from training data, pr4xis derives the next claim from accepted axioms — the same way mathematicians prove theorems.
 
 The name comes from Aristotle's three kinds of knowledge: **episteme** (knowing how things are), **techne** (knowing how to make things), and **praxis** — *the doing itself, done well*. pr4xis is the doing.
-
-What that means in practice:
-
-- **Same input, same proof, every time.** Determinism is built in.
-- **When it doesn't know, it says so.** No confident wrong answers.
-- **When it's wrong, the failed axiom is named.** Not "I generated a token" — the specific belief that turned out to be unsound.
-- **Every claim is traceable.** From the conclusion back to a published source the system stands on.
-- **It does not hallucinate.** Not as a feature — as a structural impossibility.
 
 ## Demo
 
@@ -79,13 +78,6 @@ fn main() {
 
 The same pattern works for traffic signals, elevators, HTTP state machines, judicial workflows, sensor fusion, orbital mechanics, and every other domain in the workspace.
 
-## What pr4xis is NOT
-
-- **Not a knowledge graph database.** Knowledge graphs store facts; pr4xis proves theorems.
-- **Not a theorem prover for pure math.** Coq, Lean, Agda do that. pr4xis is a substrate for *applied* domain knowledge.
-- **Not a magic ontology generator.** Humans still author ontologies; pr4xis verifies them.
-- **Not a complement to LLMs.** It is the alternative for tasks where accuracy and verifiability matter.
-
 ## Where this matters
 
 - **Safety-critical engineering** — aerospace navigation, sensor fusion, biomedical decision support, industrial process control. pr4xis already includes the foundational ontologies for orbital mechanics, attitude estimation, multi-target tracking, Kalman filtering, AHRS, SLAM, and more.
@@ -116,5 +108,4 @@ CC BY-NC-SA 4.0 — see [LICENSE](LICENSE).
 ---
 
 - **Repo:** [github.com/i-am-logger/pr4xis](https://github.com/i-am-logger/pr4xis)
-- **Verifiable:** every claim in this document — and every number in the linked docs — points to a `cargo test`, `find`, or `grep` command. 4,855 tests, 106 ontologies, 61 cross-domain proofs in the workspace today, all re-derivable from the codebase. See [Architecture](docs/understand/architecture.md) for the full verification commands.
 - **Document date:** 2026-04-14
