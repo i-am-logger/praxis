@@ -5,10 +5,7 @@
 <p align="center">
   <a href="https://nixos.org/"><img src="https://img.shields.io/badge/built_with-nix-5277C3?logo=nixos&logoColor=white" alt="Built with Nix"/></a>
   <a href="https://github.com/i-am-logger/pr4xis/actions/workflows/ci.yml"><img src="https://github.com/i-am-logger/pr4xis/actions/workflows/ci.yml/badge.svg?branch=master" alt="CI"/></a>
-  <a href="https://codecov.io/gh/i-am-logger/pr4xis"><img src="https://img.shields.io/codecov/c/github/i-am-logger/pr4xis?label=coverage" alt="Coverage"/></a>
-  <a href="https://codecov.io/gh/i-am-logger/pr4xis"><img src="https://img.shields.io/codecov/c/github/i-am-logger/pr4xis?flag=tests&label=test%20results" alt="Test Results"/></a>
-  <img src="https://img.shields.io/badge/proofs-4855-brightgreen" alt="Proofs"/>
-  <img src="https://img.shields.io/badge/functors-61-blue" alt="Functors"/>
+  <a href="https://codecov.io/gh/i-am-logger/pr4xis"><img src="https://codecov.io/gh/i-am-logger/pr4xis/branch/master/graph/badge.svg" alt="Coverage"/></a>
   <img src="https://img.shields.io/tokei/lines/github/i-am-logger/pr4xis?label=lines&color=yellow" alt="Lines of Code"/>
   <a href="https://www.rust-lang.org/"><img src="https://img.shields.io/badge/Rust-2024-orange?logo=rust&logoColor=white" alt="Rust"/></a>
   <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/"><img src="https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg" alt="License"/></a>
