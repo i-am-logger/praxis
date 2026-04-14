@@ -39,41 +39,112 @@ This is one of four sibling skills for the per-ontology rollout. The wrapper [`p
 
 ## What to write
 
-A `<ontology-dir>/README.md` with this exact structure (six sections, modest framing):
+Follow the **established pattern** already in use across the biomedical ontologies (`crates/domains/src/natural/biomedical/biology/README.md` is the reference). The pattern is more concrete and useful than a generic template — it includes per-reasoning-system mermaid diagrams, entity tables, and a functors index.
+
+The pattern, in order:
 
 ```markdown
-# <Ontology Display Name>
+# <Name> -- <One-line description>
 
-<One sentence: what real-world domain this ontology models, in plain English. No jargon.>
+<One short paragraph: what this ontology models. Domain-specific, not abstract.>
 
-## What this ontology models
+Key references:
+- <Author Year>: <one-line>
+- <Author Year>: <one-line>
 
-<One paragraph elaborating: which concepts, which relationships, which reasoning patterns are present. Name the source paper(s) if the doc comment mentions them.>
+## Entities (N)
 
-## Scope and non-scope
+| Category | Entities |
+|---|---|
+| <Subcategory> (N) | <comma-separated entity variant names> |
+| ... | ... |
+| Abstract (N) | <abstract entities like Cell, Tissue, Organism> |
 
-<One paragraph: what is intentionally covered, what is intentionally NOT covered. Be specific.>
+## Taxonomy (is-a)
 
-## Composition with other ontologies
-
-<List the functors that go in and out of this ontology, by name and target. Format as bullet points. If there are no functors yet, say "No cross-domain functors yet — see [Compose via functor](../../../docs/use/compose-via-functor.md) to add one.">
-
-## Status
-
-<One paragraph: what's been verified by the test suite. Cite the test command. Note any pending work or known gaps.>
-
-## Related
-
-- [Concepts](../../../docs/understand/concepts.md) — what an ontology is in pr4xis
-- [Architecture](../../../docs/understand/architecture.md) — the five-layer stack
-- [Glossary](../../../docs/reference/glossary.md) — every term
-- See `citings.md` in this directory for the full bibliography
-
----
-
-- **Document date:** <today's ISO date>
-- **Verification:** every claim in this README is verifiable from the codebase. The structural claims come from `ontology.rs`; the functor list comes from `grep -rn "<EntityName>" crates/domains/src/`. Run `cargo test -p pr4xis-domains <ontology-name>` to verify.
+```mermaid
+graph TD
+    <Child> --> <Parent>
+    ...
 ```
+
+(One line per row in the `taxonomy:` section of `define_ontology!`.)
+
+## Mereology (has-a)
+
+```mermaid
+graph TD
+    <Whole> -->|has-a| <Part>
+    ...
+```
+
+(One line per row in the `mereology:` section. Skip this section if the ontology has no mereology.)
+
+## Causal Graph
+
+<One short sentence naming the events>
+
+```mermaid
+graph LR
+    <Cause> --> <Effect>
+    ...
+```
+
+(Skip this section if the ontology has no causation.)
+
+## Opposition Pairs
+
+| Pair | Meaning |
+|---|---|
+| A / B | <one-line description> |
+
+(Skip if no opposition.)
+
+## Qualities
+
+| Quality | Type | Description |
+|---|---|---|
+| <QualityName> | <return type> | <one-line> |
+
+(Skip if no qualities.)
+
+## Axioms (N)
+
+| Axiom | Description | Source |
+|---|---|---|
+| <AxiomName> | <description from the impl> | <author year, or "structural" for auto-generated, or "anatomy/biophysics/etc." for domain> |
+
+## Functors
+
+**Outgoing (N):**
+
+| Functor | Target | File |
+|---|---|---|
+| <Name> | <target ontology name> | `<file.rs>` |
+
+**Incoming (N):**
+
+| Functor | Source | File |
+|---|---|---|
+| <Name> | <source ontology name> | `<relative path>` |
+
+(One or both subtables may be empty. If both are, write "No cross-domain functors yet.")
+
+## Files
+
+- `ontology.rs` -- Entity, taxonomy, mereology, category, qualities, axioms, tests
+- `<other-file>.rs` -- <what it contains>
+- `mod.rs` -- Module declarations
+```
+
+This is the pattern. Match it as closely as possible for any new ontology README.
+
+**Notes on the pattern**:
+
+- The mermaid diagrams are simple `graph TD` or `graph LR` blocks with no styling. Don't add styling or `classDef` — the existing READMEs deliberately keep them minimal.
+- The "Source" column in the Axioms table is one of: a real author-year citation, the word `structural` (for auto-generated structural axioms like NoCycles, Antisymmetric), or a domain category like `anatomy`, `biophysics`, `cross-domain`, `multi-scale`.
+- The Files section lists every `.rs` file in the directory with a one-line description.
+- Skip sections that don't apply (mereology, causation, opposition, qualities) rather than leaving them empty.
 
 ## Rules for what NOT to write
 
