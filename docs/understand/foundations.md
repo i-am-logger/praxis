@@ -69,7 +69,7 @@ Control theory is the general science of feedback and regulation. Cybernetics is
 - Feedback loops → Engine (situation → precondition check → action → new situation)
 - Requisite variety (Ashby) → ontology must be as complex as the domain it models
 - Autopoiesis → self-creating systems (pr4xis generating its own ontologies via codegen)
-- Second-order cybernetics → the observer is part of the system (pr4xis reasoning about itself via Pr4xisToDolce functor)
+- Second-order cybernetics → the observer is part of the system (pr4xis reasoning about itself via OwnToDolce functor)
 
 **Three key theorems:**
 - **Requisite Variety** (Ashby 1956): a controller must have at least as many states as the disturbances it regulates. V(controller) >= V(disturbances).
@@ -432,7 +432,7 @@ pr4xis's architecture is a novel synthesis of five existing ideas that have neve
 
 1. **Category theory + DOLCE synthesis.** Using category theory as the formal proof mechanism for upper ontological classification. Existing work uses either category theory OR formal ontology; pr4xis combines them with a verified functor.
 
-2. **Self-application.** Using the system's own tools (functors) to evolve its own ontology. The Pr4xisToDolce functor is pr4xis reasoning about itself — second-order cybernetics formalized in code.
+2. **Self-application.** Using the system's own tools (functors) to evolve its own ontology. The OwnToDolce functor is pr4xis reasoning about itself — second-order cybernetics formalized in code.
 
 3. **Ontology evolution via functor.** When transforming ontologies, create the new one alongside and prove the mapping. This pattern is implicit in categorical database migration (Spivak) but pr4xis applies it to ontological evolution explicitly.
 
