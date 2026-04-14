@@ -2,7 +2,7 @@
 
 Every published source the biology ontology stands on. Each entry includes the full citation, a DOI/URL where available, and a one-line annotation of which concepts, axioms, or relations the source grounds.
 
-This is the per-ontology bibliography. The workspace-wide bibliography of all sources cited by all ontologies lives at [`docs/papers/references.md`](../../../../../docs/papers/references.md).
+This is the per-ontology bibliography. The workspace-wide bibliography of all sources cited by all ontologies lives at [`docs/papers/references.md`](../../../../../../docs/papers/references.md).
 
 ## Primary sources
 
