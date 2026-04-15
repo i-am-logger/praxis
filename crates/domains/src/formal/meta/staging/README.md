@@ -98,7 +98,7 @@ The `project_async_functor.md` memory ("codegen and async are functors") is the 
 
 ## Functors
 
-No cross-domain functors yet — see [Compose via functor](../../../../../docs/use/compose-via-functor.md) to add one. This is a meta-ontology that other ontologies compose against; the functors will land when the `applied/hmi/surfaces/` PDF/print surfaces are added and need to formally name themselves as instances of the freeze functor.
+No cross-domain functors yet — see [Compose via functor](../../../../../../docs/use/compose-via-functor.md) to add one. This is a meta-ontology that other ontologies compose against; the functors will land when the `applied/hmi/surfaces/` PDF/print surfaces are added and need to formally name themselves as instances of the freeze functor.
 
 ## Files
 

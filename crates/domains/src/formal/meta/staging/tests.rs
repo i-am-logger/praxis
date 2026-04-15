@@ -224,6 +224,25 @@ fn arb_futamura_step() -> impl Strategy<Value = FutamuraStep> {
     ]
 }
 
+/// Generator over the real Futamura ladder transitions as (pre, post,
+/// expected_level_delta) triples. Each tuple is a specific projection that
+/// should raise the staging level by a known amount.
+fn arb_futamura_ladder_pair() -> impl Strategy<Value = (StageConcept, StageConcept, usize)> {
+    use StageConcept::*;
+    prop_oneof![
+        // First Futamura projection: specializing the interpreter yields the object program.
+        Just((Interpreter, ObjectProgram, 1)),
+        // Second Futamura projection: specializing α wrt the interpreter yields a compiler.
+        Just((Interpreter, Compiler, 2)),
+        // Third Futamura projection: specializing α wrt α yields the compiler-generator.
+        Just((Interpreter, CompilerGenerator, 3)),
+        // Second projection from the object program's own perspective: still +1 to reach compiler.
+        Just((ObjectProgram, Compiler, 1)),
+        // Third projection from compiler's perspective: +1 to reach cogen.
+        Just((Compiler, CompilerGenerator, 1)),
+    ]
+}
+
 proptest! {
     /// Every stage concept has a defined temporality. There are no concepts
     /// outside the static/dynamic/mixed trichotomy.
@@ -240,34 +259,24 @@ proptest! {
         prop_assert!(level <= 3, "level out of bounds for {:?}: {}", c, level);
     }
 
-    /// A program and its equivalent residual after specialization sit at
-    /// adjacent staging levels. Specifically: for every (pre, post) pair on
-    /// the Futamura ladder, |post - pre| ≤ 1.
+    /// Each Futamura projection along the ladder raises the staging level by
+    /// exactly the expected delta. The generator picks a (pre, post) pair
+    /// from the set of real Futamura transitions; for every such pair the
+    /// assertion is exact (=), not a bound (≤).
+    ///
+    /// This is the proptest form of the `EachProjectionRaisesStagingByOne`
+    /// domain axiom, extended to the full ladder depth.
     #[test]
-    fn prop_specialization_raises_level_by_at_most_one(
-        pre in arb_stage_concept(),
-        post in arb_stage_concept()
-    ) {
-        use StageConcept::*;
+    fn prop_futamura_ladder_deltas_are_exact(pair in arb_futamura_ladder_pair()) {
+        let (pre, post, expected_delta) = pair;
         let pre_level = StagingLevel.get(&pre).unwrap();
         let post_level = StagingLevel.get(&post).unwrap();
-        // This is a well-formedness invariant: the staging levels we assigned
-        // never differ by more than the actual Futamura ladder depth.
-        prop_assert!(
-            pre_level.abs_diff(post_level) <= 3,
-            "staging levels differ by more than ladder depth: {:?}={} {:?}={}",
-            pre, pre_level, post, post_level
+        prop_assert_eq!(
+            post_level,
+            pre_level + expected_delta,
+            "{:?}→{:?} expected +{}, got pre={} post={}",
+            pre, post, expected_delta, pre_level, post_level
         );
-        // Specific Futamura step pairs: interpreter → object program, etc.
-        if (pre, post) == (Interpreter, ObjectProgram) {
-            prop_assert_eq!(post_level, pre_level + 1);
-        }
-        if (pre, post) == (Interpreter, Compiler) {
-            prop_assert_eq!(post_level, pre_level + 2);
-        }
-        if (pre, post) == (Interpreter, CompilerGenerator) {
-            prop_assert_eq!(post_level, pre_level + 3);
-        }
     }
 
     /// For every pair of Futamura steps, there is either a causal path from
