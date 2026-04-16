@@ -5,7 +5,7 @@ use pr4xis::ontology::upper::being::Being;
 use pr4xis_domains::cognitive::cognition::epistemics;
 use pr4xis_domains::cognitive::linguistics::english::English;
 use pr4xis_domains::cognitive::linguistics::lambek::{
-    ReductionResult, TypedToken, montague, reduce::chart_reduce, tokenize,
+    ReductionResult, TypedToken, montague, reduce::chart_reduce, tokenize, tokenize_ontological,
 };
 use pr4xis_domains::cognitive::linguistics::language::Language;
 use pr4xis_domains::cognitive::linguistics::pragmatics::speech_act::SpeechAct;
@@ -70,9 +70,12 @@ pub fn process_with_metadata(lang: &English, input: &str) -> ProcessResult {
     let start = WasmSafeTimer::now();
 
     // Stage 1: Tokenize through the Language ontology.
-    // The TokenizeResult is Traceable — the writer log is derived from it.
-    let (tokens, alternatives) = tokenize::tokenize_with_alternatives(input, lang);
-    let token_count = tokens.len();
+    // tokenize_ontological produces Tokens (ontological: sense + POS + Lambek type).
+    // Legacy TypedTokens derived for the reducer until it's migrated.
+    let ont_tokens = tokenize_ontological(input, lang);
+    let tokens: Vec<TypedToken> = ont_tokens.iter().cloned().map(Into::into).collect();
+    let (_, alternatives) = tokenize::tokenize_with_alternatives(input, lang);
+    let token_count = ont_tokens.len();
 
     if tokens.is_empty() {
         return ProcessResult {
