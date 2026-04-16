@@ -376,12 +376,14 @@
     }
 
     // Tab switching
+    const inputArea = document.getElementById('input-area');
     document.querySelectorAll('.tab').forEach(tab => {
       tab.addEventListener('click', () => {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
         document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
         tab.classList.add('active');
         document.getElementById(tab.dataset.tab).classList.add('active');
+        inputArea.style.display = tab.dataset.tab === 'chat-tab' ? 'flex' : 'none';
       });
     });
 
