@@ -36,20 +36,15 @@ impl Pr4xis {
         let trace = result.trace.serialize_with_functors();
 
         let mut p = Presentation::new();
-        p.set("response", SchemaValue::Text(result.response));
-        p.set("duration_us", SchemaValue::Unsigned(result.duration_us));
-        p.set("parsed", SchemaValue::Boolean(result.parsed));
-        p.set("from_ontology", SchemaValue::Boolean(result.from_ontology));
+        p.set("response", result.response.into());
+        p.set("duration_us", result.duration_us.into());
+        p.set("parsed", result.parsed.into());
+        p.set("from_ontology", result.from_ontology.into());
         p.set(
             "ontologies",
-            SchemaValue::List(
-                ontologies
-                    .into_iter()
-                    .map(|o| SchemaValue::Text(o.to_string()))
-                    .collect(),
-            ),
+            SchemaValue::List(ontologies.into_iter().map(|o| o.into()).collect()),
         );
-        p.set("trace", SchemaValue::Text(trace));
+        p.set("trace", trace.into());
         p.to_json()
     }
 

@@ -32,6 +32,30 @@ pub enum SchemaValue {
     Absent,
 }
 
+impl From<&str> for SchemaValue {
+    fn from(s: &str) -> Self {
+        SchemaValue::Text(s.to_string())
+    }
+}
+
+impl From<String> for SchemaValue {
+    fn from(s: String) -> Self {
+        SchemaValue::Text(s)
+    }
+}
+
+impl From<u64> for SchemaValue {
+    fn from(n: u64) -> Self {
+        SchemaValue::Unsigned(n)
+    }
+}
+
+impl From<bool> for SchemaValue {
+    fn from(b: bool) -> Self {
+        SchemaValue::Boolean(b)
+    }
+}
+
 /// A Presentation — the syntactic form of an Instance (CQL).
 ///
 /// Instance of SchemaConcept::Presentation. Contains generators
