@@ -15,58 +15,35 @@ fn ontology_validates() {
 }
 
 #[test]
-fn twenty_concepts() {
-    assert_eq!(DiscourseConcept::variants().len(), 20);
+fn six_concepts() {
+    assert_eq!(DiscourseConcept::variants().len(), 6);
 }
 
 #[test]
-fn all_relations_classified() {
-    assert!(AllRelationsClassified.holds());
+fn nucleus_satellite_asymmetric() {
+    assert!(NucleusSatelliteAsymmetric.holds());
 }
 
 #[test]
-fn nucleus_satellite_opposed() {
-    assert!(NucleusSatelliteOpposed.holds());
+fn multinuclear_exists() {
+    assert!(MultinuclearExists.holds());
 }
 
 #[test]
-fn fourteen_rhetorical_relations() {
-    use pr4xis::ontology::reasoning::taxonomy::TaxonomyDef;
-    let rels = DiscourseTaxonomy::relations();
-    let count = rels
-        .iter()
-        .filter(|(_, parent)| *parent == DiscourseConcept::RhetoricalRelation)
-        .count();
-    assert_eq!(count, 14, "should have 14 rhetorical relations");
+fn elaboration_connects_nucleus_to_satellite() {
+    let m = DiscourseCategory::morphisms();
+    assert!(m.iter().any(|r| r.from == DiscourseConcept::Nucleus
+        && r.to == DiscourseConcept::Satellite
+        && r.kind == DiscourseRelationKind::Elaboration));
 }
 
 #[test]
-fn discourse_structure_has_parts() {
-    use pr4xis::ontology::reasoning::mereology::MereologyDef;
-    let parts = DiscourseMereology::relations();
+fn structure_contains_segments() {
+    let m = DiscourseCategory::morphisms();
     assert!(
-        parts.iter().any(
-            |(whole, part)| *whole == DiscourseConcept::DiscourseStructure
-                && *part == DiscourseConcept::DiscourseSegment
-        ),
-        "DiscourseStructure should have DiscourseSegment as part"
+        m.iter()
+            .any(|r| r.from == DiscourseConcept::DiscourseStructure
+                && r.to == DiscourseConcept::DiscourseSegment
+                && r.kind == DiscourseRelationKind::Contains)
     );
-}
-
-mod prop {
-    use super::*;
-    use proptest::prelude::*;
-
-    fn arb_discourse() -> impl Strategy<Value = DiscourseConcept> {
-        (0..20usize)
-            .prop_map(|i| DiscourseConcept::variants()[i % DiscourseConcept::variants().len()])
-    }
-
-    proptest! {
-        #[test]
-        fn prop_identity_idempotent(c in arb_discourse()) {
-            let id = DiscourseCategory::identity(&c);
-            prop_assert_eq!(DiscourseCategory::compose(&id, &id), Some(id));
-        }
-    }
 }

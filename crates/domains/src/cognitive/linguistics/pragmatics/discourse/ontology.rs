@@ -1,133 +1,132 @@
 // Discourse Coherence — RST + SDRT.
 //
-// How text segments relate to each other to form coherent discourse.
-// RST (Mann & Thompson 1988) provides the nucleus/satellite structure
-// and the taxonomy of rhetorical relations. SDRT (Asher & Lascarides
-// 2003) adds dynamic semantics and inference rules for computing
-// discourse relations. Hobbs (1979) contributes the coherence
-// relation classification.
+// Rhetorical relations are MORPHISMS (typed edges), not objects.
+// An Elaboration is a relationship between a Nucleus and its Satellite —
+// it doesn't exist independently. This follows Mann & Thompson (1988)
+// and Asher & Lascarides (2003): relations have specific semantic
+// conditions and aren't arbitrary connections.
 //
-// This ontology governs text generation: the NLG pipeline must
-// produce coherent discourse by selecting appropriate rhetorical
-// relations between segments. It also governs interpretation:
-// understanding a text means recovering its discourse structure.
+// Concepts (objects): TextSpan, Nucleus, Satellite, DiscourseSegment,
+//   DiscourseStructure, Topic.
+// Relations (morphism kinds): Elaboration, Sequence, Cause, Condition,
+//   Purpose, Background, Justify, Restatement, Concession, Contrast,
+//   Narration, Explanation, Parallel, Continuation.
 //
-// Source: Mann & Thompson (1988); Asher & Lascarides (2003);
-//         Hobbs (1979); Taboada & Mann (2006)
+// Source: Mann & Thompson (1988); Asher & Lascarides (2003); Hobbs (1979)
 
-use pr4xis::category::Entity;
+use pr4xis::category::{Category, Entity};
 use pr4xis::define_ontology;
 use pr4xis::ontology::{Axiom, Ontology, Quality};
 
-/// Concepts in the Discourse Coherence ontology.
+/// Structural concepts in discourse — what text IS.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Entity)]
 pub enum DiscourseConcept {
-    // === RST structural concepts (Mann & Thompson 1988) ===
     /// A minimal unit of text that participates in discourse structure.
     TextSpan,
     /// The more central part of a nucleus-satellite pair.
     Nucleus,
     /// The supporting part — depends on the nucleus for interpretation.
     Satellite,
-    /// A rhetorical relation connecting two or more spans.
-    RhetoricalRelation,
-
-    // === SDRT structural concepts (Asher & Lascarides 2003) ===
-    /// An elementary discourse unit — the atomic building block.
+    /// An elementary discourse unit (SDRT).
     DiscourseSegment,
     /// A complex discourse structure built from segments + relations.
     DiscourseStructure,
-
-    // === Rhetorical relation taxonomy (Mann & Thompson; Hobbs) ===
-    // Subject-matter relations (informational)
-    /// Adding detail to the nucleus (most common RST relation).
-    Elaboration,
-    /// Temporal or logical sequence between events.
-    Sequence,
-    /// Causal connection: nucleus causes satellite or vice versa.
-    Cause,
-    /// A condition under which the nucleus holds.
-    Condition,
-    /// The goal or intention behind an action described in the nucleus.
-    Purpose,
-    /// Setting the context for understanding the nucleus.
-    Background,
-
-    // Presentational relations (affect reader's attitude)
-    /// Making the nucleus more believable via evidence or reasoning.
-    Justify,
-    /// Restating the same content in different words.
-    Restatement,
-    /// Acknowledging an apparent incompatibility then overriding it.
-    Concession,
-    /// Highlighting difference between two spans.
-    Contrast,
-
-    // SDRT-specific relations (Asher & Lascarides 2003)
-    /// Temporal progression of events.
-    Narration,
-    /// Causal explanation of a previously mentioned event.
-    Explanation,
-    /// Similar content presented in parallel structure.
-    Parallel,
-    /// Continuing a topic without adding new rhetorical structure.
-    Continuation,
+    /// What the discourse is about.
+    Topic,
 }
 
 define_ontology! {
-    /// Discourse Coherence — rhetorical structure of text.
+    /// Discourse Coherence — RST + SDRT with typed rhetorical relations.
     pub DiscourseOntology for DiscourseCategory {
         concepts: DiscourseConcept,
         relation: DiscourseRelation,
+        kind: DiscourseRelationKind,
+        kinds: [
+            // === Subject-matter relations (RST, informational) ===
+            /// Adding detail to the nucleus.
+            Elaboration,
+            /// Temporal or logical sequence.
+            Sequence,
+            /// Causal connection.
+            Cause,
+            /// A condition under which the nucleus holds.
+            Condition,
+            /// The goal behind an action.
+            Purpose,
+            /// Setting the context.
+            Background,
+
+            // === Presentational relations (RST, affect attitude) ===
+            /// Making the nucleus more believable.
+            Justify,
+            /// Restating in different words.
+            Restatement,
+            /// Acknowledging incompatibility then overriding.
+            Concession,
+            /// Highlighting difference.
+            Contrast,
+
+            // === SDRT-specific relations ===
+            /// Temporal progression (Asher & Lascarides).
+            Narration,
+            /// Causal explanation of a previous event.
+            Explanation,
+            /// Similar content in parallel structure.
+            Parallel,
+            /// Continuing without new rhetorical structure.
+            Continuation,
+
+            // === Structural relations ===
+            /// Structure contains segments.
+            Contains,
+        ],
+        edges: [
+            // Nucleus-Satellite relations (RST core)
+            (Nucleus, Satellite, Elaboration),
+            (Nucleus, Satellite, Justify),
+            (Nucleus, Satellite, Restatement),
+            (Nucleus, Satellite, Concession),
+            (Nucleus, Satellite, Background),
+            (Nucleus, Satellite, Condition),
+            (Nucleus, Satellite, Purpose),
+
+            // Multinuclear relations (both spans are nuclei)
+            (Nucleus, Nucleus, Sequence),
+            (Nucleus, Nucleus, Contrast),
+            (Nucleus, Nucleus, Parallel),
+            (Nucleus, Nucleus, Continuation),
+
+            // Causal relations (SDRT)
+            (DiscourseSegment, DiscourseSegment, Cause),
+            (DiscourseSegment, DiscourseSegment, Explanation),
+            (DiscourseSegment, DiscourseSegment, Narration),
+
+            // Structural containment
+            (DiscourseStructure, DiscourseSegment, Contains),
+            (DiscourseStructure, Nucleus, Contains),
+            (DiscourseStructure, Satellite, Contains),
+            (DiscourseStructure, Topic, Contains),
+        ],
+        composed: [
+            (DiscourseStructure, TextSpan),
+        ],
 
         being: AbstractObject,
         source: "Mann & Thompson (1988); Asher & Lascarides (2003); Hobbs (1979)",
 
         is_a: DiscourseTaxonomy [
-            // Structural: Nucleus and Satellite are TextSpans
             (Nucleus, TextSpan),
             (Satellite, TextSpan),
             (DiscourseSegment, TextSpan),
-
-            // Subject-matter relations are RhetoricalRelations
-            (Elaboration, RhetoricalRelation),
-            (Sequence, RhetoricalRelation),
-            (Cause, RhetoricalRelation),
-            (Condition, RhetoricalRelation),
-            (Purpose, RhetoricalRelation),
-            (Background, RhetoricalRelation),
-
-            // Presentational relations are RhetoricalRelations
-            (Justify, RhetoricalRelation),
-            (Restatement, RhetoricalRelation),
-            (Concession, RhetoricalRelation),
-            (Contrast, RhetoricalRelation),
-
-            // SDRT relations are RhetoricalRelations
-            (Narration, RhetoricalRelation),
-            (Explanation, RhetoricalRelation),
-            (Parallel, RhetoricalRelation),
-            (Continuation, RhetoricalRelation),
-        ],
-
-        has_a: DiscourseMereology [
-            // A discourse structure is composed of segments
-            (DiscourseStructure, DiscourseSegment),
-            (DiscourseStructure, RhetoricalRelation),
         ],
 
         opposes: DiscourseOpposition [
-            // Nucleus vs Satellite: central vs subordinate
             (Nucleus, Satellite),
-            // Cause vs Explanation: forward vs backward causation
-            (Cause, Explanation),
-            // Contrast vs Parallel: difference vs similarity
-            (Contrast, Parallel),
         ],
     }
 }
 
-/// Whether a concept is a structural element vs. a rhetorical relation.
+/// Whether a concept is structural vs a text unit.
 #[derive(Debug, Clone)]
 pub struct IsStructuralElement;
 
@@ -138,64 +137,50 @@ impl Quality for IsStructuralElement {
     fn get(&self, individual: &DiscourseConcept) -> Option<bool> {
         Some(matches!(
             individual,
-            DiscourseConcept::TextSpan
-                | DiscourseConcept::Nucleus
-                | DiscourseConcept::Satellite
-                | DiscourseConcept::DiscourseSegment
-                | DiscourseConcept::DiscourseStructure
+            DiscourseConcept::DiscourseStructure | DiscourseConcept::Topic
         ))
     }
 }
 
-/// Every rhetorical relation is-a RhetoricalRelation (taxonomy completeness).
+/// Nucleus-Satellite relations are asymmetric (RST core).
 #[derive(Debug)]
-pub struct AllRelationsClassified;
+pub struct NucleusSatelliteAsymmetric;
 
-impl Axiom for AllRelationsClassified {
+impl Axiom for NucleusSatelliteAsymmetric {
     fn description(&self) -> &str {
-        "every specific relation is-a RhetoricalRelation (Mann & Thompson 1988 taxonomy)"
+        "Nucleus→Satellite relations exist but Satellite→Nucleus do not (RST asymmetry)"
     }
     fn holds(&self) -> bool {
-        use pr4xis::ontology::reasoning::taxonomy::TaxonomyDef;
-        let rels = DiscourseTaxonomy::relations();
-        let relation_types = [
-            DiscourseConcept::Elaboration,
-            DiscourseConcept::Sequence,
-            DiscourseConcept::Cause,
-            DiscourseConcept::Condition,
-            DiscourseConcept::Purpose,
-            DiscourseConcept::Background,
-            DiscourseConcept::Justify,
-            DiscourseConcept::Restatement,
-            DiscourseConcept::Concession,
-            DiscourseConcept::Contrast,
-            DiscourseConcept::Narration,
-            DiscourseConcept::Explanation,
-            DiscourseConcept::Parallel,
-            DiscourseConcept::Continuation,
-        ];
-        relation_types.iter().all(|rt| {
-            rels.iter().any(|(child, parent)| {
-                child == rt && *parent == DiscourseConcept::RhetoricalRelation
-            })
-        })
+        let m = DiscourseCategory::morphisms();
+        let has_nuc_sat = m.iter().any(|r| {
+            r.from == DiscourseConcept::Nucleus
+                && r.to == DiscourseConcept::Satellite
+                && r.kind == DiscourseRelationKind::Elaboration
+        });
+        let has_sat_nuc_elab = m.iter().any(|r| {
+            r.from == DiscourseConcept::Satellite
+                && r.to == DiscourseConcept::Nucleus
+                && r.kind == DiscourseRelationKind::Elaboration
+        });
+        has_nuc_sat && !has_sat_nuc_elab
     }
 }
 
-/// Nucleus and Satellite are in opposition (Mann & Thompson 1988 §2.1).
+/// Multinuclear relations connect Nucleus to Nucleus (RST).
 #[derive(Debug)]
-pub struct NucleusSatelliteOpposed;
+pub struct MultinuclearExists;
 
-impl Axiom for NucleusSatelliteOpposed {
+impl Axiom for MultinuclearExists {
     fn description(&self) -> &str {
-        "Nucleus and Satellite are opposed: central vs subordinate (RST §2.1)"
+        "Multinuclear relations: Sequence, Contrast, Parallel connect Nucleus→Nucleus (RST)"
     }
     fn holds(&self) -> bool {
-        use pr4xis::ontology::reasoning::opposition::OppositionDef;
-        let pairs = DiscourseOpposition::pairs();
-        pairs
-            .iter()
-            .any(|(a, b)| *a == DiscourseConcept::Nucleus && *b == DiscourseConcept::Satellite)
+        let m = DiscourseCategory::morphisms();
+        m.iter().any(|r| {
+            r.from == DiscourseConcept::Nucleus
+                && r.to == DiscourseConcept::Nucleus
+                && r.kind == DiscourseRelationKind::Sequence
+        })
     }
 }
 
@@ -209,8 +194,8 @@ impl Ontology for DiscourseOntology {
 
     fn domain_axioms() -> Vec<Box<dyn Axiom>> {
         vec![
-            Box::new(AllRelationsClassified),
-            Box::new(NucleusSatelliteOpposed),
+            Box::new(NucleusSatelliteAsymmetric),
+            Box::new(MultinuclearExists),
         ]
     }
 }

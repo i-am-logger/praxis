@@ -1,13 +1,16 @@
 // Discourse → NLG functor.
 //
-// The rhetorical structure becomes the NLG document plan.
-// RST structure maps to Reiter & Dale's pipeline stages.
+// Discourse structural concepts map to NLG pipeline stages.
+// Rhetorical relations (now morphism kinds in Discourse) map
+// to NLG relation kinds.
 //
 // Source: Mann & Thompson (1988) → Reiter & Dale (2000)
 
 use pr4xis::category::Functor;
 
-use super::discourse::ontology::{DiscourseCategory, DiscourseConcept, DiscourseRelation};
+use super::discourse::ontology::{
+    DiscourseCategory, DiscourseConcept, DiscourseRelation, DiscourseRelationKind,
+};
 use super::nlg::{NlgCategory, NlgConcept, NlgRelation, NlgRelationKind};
 
 pub struct DiscourseToNlg;
@@ -21,33 +24,33 @@ impl Functor for DiscourseToNlg {
             DiscourseConcept::TextSpan => NlgConcept::SurfaceText,
             DiscourseConcept::Nucleus => NlgConcept::Message,
             DiscourseConcept::Satellite => NlgConcept::ReferringExpression,
-            DiscourseConcept::RhetoricalRelation => NlgConcept::RhetoricalRelation,
             DiscourseConcept::DiscourseSegment => NlgConcept::ContentDetermination,
             DiscourseConcept::DiscourseStructure => NlgConcept::DocumentPlanning,
-            DiscourseConcept::Elaboration => NlgConcept::RhetoricalRelation,
-            DiscourseConcept::Sequence => NlgConcept::RhetoricalRelation,
-            DiscourseConcept::Cause => NlgConcept::RhetoricalRelation,
-            DiscourseConcept::Condition => NlgConcept::RhetoricalRelation,
-            DiscourseConcept::Purpose => NlgConcept::RhetoricalRelation,
-            DiscourseConcept::Background => NlgConcept::KnowledgeGathering,
-            DiscourseConcept::Justify => NlgConcept::RhetoricalRelation,
-            DiscourseConcept::Restatement => NlgConcept::ReferringExpression,
-            DiscourseConcept::Concession => NlgConcept::RhetoricalRelation,
-            DiscourseConcept::Contrast => NlgConcept::RhetoricalRelation,
-            DiscourseConcept::Narration => NlgConcept::RhetoricalRelation,
-            DiscourseConcept::Explanation => NlgConcept::RhetoricalRelation,
-            DiscourseConcept::Parallel => NlgConcept::RhetoricalRelation,
-            DiscourseConcept::Continuation => NlgConcept::Microplanning,
+            DiscourseConcept::Topic => NlgConcept::CommunicativeGoal,
         }
     }
 
     fn map_morphism(m: &DiscourseRelation) -> NlgRelation {
         let from = Self::map_object(&m.from);
         let to = Self::map_object(&m.to);
-        let kind = if from == to && m.from == m.to {
-            NlgRelationKind::Identity
-        } else {
-            NlgRelationKind::Composed
+        let kind = match m.kind {
+            DiscourseRelationKind::Identity => NlgRelationKind::Identity,
+            DiscourseRelationKind::Contains => NlgRelationKind::Organizes,
+            DiscourseRelationKind::Elaboration => NlgRelationKind::Organizes,
+            DiscourseRelationKind::Sequence => NlgRelationKind::Organizes,
+            DiscourseRelationKind::Cause => NlgRelationKind::Organizes,
+            DiscourseRelationKind::Condition => NlgRelationKind::Organizes,
+            DiscourseRelationKind::Purpose => NlgRelationKind::Organizes,
+            DiscourseRelationKind::Background => NlgRelationKind::Gathers,
+            DiscourseRelationKind::Justify => NlgRelationKind::Organizes,
+            DiscourseRelationKind::Restatement => NlgRelationKind::Produces,
+            DiscourseRelationKind::Concession => NlgRelationKind::Organizes,
+            DiscourseRelationKind::Contrast => NlgRelationKind::Organizes,
+            DiscourseRelationKind::Narration => NlgRelationKind::Precedes,
+            DiscourseRelationKind::Explanation => NlgRelationKind::Organizes,
+            DiscourseRelationKind::Parallel => NlgRelationKind::Organizes,
+            DiscourseRelationKind::Continuation => NlgRelationKind::Precedes,
+            DiscourseRelationKind::Composed => NlgRelationKind::Composed,
         };
         NlgRelation { from, to, kind }
     }
@@ -59,7 +62,6 @@ mod tests {
     use pr4xis::category::validate::check_functor_laws;
 
     #[test]
-    #[ignore = "dense→kinded: discourse round-trips become non-identity self-loops in NLG (#98)"]
     fn functor_laws() {
         check_functor_laws::<DiscourseToNlg>().unwrap();
     }
