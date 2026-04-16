@@ -20,8 +20,16 @@ pub struct VocabularyDescriptor {
     pub morphisms: usize,
 }
 
-/// Enumerate all ontologies loaded in the praxis knowledge base.
+/// Enumerate all ontologies loaded in the pr4xis knowledge base.
+///
+/// Cached after first call — the descriptor list is computed once from
+/// `Category::morphisms()` / `Entity::variants()` and then reused.
 pub fn describe_knowledge_base() -> Vec<VocabularyDescriptor> {
+    static CACHE: std::sync::OnceLock<Vec<VocabularyDescriptor>> = std::sync::OnceLock::new();
+    CACHE.get_or_init(build_descriptors).clone()
+}
+
+fn build_descriptors() -> Vec<VocabularyDescriptor> {
     vec![
         // =====================================================================
         // Cognitive — Cognition
@@ -134,7 +142,7 @@ pub fn describe_knowledge_base() -> Vec<VocabularyDescriptor> {
         descriptor::<
             crate::formal::meta::ontology_diagnostics::ontology::MetaCategory,
             crate::formal::meta::ontology_diagnostics::ontology::MetaEntity,
-        >("Ontology Diagnostics", "formal.meta.ontology_diagnostics", "citings pending"),
+        >("Ontology Diagnostics", "formal.meta.ontology_diagnostics", "citings pending; see domain citings.md"),
         // =====================================================================
         // Formal — Information
         // =====================================================================
@@ -372,7 +380,7 @@ pub fn describe_knowledge_base() -> Vec<VocabularyDescriptor> {
         descriptor::<
             crate::natural::biomedical::acoustics::ontology::AcousticsCategory,
             crate::natural::biomedical::acoustics::ontology::AcousticsEntity,
-        >("Biomedical Acoustics", "natural.biomedical.acoustics", "citings pending"),
+        >("Biomedical Acoustics", "natural.biomedical.acoustics", "citings pending; see domain citings.md"),
         descriptor::<
             crate::natural::biomedical::biochemistry::ontology::BiochemistryCategory,
             crate::natural::biomedical::biochemistry::ontology::BiochemistryEntity,
@@ -396,7 +404,7 @@ pub fn describe_knowledge_base() -> Vec<VocabularyDescriptor> {
         descriptor::<
             crate::natural::biomedical::chemistry::ontology::ChemistryCategory,
             crate::natural::biomedical::chemistry::ontology::ChemistryEntity,
-        >("Chemistry", "natural.biomedical.chemistry", "citings pending"),
+        >("Chemistry", "natural.biomedical.chemistry", "citings pending; see domain citings.md"),
         descriptor::<
             crate::natural::biomedical::electrophysiology::ontology::ElectrophysiologyCategory,
             crate::natural::biomedical::electrophysiology::ontology::ElectrophysiologyEntity,
@@ -404,7 +412,7 @@ pub fn describe_knowledge_base() -> Vec<VocabularyDescriptor> {
         descriptor::<
             crate::natural::biomedical::hematology::ontology::HematologyCategory,
             crate::natural::biomedical::hematology::ontology::HematologyEntity,
-        >("Hematology", "natural.biomedical.hematology", "citings pending"),
+        >("Hematology", "natural.biomedical.hematology", "citings pending; see domain citings.md"),
         descriptor::<
             crate::natural::biomedical::immunology::ontology::ImmunologyCategory,
             crate::natural::biomedical::immunology::ontology::ImmunologyEntity,
@@ -412,7 +420,7 @@ pub fn describe_knowledge_base() -> Vec<VocabularyDescriptor> {
         descriptor::<
             crate::natural::biomedical::mechanobiology::ontology::MechanobiologyCategory,
             crate::natural::biomedical::mechanobiology::ontology::MechanobiologyEntity,
-        >("Mechanobiology", "natural.biomedical.mechanobiology", "citings pending"),
+        >("Mechanobiology", "natural.biomedical.mechanobiology", "citings pending; see domain citings.md"),
         descriptor::<
             crate::natural::biomedical::molecular::ontology::MolecularCategory,
             crate::natural::biomedical::molecular::ontology::MolecularEntity,
