@@ -523,7 +523,7 @@ mod proc_macro_test {
     use crate::category::Entity;
     use crate::category::validate::check_category_laws;
 
-    pr4xis_derive::ontology! {
+    pr4xis::ontology! {
         name: "Communication",
         source: "Shannon (1948); Jakobson (1960)",
         being: AbstractObject,

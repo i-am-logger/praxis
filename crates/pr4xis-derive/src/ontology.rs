@@ -268,6 +268,23 @@ pub fn generate(def: OntologyDef) -> TokenStream {
         }
     }
 
+    for comp in &def.composed {
+        if !concept_set.contains(&comp.from.to_string()) {
+            return syn::Error::new_spanned(
+                &comp.from,
+                format!("concept '{}' not declared in concepts list", comp.from),
+            )
+            .to_compile_error();
+        }
+        if !concept_set.contains(&comp.to.to_string()) {
+            return syn::Error::new_spanned(
+                &comp.to,
+                format!("concept '{}' not declared in concepts list", comp.to),
+            )
+            .to_compile_error();
+        }
+    }
+
     for label in &def.labels {
         if !concept_set.contains(&label.concept.to_string()) {
             return syn::Error::new_spanned(
