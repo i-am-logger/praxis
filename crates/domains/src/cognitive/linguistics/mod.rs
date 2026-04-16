@@ -7,6 +7,7 @@ pub mod lexicon;
 
 pub mod morphology;
 pub mod orthography;
+pub mod pipeline;
 pub mod pragmatics;
 pub mod semantics;
 pub mod symbols;
