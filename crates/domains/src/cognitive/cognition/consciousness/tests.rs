@@ -1,4 +1,5 @@
 use super::ontology::*;
+use pr4xis::category::Category;
 use pr4xis::category::entity::Entity;
 use pr4xis::category::validate::check_category_laws;
 use pr4xis::ontology::{Axiom, Ontology, Quality};
@@ -24,11 +25,6 @@ fn attention_causes_access() {
 }
 
 #[test]
-fn conscious_unconscious_opposed() {
-    assert!(ConsciousUnconsciousOpposed.holds());
-}
-
-#[test]
 fn integration_produces_structure() {
     assert!(IntegrationProducesStructure.holds());
 }
@@ -36,22 +32,23 @@ fn integration_produces_structure() {
 #[test]
 fn all_concepts_have_theory_origin() {
     for c in ConsciousnessConcept::variants() {
-        assert!(
-            TheoryOrigin.get(&c).is_some(),
-            "{:?} has no theory origin",
-            c
-        );
+        assert!(TheoryOrigin.get(&c).is_some(), "{:?} missing origin", c);
     }
 }
 
 #[test]
-fn global_workspace_has_parts() {
-    use pr4xis::ontology::reasoning::mereology::MereologyDef;
-    let parts = ConsciousnessMereology::relations();
-    assert!(parts.iter().any(|(w, p)| {
-        *w == ConsciousnessConcept::GlobalWorkspace && *p == ConsciousnessConcept::BroadcastMessage
-    }));
-    assert!(parts.iter().any(|(w, p)| {
-        *w == ConsciousnessConcept::GlobalWorkspace && *p == ConsciousnessConcept::Coalition
-    }));
+fn global_workspace_has_coalition_and_broadcast() {
+    let m = ConsciousnessCategory::morphisms();
+    assert!(
+        m.iter()
+            .any(|r| r.from == ConsciousnessConcept::GlobalWorkspace
+                && r.to == ConsciousnessConcept::Coalition
+                && r.kind == ConsciousnessRelationKind::HasComponent)
+    );
+    assert!(
+        m.iter()
+            .any(|r| r.from == ConsciousnessConcept::GlobalWorkspace
+                && r.to == ConsciousnessConcept::BroadcastMessage
+                && r.kind == ConsciousnessRelationKind::HasComponent)
+    );
 }

@@ -1,31 +1,11 @@
 // Consciousness — IIT + GWT + Higher-Order Theories.
 //
-// Three complementary theories of consciousness, unified categorically:
+// Three complementary theories unified categorically.
+// IIT (Tononi): consciousness = integrated information (Φ).
+// GWT (Baars): consciousness = global broadcasting.
+// Higher-Order (Rosenthal): consciousness = representation of representation.
 //
-// IIT (Tononi 2004, 2008, 2012): consciousness = integrated information (Φ).
-// A system is conscious to the degree it integrates information beyond its
-// parts. Five axioms: intrinsic existence, composition, information,
-// integration, exclusion. Five postulates map axioms to physical properties.
-//
-// GWT (Baars 1988, 2005): consciousness = global broadcasting.
-// Specialized unconscious processors compete for access to a shared
-// global workspace. The winning coalition broadcasts its content to all
-// other processors. Attention is the spotlight.
-//
-// Higher-Order (Rosenthal 2005, Lau & Rosenthal 2011): consciousness =
-// having a representation OF a representation. A first-order state
-// becomes conscious when a higher-order state represents it.
-//
-// For pr4xis: consciousness governs what enters the system's awareness.
-// When processing a query, not everything is "conscious" — the global
-// workspace selects what's salient for the response. The metacognition
-// ontology monitors; consciousness determines what monitoring ATTENDS to.
-//
-// Composes with:
-// - Self-Model: AwarenessLevel IS a consciousness property
-// - Metacognition: MetaLevel IS the higher-order representation
-// - Epistemics: what enters awareness IS what we know we know
-// - Distinction: the mark IS the first act of consciousness
+// Source: Tononi (2004, 2012); Baars (1988, 2005); Rosenthal (2005); Block (1995)
 
 use pr4xis::category::Entity;
 use pr4xis::define_ontology;
@@ -34,47 +14,33 @@ use pr4xis::ontology::{Axiom, Ontology, Quality};
 /// Concepts in the Consciousness ontology.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Entity)]
 pub enum ConsciousnessConcept {
-    // === IIT (Tononi 2004, 2012) ===
-    /// Integrated information (Φ) — the quantity of consciousness.
-    /// How much a system integrates information beyond its parts.
+    /// Integrated information (Φ) — the quantity of consciousness (IIT).
     IntegratedInformation,
-    /// A cause-effect structure — the qualitative character of experience.
-    /// What it's like to be in a particular conscious state.
+    /// A cause-effect structure — qualitative character of experience (IIT).
     CauseEffectStructure,
-    /// A mechanism — a set of elements in a definite state.
-    /// The physical substrate that generates Φ.
+    /// A mechanism — elements in a definite state (IIT).
     Mechanism,
-    /// The repertoire of possible states — past causes and future effects.
+    /// The repertoire of possible states (IIT).
     Repertoire,
-
-    // === GWT (Baars 1988, 2005) ===
-    /// The global workspace — the shared broadcast medium.
-    /// Content on the "stage" is conscious; everything else is not.
+    /// The global workspace — shared broadcast medium (GWT).
     GlobalWorkspace,
-    /// A coalition of processors competing for workspace access.
+    /// A coalition of processors competing for access (GWT).
     Coalition,
-    /// The message broadcast to all processors when a coalition wins.
+    /// The message broadcast when a coalition wins (GWT).
     BroadcastMessage,
-    /// A specialized processor operating outside awareness.
+    /// A processor operating outside awareness (GWT).
     UnconsciousProcessor,
-    /// The act of entering the global workspace.
+    /// The act of entering the global workspace (GWT).
     ConsciousAccess,
-    /// The spotlight selecting what enters the workspace.
+    /// The spotlight selecting what enters the workspace (GWT).
     Attention,
-
-    // === Higher-Order Theories (Rosenthal 2005) ===
-    /// A first-order state — a representation of the world.
+    /// A first-order state — representation of the world (Higher-Order).
     FirstOrderState,
-    /// A higher-order representation OF a first-order state.
-    /// This is what makes a state conscious (Rosenthal).
+    /// A higher-order representation OF a first-order state (Higher-Order).
     HigherOrderRepresentation,
-
-    // === Bridging concepts ===
-    /// Access consciousness — information available for reasoning/report.
-    /// Block (1995): functionally conscious.
+    /// Access consciousness — available for reasoning/report (Block).
     AccessConsciousness,
-    /// Phenomenal consciousness — the subjective experience.
-    /// Block (1995): "what it's like."
+    /// Phenomenal consciousness — subjective experience (Block).
     PhenomenalConsciousness,
 }
 
@@ -83,58 +49,62 @@ define_ontology! {
     pub ConsciousnessOntology for ConsciousnessCategory {
         concepts: ConsciousnessConcept,
         relation: ConsciousnessRelation,
+        kind: ConsciousnessRelationKind,
+        kinds: [
+            /// IIT: mechanism generates integrated information.
+            Generates,
+            /// GWT: attention selects for conscious access.
+            Selects,
+            /// GWT: coalition broadcasts message.
+            Broadcasts,
+            /// Higher-order: represents a lower-order state.
+            Represents,
+            /// IIT: structure has components.
+            HasComponent,
+            /// Block: conscious access enables reporting.
+            Enables,
+        ],
+        edges: [
+            // IIT: Mechanism generates IntegratedInformation
+            (Mechanism, IntegratedInformation, Generates),
+            // IIT: IntegratedInformation produces CauseEffectStructure
+            (IntegratedInformation, CauseEffectStructure, Generates),
+            // IIT: CauseEffectStructure has Mechanism and Repertoire
+            (CauseEffectStructure, Mechanism, HasComponent),
+            (CauseEffectStructure, Repertoire, HasComponent),
+            // GWT: Attention selects ConsciousAccess
+            (Attention, ConsciousAccess, Selects),
+            // GWT: GlobalWorkspace has Coalition and BroadcastMessage
+            (GlobalWorkspace, Coalition, HasComponent),
+            (GlobalWorkspace, BroadcastMessage, HasComponent),
+            // GWT: Coalition broadcasts BroadcastMessage
+            (Coalition, BroadcastMessage, Broadcasts),
+            // Higher-order: HigherOrderRepresentation represents FirstOrderState
+            (HigherOrderRepresentation, FirstOrderState, Represents),
+            // Higher-order → access: representation enables access consciousness
+            (HigherOrderRepresentation, AccessConsciousness, Enables),
+            // Block: ConsciousAccess enables AccessConsciousness
+            (ConsciousAccess, AccessConsciousness, Enables),
+            // IIT → phenomenal: CauseEffectStructure IS phenomenal consciousness
+            (CauseEffectStructure, PhenomenalConsciousness, Generates),
+        ],
+        composed: [
+            // GlobalWorkspace reaches UnconsciousProcessor through Coalition
+            (GlobalWorkspace, UnconsciousProcessor),
+            // Attention reaches BroadcastMessage through ConsciousAccess
+            (Attention, BroadcastMessage),
+            (Attention, AccessConsciousness),
+            // Mechanism reaches CauseEffectStructure through IntegratedInformation
+            (Mechanism, CauseEffectStructure),
+            (Mechanism, Repertoire),
+        ],
 
         being: MentalObject,
         source: "Tononi (2004, 2012); Baars (1988, 2005); Rosenthal (2005); Block (1995)",
-
-        is_a: ConsciousnessTaxonomy [
-            // IIT: Mechanism generates IntegratedInformation
-            (Mechanism, IntegratedInformation),
-            // GWT: ConsciousAccess is-a kind of Attention
-            (ConsciousAccess, Attention),
-            // Both access and phenomenal are kinds of consciousness
-            (AccessConsciousness, ConsciousAccess),
-            (PhenomenalConsciousness, CauseEffectStructure),
-        ],
-
-        has_a: ConsciousnessMereology [
-            // GWT: GlobalWorkspace contains BroadcastMessage
-            (GlobalWorkspace, BroadcastMessage),
-            // GlobalWorkspace contains competing Coalitions
-            (GlobalWorkspace, Coalition),
-            // Coalition consists of UnconsciousProcessors
-            (Coalition, UnconsciousProcessor),
-            // IIT: CauseEffectStructure has Mechanisms
-            (CauseEffectStructure, Mechanism),
-            // CauseEffectStructure has Repertoire
-            (CauseEffectStructure, Repertoire),
-            // Higher-order: HigherOrderRepresentation wraps FirstOrderState
-            (HigherOrderRepresentation, FirstOrderState),
-        ],
-
-        causes: ConsciousnessCausation for ConsciousnessConcept [
-            // GWT: Attention causes ConsciousAccess
-            (Attention, ConsciousAccess),
-            // GWT: Coalition winning causes BroadcastMessage
-            (Coalition, BroadcastMessage),
-            // Higher-order: HigherOrderRepresentation causes AccessConsciousness
-            (HigherOrderRepresentation, AccessConsciousness),
-            // IIT: Integration causes CauseEffectStructure
-            (IntegratedInformation, CauseEffectStructure),
-        ],
-
-        opposes: ConsciousnessOpposition [
-            // Conscious vs unconscious processing
-            (ConsciousAccess, UnconsciousProcessor),
-            // Access vs phenomenal consciousness (Block's distinction)
-            (AccessConsciousness, PhenomenalConsciousness),
-            // First-order vs higher-order (Rosenthal's hierarchy)
-            (FirstOrderState, HigherOrderRepresentation),
-        ],
     }
 }
 
-/// Whether a concept is from IIT vs GWT vs Higher-Order.
+/// Which theory a concept originates from.
 #[derive(Debug, Clone)]
 pub struct TheoryOrigin;
 
@@ -162,35 +132,20 @@ impl Quality for TheoryOrigin {
     }
 }
 
-/// Attention causes ConsciousAccess (GWT core claim).
+/// Attention causes ConsciousAccess (GWT core).
 #[derive(Debug)]
 pub struct AttentionCausesAccess;
 
 impl Axiom for AttentionCausesAccess {
     fn description(&self) -> &str {
-        "Attention causes ConsciousAccess (Baars 1988: spotlight metaphor)"
+        "Attention selects ConsciousAccess (Baars 1988)"
     }
     fn holds(&self) -> bool {
-        use pr4xis::ontology::reasoning::causation::CausalDef;
-        ConsciousnessCausation::relations().iter().any(|(c, e)| {
-            *c == ConsciousnessConcept::Attention && *e == ConsciousnessConcept::ConsciousAccess
-        })
-    }
-}
-
-/// Conscious and unconscious processing are opposed (GWT).
-#[derive(Debug)]
-pub struct ConsciousUnconsciousOpposed;
-
-impl Axiom for ConsciousUnconsciousOpposed {
-    fn description(&self) -> &str {
-        "ConsciousAccess and UnconsciousProcessor are opposed (GWT)"
-    }
-    fn holds(&self) -> bool {
-        use pr4xis::ontology::reasoning::opposition::OppositionDef;
-        ConsciousnessOpposition::pairs().iter().any(|(a, b)| {
-            *a == ConsciousnessConcept::ConsciousAccess
-                && *b == ConsciousnessConcept::UnconsciousProcessor
+        use pr4xis::category::Category;
+        ConsciousnessCategory::morphisms().iter().any(|r| {
+            r.from == ConsciousnessConcept::Attention
+                && r.to == ConsciousnessConcept::ConsciousAccess
+                && r.kind == ConsciousnessRelationKind::Selects
         })
     }
 }
@@ -201,13 +156,14 @@ pub struct IntegrationProducesStructure;
 
 impl Axiom for IntegrationProducesStructure {
     fn description(&self) -> &str {
-        "IntegratedInformation causes CauseEffectStructure (Tononi 2012: IIT axiom)"
+        "IntegratedInformation generates CauseEffectStructure (Tononi 2012)"
     }
     fn holds(&self) -> bool {
-        use pr4xis::ontology::reasoning::causation::CausalDef;
-        ConsciousnessCausation::relations().iter().any(|(c, e)| {
-            *c == ConsciousnessConcept::IntegratedInformation
-                && *e == ConsciousnessConcept::CauseEffectStructure
+        use pr4xis::category::Category;
+        ConsciousnessCategory::morphisms().iter().any(|r| {
+            r.from == ConsciousnessConcept::IntegratedInformation
+                && r.to == ConsciousnessConcept::CauseEffectStructure
+                && r.kind == ConsciousnessRelationKind::Generates
         })
     }
 }
@@ -223,7 +179,6 @@ impl Ontology for ConsciousnessOntology {
     fn domain_axioms() -> Vec<Box<dyn Axiom>> {
         vec![
             Box::new(AttentionCausesAccess),
-            Box::new(ConsciousUnconsciousOpposed),
             Box::new(IntegrationProducesStructure),
         ]
     }
