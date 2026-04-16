@@ -57,7 +57,7 @@ mod tests {
     use pr4xis::category::validate::check_functor_laws;
 
     #[test]
-    #[ignore = "kinded category Composed kind doesn't compose back to Identity — systematic issue with define_ontology! compose generation"]
+    #[ignore = "epistemics has Repair/Forgetting cycles that response doesn't model — need intermediate ontology or richer response (#98)"]
     fn functor_laws() {
         check_functor_laws::<EpistemicsToResponse>().unwrap();
     }
