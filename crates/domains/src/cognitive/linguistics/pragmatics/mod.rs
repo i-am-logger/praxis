@@ -1,6 +1,7 @@
 pub mod discourse;
 pub mod drt_dialogue_functor;
 pub mod generation;
+pub mod grounding;
 pub mod nlg;
 pub mod realize;
 pub mod reference;
