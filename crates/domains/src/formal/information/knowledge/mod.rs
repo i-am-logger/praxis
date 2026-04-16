@@ -2,9 +2,10 @@ pub mod descriptor;
 pub mod instance;
 pub mod ontology;
 
-pub use descriptor::{VocabularyDescriptor, describe_knowledge_base};
+pub use descriptor::describe_knowledge_base;
 pub use instance::SelfModelInstance;
 pub use ontology::*;
+pub use pr4xis::ontology::OntologyDescriptor;
 
 #[cfg(test)]
 mod tests;

@@ -1,5 +1,5 @@
-use super::descriptor::VocabularyDescriptor;
 use crate::cognitive::cognition::self_model::AwarenessLevel;
+use pr4xis::ontology::OntologyDescriptor;
 
 // SelfModelInstance — runtime eigenform of the SelfModel ontology.
 //
@@ -13,16 +13,16 @@ pub struct SelfModelInstance {
     pub name: &'static str,
     pub version: &'static str,
     pub awareness: AwarenessLevel,
-    pub components: Vec<VocabularyDescriptor>,
+    pub components: Vec<OntologyDescriptor>,
     pub total_concepts: usize,
     pub total_morphisms: usize,
 }
 
 impl SelfModelInstance {
     /// The self-observation operator F. X = F(X).
-    pub fn observe(components: Vec<VocabularyDescriptor>) -> Self {
-        let total_concepts = components.iter().map(|v| v.concepts).sum();
-        let total_morphisms = components.iter().map(|v| v.morphisms).sum();
+    pub fn observe(components: Vec<OntologyDescriptor>) -> Self {
+        let total_concepts = components.iter().map(|v| v.concept_count).sum();
+        let total_morphisms = components.iter().map(|v| v.morphism_count).sum();
         Self {
             name: "pr4xis",
             version: env!("CARGO_PKG_VERSION"),
@@ -38,7 +38,7 @@ impl SelfModelInstance {
         let onto_json: Vec<String> = self.components.iter().map(|v| {
             format!(
                 r#"{{"name":"{}","domain":"{}","being":"{}","source":"{}","concepts":{},"morphisms":{}}}"#,
-                v.name, v.domain, v.being.label(), v.source, v.concepts, v.morphisms,
+                v.name(), v.domain(), v.being.map_or("Unknown", |b| b.label()), v.source.0.value, v.concept_count, v.morphism_count,
             )
         }).collect();
 

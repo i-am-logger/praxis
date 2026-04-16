@@ -1,4 +1,5 @@
 use pr4xis::category::{Ap, NonEmpty, Product, Writer};
+use pr4xis::ontology::OntologyDescriptor;
 pub use pr4xis::ontology::OntologyMeta;
 use pr4xis::ontology::upper::being::Being;
 use pr4xis_domains::cognitive::cognition::epistemics;
@@ -13,9 +14,7 @@ use pr4xis_domains::formal::information::diagnostics::trace_functors::{
     PipelineStep, PipelineTrace, TracedPipeline,
 };
 use pr4xis_domains::formal::information::diagnostics::trace_impls;
-use pr4xis_domains::formal::information::knowledge::{
-    SelfModelInstance, VocabularyDescriptor, describe_knowledge_base,
-};
+use pr4xis_domains::formal::information::knowledge::{SelfModelInstance, describe_knowledge_base};
 
 /// The Diagnostics ontology governs the trace — every PipelineTraceEntry is
 /// a Diagnostic concept. `TRACE_META` is pulled from `define_ontology!`-generated
@@ -717,17 +716,17 @@ impl WasmSafeTimer {
 // =========================================================================
 
 /// All loaded ontologies including language-specific runtime data.
-pub fn loaded_ontologies(lang: &English) -> Vec<VocabularyDescriptor> {
+pub fn loaded_ontologies(_lang: &English) -> Vec<OntologyDescriptor> {
     let mut ontologies = describe_knowledge_base();
-    ontologies.push(VocabularyDescriptor {
-        name: "English (WordNet)",
-        domain: "cognitive.linguistics.english",
-        being: Being::SocialObject,
-        reason: "natural language is an evolved social convention",
-        source: "Open English WordNet 2025; Princeton WordNet",
-        concepts: lang.concept_count(),
-        morphisms: lang.word_count(),
-    });
+    ontologies.push(OntologyDescriptor::manual::<
+        pr4xis_domains::cognitive::linguistics::lexicon::ontology::LexicalCategory,
+        pr4xis_domains::cognitive::linguistics::lexicon::pos::PosTag,
+    >(
+        "English (WordNet)",
+        "pr4xis_domains::cognitive::linguistics::english",
+        "Open English WordNet 2025; Princeton WordNet",
+        Some(Being::SocialObject),
+    ));
     ontologies
 }
 
@@ -871,7 +870,7 @@ mod tests {
         let json = self_describe(&en);
         assert!(json.contains("ontology_count"));
         assert!(json.contains("Self-Model"));
-        assert!(json.contains("Knowledge Base"));
+        assert!(json.contains("KnowledgeOntology"));
     }
 
     #[test]

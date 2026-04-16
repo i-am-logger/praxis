@@ -308,7 +308,11 @@
       "Bash(sed -i '/^pub struct Coalgebra/i #[allow\\(clippy::type_complexity\\)]' crates/pr4xis/src/category/algebra.rs)",
       "Bash(sed -i '/^pub struct Prism/i #[allow\\(clippy::type_complexity\\)]' crates/pr4xis/src/category/optics.rs)",
       "Bash(sed -i '/^pub struct Lens/i #[allow\\(clippy::type_complexity\\)]' crates/pr4xis/src/category/optics.rs)",
-      "Bash(RUSTFLAGS=\"-D warnings\" cargo test -p pr4xis --lib --no-run)"
+      "Bash(RUSTFLAGS=\"-D warnings\" cargo test -p pr4xis --lib --no-run)",
+      "Bash(git apply:*)",
+      "Bash(gh issue:*)",
+      "WebFetch(domain:john.mccr.ae)",
+      "Bash(GIT_EDITOR=true git rebase --continue)"
     ]
   }
 }

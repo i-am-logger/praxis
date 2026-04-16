@@ -32,6 +32,19 @@ impl Default for Pr4xis {
     }
 }
 
+#[derive(serde::Serialize)]
+struct ChatResponse<'a> {
+    response: &'a str,
+    duration_us: u64,
+    token_count: usize,
+    tokens_per_sec: u64,
+    parsed: bool,
+    from_ontology: bool,
+    ontology_count: usize,
+    ontologies: &'a str,
+    trace: &'a str,
+}
+
 #[wasm_bindgen]
 impl Pr4xis {
     #[wasm_bindgen(constructor)]
@@ -50,15 +63,20 @@ impl Pr4xis {
         } else {
             0
         };
-        let response = json_escape(&result.response);
-        let trace = json_escape(&result.trace.serialize_with_functors());
-        let ontologies = result.trace.all_participating_ontologies();
-        let ontology_count = ontologies.len();
-        let ontology_list = json_escape(&ontologies.join(", "));
-        format!(
-            r#"{{"response":"{response}","duration_us":{},"token_count":{},"tokens_per_sec":{tps},"parsed":{},"from_ontology":{},"ontology_count":{ontology_count},"ontologies":"{ontology_list}","trace":"{trace}"}}"#,
-            result.duration_us, result.token_count, result.parsed, result.from_ontology,
-        )
+        let trace = result.trace.serialize_with_functors();
+        let ontologies = result.trace.all_participating_ontologies().join(", ");
+        let resp = ChatResponse {
+            response: &result.response,
+            duration_us: result.duration_us,
+            token_count: result.token_count,
+            tokens_per_sec: tps,
+            parsed: result.parsed,
+            from_ontology: result.from_ontology,
+            ontology_count: result.trace.all_participating_ontologies().len(),
+            ontologies: &ontologies,
+            trace: &trace,
+        };
+        serde_json::to_string(&resp).unwrap_or_default()
     }
 
     pub fn concept_count(&self) -> usize {
@@ -73,13 +91,10 @@ impl Pr4xis {
     pub fn self_describe(&self) -> String {
         pr4xis_chat::self_describe(&self.english)
     }
-}
 
-/// Escape a string for safe JSON embedding.
-fn json_escape(s: &str) -> String {
-    s.replace('\\', "\\\\")
-        .replace('"', "\\\"")
-        .replace('\n', "\\n")
-        .replace('\r', "\\r")
-        .replace('\t', "\\t")
+    /// The functor graph — every typed connection between ontologies.
+    pub fn functor_graph(&self) -> String {
+        use pr4xis_domains::formal::information::knowledge::describe_functors;
+        serde_json::to_string(&describe_functors()).unwrap_or_default()
+    }
 }
