@@ -192,7 +192,10 @@ impl Ontology {
     pub fn couple(&self, other: &Ontology) -> Ontology {
         let mut concepts = self.concepts.clone();
         for (k, v) in &other.concepts {
-            concepts.entry(k.clone()).or_insert_with(|| v.clone());
+            concepts
+                .entry(k.clone())
+                .and_modify(|existing| merge_lexical(existing, v))
+                .or_insert_with(|| v.clone());
         }
 
         let mut edges = self.edges.clone();
@@ -230,7 +233,10 @@ impl Ontology {
 
         let mut concepts = self.concepts.clone();
         for (k, v) in &other.concepts {
-            concepts.entry(k.clone()).or_insert_with(|| v.clone());
+            concepts
+                .entry(k.clone())
+                .and_modify(|existing| merge_lexical(existing, v))
+                .or_insert_with(|| v.clone());
         }
 
         let mut edges = self.edges.clone();
@@ -267,7 +273,10 @@ impl Ontology {
         let mut concepts = self.concepts.clone();
         for (k, v) in &other.concepts {
             if selected_set.contains(k) {
-                concepts.entry(k.clone()).or_insert_with(|| v.clone());
+                concepts
+                    .entry(k.clone())
+                    .and_modify(|existing| merge_lexical(existing, v))
+                    .or_insert_with(|| v.clone());
             }
         }
 
@@ -516,7 +525,18 @@ impl Ontology {
     ///
     /// All edges referencing the old name are updated.
     /// Provenance tracks the rename.
+    ///
+    /// Panics if `new` already exists (would silently collapse concepts)
+    /// or if `old` does not exist.
     pub fn rename(&self, old: &str, new: &str) -> Ontology {
+        assert!(
+            self.concepts.contains_key(old),
+            "rename: source concept '{old}' does not exist"
+        );
+        assert!(
+            old == new || !self.concepts.contains_key(new),
+            "rename: target concept '{new}' already exists — use evolve() explicitly for merging"
+        );
         let mut concepts = BTreeMap::new();
         for (k, v) in &self.concepts {
             let key = if k == old {
@@ -570,6 +590,11 @@ impl Ontology {
     ///
     /// Applies a concept name mapping. Concepts not in the mapping are kept as-is.
     /// This is the runtime equivalent of a typed Functor's map_object.
+    ///
+    /// Panics if the mapping is not injective over the ontology's concept
+    /// namespace (two source concepts map to the same target, or the target
+    /// collides with an unmapped concept). Use explicit compose/couple for
+    /// intentional merging.
     pub fn evolve(&self, mapping: &[(&str, &str)]) -> Ontology {
         let map: BTreeMap<&str, &str> = mapping.iter().copied().collect();
 
@@ -582,6 +607,10 @@ impl Ontology {
         let mut concepts = BTreeMap::new();
         for (k, v) in &self.concepts {
             let new_name = resolve(k);
+            assert!(
+                !concepts.contains_key(&new_name),
+                "evolve: mapping causes collision at '{new_name}' — would silently collapse concepts"
+            );
             let mut concept = v.clone();
             concept.name = new_name.clone();
             concepts.insert(new_name, concept);
@@ -612,6 +641,31 @@ impl Ontology {
             staging: Staging::Composed,
             provenance,
         }
+    }
+}
+
+/// Merge lexical metadata from `source` into `target`, preferring non-empty fields.
+///
+/// When two ontologies share a concept, composing them must preserve as much
+/// lexical data as possible. If one side has a label and the other has a
+/// definition, the merged concept has both.
+fn merge_lexical(target: &mut Concept, source: &Concept) {
+    match (&mut target.lexical, &source.lexical) {
+        (None, Some(src_lex)) => {
+            target.lexical = Some(src_lex.clone());
+        }
+        (Some(tgt_lex), Some(src_lex)) => {
+            if tgt_lex.label.is_empty() && !src_lex.label.is_empty() {
+                tgt_lex.label = src_lex.label.clone();
+            }
+            if tgt_lex.definition.is_empty() && !src_lex.definition.is_empty() {
+                tgt_lex.definition = src_lex.definition.clone();
+            }
+            if tgt_lex.language.is_empty() && !src_lex.language.is_empty() {
+                tgt_lex.language = src_lex.language.clone();
+            }
+        }
+        _ => {}
     }
 }
 
@@ -1215,6 +1269,74 @@ mod tests {
         assert!(evolved.concept("Plant").is_some());
         assert!(evolved.concept("Sensor").is_some());
         assert!(evolved.concept("Sender").is_none());
+    }
+
+    #[test]
+    fn couple_partial_produces_valid_ontology() {
+        let full = Ontology::create("Full")
+            .concepts(&["A", "B", "C"])
+            .is_a("A", "B")
+            .is_a("B", "C")
+            .build();
+
+        let base = Ontology::create("Base").concept("X").build();
+
+        // Select only A and B — edge (B, C) should NOT be imported
+        // (C is not selected, so including the edge would create an orphan)
+        let partial = base.couple_partial(&full, &["A", "B"]);
+        partial
+            .validate()
+            .expect("partial Korporator must produce valid ontology");
+    }
+
+    #[test]
+    fn compose_merges_lexical_on_shared_concepts() {
+        let english = Ontology::create("English")
+            .concept("Cell")
+            .label("Cell", "en", "Cell")
+            .build();
+
+        let bio = Ontology::create("Biology")
+            .concept("Cell")
+            .definition("Cell", "en", "The basic unit of life")
+            .build();
+
+        let merged = english.compose(&bio);
+        let cell = merged.concept("Cell").unwrap();
+        let lex = cell.lexical.as_ref().unwrap();
+        assert_eq!(lex.label, "Cell");
+        assert_eq!(lex.definition, "The basic unit of life");
+    }
+
+    #[test]
+    #[should_panic(expected = "collision")]
+    fn evolve_rejects_collision() {
+        let onto = Ontology::create("Test").concept("A").concept("B").build();
+        // Both A and B map to X — silent collapse would lose data
+        let _ = onto.evolve(&[("A", "X"), ("B", "X")]);
+    }
+
+    #[test]
+    #[should_panic(expected = "already exists")]
+    fn rename_rejects_existing_target() {
+        let onto = Ontology::create("Test").concept("A").concept("B").build();
+        // Renaming A to B would silently collapse into one concept
+        let _ = onto.rename("A", "B");
+    }
+
+    #[test]
+    fn extend_preserves_level() {
+        let a = Ontology::create("A").concept("X").build();
+        let b = Ontology::create("B").concept("Y").build();
+        let composed = a.couple(&b);
+        assert_eq!(composed.level(), 1);
+
+        let extended = composed.extend().concept("Z").build();
+        assert_eq!(
+            extended.level(),
+            1,
+            "extend must preserve level, not reset to 0"
+        );
     }
 
     #[test]
