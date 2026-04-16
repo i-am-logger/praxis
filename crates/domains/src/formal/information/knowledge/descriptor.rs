@@ -236,6 +236,49 @@ fn build_descriptors() -> Vec<OntologyDescriptor> {
             crate::social::software::markup::xml::owl::ontology::OwlCategory,
             crate::social::software::markup::xml::owl::ontology::OwlConcept,
         >("OWL", "pr4xis_domains::social::software::markup::xml::owl", "W3C OWL 2 (2012); Baader et al. (2003)", Being::SocialObject),
+        // =================================================================
+        // New this session — Lemon, OMV, NL ontologies
+        // =================================================================
+        crate::cognitive::linguistics::lemon::ontology::LemonOntology::descriptor(),
+        crate::formal::meta::omv::ontology::OmvOntology::descriptor(),
+        crate::cognitive::linguistics::pragmatics::discourse::ontology::DiscourseOntology::descriptor(),
+        crate::cognitive::linguistics::pragmatics::grounding::ontology::GroundingOntology::descriptor(),
+        crate::cognitive::linguistics::pragmatics::fragment::ontology::FragmentOntology::descriptor(),
+        // =================================================================
+        // Sub-ontologies (define_category! — not yet migrated to define_ontology!)
+        // =================================================================
+        manual::<
+            crate::formal::information::schema::alignment::AlignmentCategory,
+            crate::formal::information::schema::alignment::AlignmentConcept,
+        >("Schema Alignment", "pr4xis_domains::formal::information::schema::alignment", "Spivak (2012); Euzenat & Shvaiko (2013)", Being::AbstractObject),
+        manual::<
+            crate::formal::information::schema::instance::InstanceCategory,
+            crate::formal::information::schema::instance::InstanceConcept,
+        >("Schema Instance", "pr4xis_domains::formal::information::schema::instance", "Spivak (2012)", Being::AbstractObject),
+        manual::<
+            crate::formal::information::schema::trace_schema::TraceSchemaCategory,
+            crate::formal::information::schema::trace_schema::TraceSchemaElement,
+        >("Trace Schema", "pr4xis_domains::formal::information::schema::trace_schema", "W3C PROV-O (2013)", Being::AbstractObject),
+        manual::<
+            crate::formal::information::storage::consistency::ConsistencyCategory,
+            crate::formal::information::storage::consistency::ConsistencyModel,
+        >("Consistency", "pr4xis_domains::formal::information::storage::consistency", "Viotti & Vukolic (2016); Herlihy & Wing (1990)", Being::AbstractObject),
+        manual::<
+            crate::formal::information::storage::durability::DurabilityCategory,
+            crate::formal::information::storage::durability::DurabilityLevel,
+        >("Durability", "pr4xis_domains::formal::information::storage::durability", "Haerder & Reuter (1983); Pelley et al. (2014)", Being::AbstractObject),
+        manual::<
+            crate::formal::information::storage::volatility::VolatilityCategory,
+            crate::formal::information::storage::volatility::StorageMedia,
+        >("Volatility", "pr4xis_domains::formal::information::storage::volatility", "Pelley et al. (2014)", Being::AbstractObject),
+        manual::<
+            crate::formal::information::measurement::benchmark::BenchmarkCategory,
+            crate::formal::information::measurement::benchmark::BenchmarkConcept,
+        >("Benchmark", "pr4xis_domains::formal::information::measurement::benchmark", "JCGM 200:2012 (VIM)", Being::AbstractObject),
+        manual::<
+            crate::formal::information::dialogue::grounding::GroundingCategory,
+            crate::formal::information::dialogue::grounding::GroundingState,
+        >("Dialogue Grounding", "pr4xis_domains::formal::information::dialogue::grounding", "Clark (1996); Traum (1994)", Being::Process),
     ]
 }
 
