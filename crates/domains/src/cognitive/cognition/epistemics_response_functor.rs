@@ -42,8 +42,6 @@ impl Functor for EpistemicsToResponse {
         let to = Self::map_object(&m.to);
         let kind = if from == to && m.from == m.to {
             ResponseRelationKind::Identity
-        } else if from == to {
-            ResponseRelationKind::Composed
         } else {
             ResponseRelationKind::Composed
         };
