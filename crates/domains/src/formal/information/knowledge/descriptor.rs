@@ -279,6 +279,46 @@ fn build_descriptors() -> Vec<OntologyDescriptor> {
             crate::formal::information::dialogue::grounding::GroundingCategory,
             crate::formal::information::dialogue::grounding::GroundingState,
         >("Dialogue Grounding", "pr4xis_domains::formal::information::dialogue::grounding", "Clark (1996); Traum (1994)", Being::Process),
+        // =================================================================
+        // Session ontologies — consciousness, pipeline, planning, text, algebra
+        // =================================================================
+        crate::cognitive::cognition::consciousness::ontology::C1Ontology::descriptor(),
+        crate::cognitive::cognition::consciousness::ontology::C2Ontology::descriptor(),
+        crate::cognitive::linguistics::pipeline::ontology::PipelineOntology::descriptor(),
+        crate::cognitive::linguistics::pragmatics::planning::ontology::PlanningOntology::descriptor(),
+        crate::cognitive::linguistics::text::ontology::TextOntology::descriptor(),
+        crate::formal::meta::algebra::ontology::AlgebraOntology::descriptor(),
+        // =================================================================
+        // Pre-existing unregistered — manual Category impls
+        // =================================================================
+        manual::<
+            crate::applied::localization::slam::ontology::SlamCategory,
+            crate::applied::localization::slam::ontology::SlamComponent,
+        >("SLAM", "pr4xis_domains::applied::localization::slam", "Durrant-Whyte & Bailey (2006)", Being::Process),
+        manual::<
+            crate::applied::perception::lidar_camera::ontology::LidarCameraCategory,
+            crate::applied::perception::lidar_camera::ontology::FusionStage,
+        >("Lidar-Camera Fusion", "pr4xis_domains::applied::perception::lidar_camera", "Qi et al. (2018)", Being::Process),
+        manual::<
+            crate::applied::perception::radar_camera::ontology::RadarCameraCategory,
+            crate::applied::perception::radar_camera::ontology::RadarCameraStage,
+        >("Radar-Camera Fusion", "pr4xis_domains::applied::perception::radar_camera", "Nobis et al. (2019)", Being::Process),
+        manual::<
+            crate::applied::sensor_fusion::frame::ontology::FrameCategory,
+            crate::applied::sensor_fusion::frame::reference::ReferenceFrame,
+        >("Reference Frame", "pr4xis_domains::applied::sensor_fusion::frame", "Sola et al. (2018)", Being::AbstractObject),
+        manual::<
+            crate::applied::tracking::multi_target::ontology::TrackLifecycleCategory,
+            crate::applied::tracking::multi_target::ontology::TrackState,
+        >("Multi-Target Tracking", "pr4xis_domains::applied::tracking::multi_target", "Bar-Shalom et al. (2001)", Being::Process),
+        manual::<
+            crate::social::compliance::ontology::ComplianceCategory,
+            crate::social::compliance::escalation::EscalationLevel,
+        >("Compliance", "pr4xis_domains::social::compliance", "ISO 37301 (2021)", Being::SocialObject),
+        manual::<
+            crate::social::military::situation::ontology::SituationCategory,
+            crate::social::military::situation::ontology::SituationElement,
+        >("Situation Awareness", "pr4xis_domains::social::military::situation", "Endsley (1995); JDL (1999)", Being::Process),
     ]
 }
 
