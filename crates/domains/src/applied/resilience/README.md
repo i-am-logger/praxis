@@ -6,7 +6,7 @@ Per user direction surfacing PR #120 review:
 
 > we need ontology understanding of erroring and recovery, backoff, etc
 
-## Entities (39)
+## Entities (38)
 
 | Family | Entities |
 |---|---|

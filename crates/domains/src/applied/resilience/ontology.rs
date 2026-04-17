@@ -336,12 +336,27 @@ impl Axiom for CircuitBreakerTransitionsExist {
     }
     fn holds(&self) -> bool {
         use ResilienceConcept as R;
+        use ResilienceRelationKind as K;
         let m = ResilienceCategory::morphisms();
-        let has = |from: R, to: R| m.iter().any(|r| r.from == from && r.to == to);
-        has(R::CircuitBreakerClosed, R::CircuitBreakerOpen)
-            && has(R::CircuitBreakerOpen, R::CircuitBreakerHalfOpen)
-            && has(R::CircuitBreakerHalfOpen, R::CircuitBreakerClosed)
-            && has(R::CircuitBreakerHalfOpen, R::CircuitBreakerOpen)
+        // Kind-strict match: the Composed morphism kind (transitive closure)
+        // would otherwise let this axiom pass without the direct state-machine
+        // edges being declared.
+        let has = |from: R, to: R, kind: K| {
+            m.iter()
+                .any(|r| r.from == from && r.to == to && r.kind == kind)
+        };
+        has(R::CircuitBreakerClosed, R::CircuitBreakerOpen, K::TripsTo)
+            && has(R::CircuitBreakerOpen, R::CircuitBreakerHalfOpen, K::CoolsTo)
+            && has(
+                R::CircuitBreakerHalfOpen,
+                R::CircuitBreakerClosed,
+                K::ResolvesTo,
+            )
+            && has(
+                R::CircuitBreakerHalfOpen,
+                R::CircuitBreakerOpen,
+                K::RelapsesTo,
+            )
     }
 }
 

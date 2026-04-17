@@ -1,6 +1,6 @@
 # Resilience ontology — bibliography
 
-Four literatures fused into a single ontology of recovery. Each concept in `ontology.rs` traces to exactly one of these.
+Four literatures fused into a single ontology of recovery. Most concepts in `ontology.rs` trace to exactly one of these primary sources; a small set of cross-cutting concepts (`Service`, `Resource`, `Request`) are common-vocabulary targets used by the patterns and are not literature-specific — they align with their namesakes in `applied::dependability` and standard distributed-systems usage.
 
 ## Primary source — stability patterns
 
