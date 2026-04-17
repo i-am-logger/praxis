@@ -34,20 +34,20 @@ pub fn map_substrate(c: &Pr4xisSubstrateConcept) -> SyntrometryConcept {
     use Pr4xisSubstrateConcept as P;
     use SyntrometryConcept as S;
     match c {
-        // Phase 1 reverse.
+        // Core primitives.
         P::SubEntity => S::Predicate,
         P::SubMorphism => S::Koordination,
         P::SubCategory => S::Syntrix,
         P::SubFunctor => S::Korporator,
         P::SubEndofunctor => S::Synkolator,
         P::SubOntology => S::Predikatrix,
-        // Phase 2 reverse.
+        // Architectural primitives.
         P::SubEigenform => S::Telecenter,
         P::SubIntention => S::Maxime,
         P::SubStagingLevel => S::Transzendenzstufe,
         P::SubSystemOfSystems => S::Metroplex,
-        // Phase 3 reverse — each refined substrate primitive has a
-        // syntrometric counterpart, so every concept round-trips cleanly.
+        // Refined sub-kinds — each has a distinct syntrometric counterpart,
+        // so every concept round-trips cleanly.
         P::SubOppositionCategory => S::Dialektik,
         P::SubProductCategory => S::Aspekt,
         P::SubLeveledEntity => S::SyntrixLevel,

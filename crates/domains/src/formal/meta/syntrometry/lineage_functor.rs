@@ -44,21 +44,20 @@ fn map_concept(c: &SyntrometryConcept) -> Pr4xisSubstrateConcept {
     use Pr4xisSubstrateConcept as P;
     use SyntrometryConcept as S;
     match c {
-        // Phase 1 base mappings — each concept now lands at a distinct
-        // substrate primitive, no collapses.
+        // Core primitives each land at a distinct substrate target.
         S::Predicate => P::SubEntity,
         S::Predikatrix => P::SubOntology,
         S::Syntrix => P::SubCategory,
         S::Koordination => P::SubMorphism,
         S::Synkolator => P::SubEndofunctor,
         S::Korporator => P::SubFunctor,
-        // Phase 2 teleological / hierarchical mappings.
+        // Teleological / hierarchical concepts.
         S::Telecenter => P::SubEigenform,
         S::Maxime => P::SubIntention,
         S::Transzendenzstufe => P::SubStagingLevel,
         S::Metroplex => P::SubSystemOfSystems,
-        // Phase 3 — formerly collapsed Phase 1 concepts land at their own
-        // refined substrate targets.
+        // Refined distinctions — the substrate sub-kinds preserve these
+        // without collapsing them to their parent.
         S::Dialektik => P::SubOppositionCategory,
         S::Aspekt => P::SubProductCategory,
         S::SyntrixLevel => P::SubLeveledEntity,

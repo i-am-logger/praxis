@@ -1,6 +1,6 @@
 //! Cross-functor: Syntrometry → OntologyDiagnostics::MetaOntology.
 //!
-//! Phase 4 of the Heim-pr4xis lineage work. Demonstrates that Heim's
+//! Demonstrates that Heim's
 //! syntrometric vocabulary and pr4xis's meta-ontology vocabulary describe
 //! the same primitives using different words — an explicit structural
 //! alignment between the two, proven by a strict Functor whose laws check
@@ -81,7 +81,7 @@ mod tests {
     use super::*;
     use pr4xis::category::validate::check_functor_laws;
 
-    /// The Phase 4 headline test: Heim's vocabulary aligns with pr4xis's
+    /// Heim's vocabulary aligns with pr4xis's
     /// own meta-ontology vocabulary via a strict Functor.
     #[test]
     fn meta_ontology_functor_laws_pass() {

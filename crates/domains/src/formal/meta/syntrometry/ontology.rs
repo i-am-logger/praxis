@@ -1,4 +1,4 @@
-//! Syntrometry ontology — Heim's syntrometric primitives, Phase 1.
+//! Syntrometry ontology — Heim's syntrometric primitives.
 //!
 //! Encodes the core of Burkhard Heim's *Syntrometrische Maximentelezentrik*
 //! (the logical foundation underneath Heim theory proper) as a pr4xis
@@ -9,17 +9,11 @@
 //! > — §1, §2 (especially §2.2 "The Syntrix as the Category of Leveled Structures").
 //!
 //! The goal is to *verify* the lineage claim — pr4xis's categorical substrate
-//! is claimed to instantiate Heim's syntrometric structure — not to assert it.
-//! Phase 1 encodes the distinction primitives (Predicate, Predikatrix,
-//! Dialektik, Koordination, Aspekt), the syntrometric structures (Syntrix,
-//! SyntrixLevel, Synkolator, Korporator), and the mereological primitive
-//! (Part), plus their structural relations. A companion module
-//! `lineage_functor` maps Syntrometry → a small pr4xis-substrate ontology
-//! and verifies the functor laws.
-//!
-//! Phase 2 (deferred): telecenters, transzendenzstufen, maximes — the
-//! teleological concepts that map to goal-directed planning architecture
-//! (see memory: `project_heim_transport.md`).
+//! is claimed to instantiate Heim's syntrometric structure — not to assert
+//! it. The companion module `lineage_functor` maps Syntrometry → the pr4xis
+//! substrate and verifies the functor laws; five further cross-functors
+//! align Heim's vocabulary with pr4xis's meta, composition, staging, and
+//! cognitive ontologies.
 
 use pr4xis::category::Category;
 use pr4xis::ontology::{Axiom, Ontology, Quality};
@@ -47,7 +41,7 @@ pr4xis::ontology! {
         Part,
 
         // === Teleological / hierarchical (§§ Telezentrik + Metroplextheorie) ===
-        // Phase 2 — the "metaphysical" concepts that actually are architecture.
+        // The "metaphysical" concepts that are actually architecture.
         Telecenter,
         Maxime,
         Transzendenzstufe,
@@ -99,7 +93,7 @@ pr4xis::ontology! {
         // it contains the same predicates its parent Predikatrix would.
         (SyntrixLevel, Predicate),
 
-        // === Phase 2 teleological + hierarchical structure ===
+        // === Teleological + hierarchical structure ===
         // A Metroplex contains Syntrices organised by Transzendenzstufen.
         (Metroplex, Syntrix),
         (Metroplex, Transzendenzstufe),
@@ -126,7 +120,7 @@ pr4xis::ontology! {
         (Synkolator, Syntrix, EndomorphismOn),
         (Korporator, Syntrix, MapsBetween),
 
-        // === Phase 2 teleological / hierarchical ===
+        // === Teleological / hierarchical ===
         // A Maxime selects among candidate Aspekts for a Telecenter.
         (Maxime, Aspekt, Selects),
         // Maximes are oriented toward a Telecenter — the target of selection.
@@ -240,7 +234,7 @@ impl Axiom for SyntrixIsLeveled {
     }
 }
 
-/// Phase 2 axiom: a Metroplex mereologically contains Syntrices organised
+///a Metroplex mereologically contains Syntrices organised
 /// by Transzendenzstufen. Both parts must be present.
 pub struct MetroplexContainsSyntrixAndLevels;
 
@@ -255,7 +249,7 @@ impl Axiom for MetroplexContainsSyntrixAndLevels {
     }
 }
 
-/// Phase 2 axiom: every Maxime ConvergesToward a Telecenter. The pair
+///every Maxime ConvergesToward a Telecenter. The pair
 /// (Maxime, Telecenter) must exist with the ConvergesToward kind —
 /// otherwise the teleological selection claim of Maximentelezentrik
 /// is unencoded.
@@ -274,7 +268,7 @@ impl Axiom for MaximeConvergesTowardTelecenter {
     }
 }
 
-/// Phase 2 axiom: a Telecenter is a fixed-point of a Synkolator — the
+///a Telecenter is a fixed-point of a Synkolator — the
 /// categorical content of the eigenform / goal-attractor mapping.
 pub struct TelecenterIsSynkolatorFixedPoint;
 

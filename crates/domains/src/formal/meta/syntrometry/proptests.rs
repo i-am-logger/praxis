@@ -109,7 +109,7 @@ proptest! {
         prop_assert!(SyntrometryConcept::variants().contains(&rt));
     }
 
-    /// Phase 3 target: all 14 syntrometric concepts are round-trip fixed
+    /// All 14 syntrometric concepts are round-trip fixed
     /// points. Sampling any one reproduces it under G∘F. This is the
     /// "object-level equivalence" form of the Heim ↔ pr4xis lineage.
     #[test]
@@ -154,7 +154,7 @@ proptest! {
     // -----------------------------------------------------------------------
 
     // -----------------------------------------------------------------------
-    // Phase 4 cross-functor invariants
+    // Cross-functor invariants
     // -----------------------------------------------------------------------
 
     /// For every concept sampled, the cross-functor to MetaOntology produces
@@ -179,7 +179,7 @@ proptest! {
         prop_assert_eq!(f_id, id_fc);
     }
 
-    /// Phase 5: staging cross-functor is deterministic and preserves identity.
+    /// Staging cross-functor preserves identity across random sampling.
     #[test]
     fn staging_functor_preserves_identity(c in arb_syntrometry_concept()) {
         use super::staging_functor::SyntrometryToStaging;
@@ -190,7 +190,7 @@ proptest! {
         prop_assert_eq!(f_id, id_fc);
     }
 
-    /// Phase 5: algebra cross-functor is deterministic and preserves identity.
+    /// Algebra cross-functor preserves identity across random sampling.
     #[test]
     fn algebra_functor_preserves_identity(c in arb_syntrometry_concept()) {
         use super::algebra_functor::SyntrometryToAlgebra;
@@ -201,7 +201,7 @@ proptest! {
         prop_assert_eq!(f_id, id_fc);
     }
 
-    /// Phase 6: Syntrometry → C1 preserves identity across all concepts.
+    /// Syntrometry → C1 preserves identity across random sampling.
     #[test]
     fn c1_functor_preserves_identity(c in arb_syntrometry_concept()) {
         use super::consciousness_functor::SyntrometryToC1;
@@ -212,7 +212,7 @@ proptest! {
         prop_assert_eq!(f_id, id_fc);
     }
 
-    /// Phase 6: Distinction → Syntrometry (kinded→kinded) preserves identity.
+    /// Distinction → Syntrometry (kinded→kinded) preserves identity.
     #[test]
     fn distinction_functor_preserves_identity(_ in 0..32u32) {
         use super::distinction_functor::DistinctionToSyntrometry;

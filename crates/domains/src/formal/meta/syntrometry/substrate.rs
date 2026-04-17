@@ -15,7 +15,7 @@ pr4xis::ontology! {
     being: AbstractObject,
 
     concepts: [
-        // Phase 1 — categorical core primitives.
+        // Categorical core primitives.
         SubEntity,
         SubMorphism,
         SubCategory,
@@ -23,16 +23,16 @@ pr4xis::ontology! {
         SubEndofunctor,
         SubOntology,
 
-        // Phase 2 — architectural primitives already present in pr4xis
-        // elsewhere in the workspace; mirrored here as the functor target.
+        // Architectural primitives — already present in pr4xis elsewhere in
+        // the workspace; mirrored here as the functor target.
         SubEigenform,
         SubIntention,
         SubStagingLevel,
         SubSystemOfSystems,
 
-        // Phase 3 — sub-kinds of SubCategory / SubMorphism / SubEntity that
-        // receive the four remaining Phase 1 collapsed concepts cleanly.
-        // Landing these drops the unit loss from 28.6% to 0%.
+        // Refined sub-kinds of SubCategory / SubMorphism / SubEntity — the
+        // distinctions that give the primary lineage functor object-level
+        // equivalence with Syntrometry.
         SubOppositionCategory,
         SubProductCategory,
         SubLeveledEntity,
@@ -62,7 +62,7 @@ pr4xis::ontology! {
         // True subsumption only: every Endofunctor is a Functor specialised
         // to Source = Target (Mac Lane Ch. II §1).
         (SubEndofunctor, SubFunctor),
-        // Phase 3 — sub-kinds of the core primitives.
+        // Sub-kinds of the core primitives.
         (SubOppositionCategory, SubCategory),
         (SubProductCategory, SubCategory),
         (SubLeveledEntity, SubEntity),

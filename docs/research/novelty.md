@@ -44,9 +44,9 @@ After subtracting the prior art, the things we believe pr4xis contributes — pe
 
 ## The Heim lineage — machine-verified across six functors
 
-The most prominent lineage claim in the project is the structural alignment with the **modernized syntrometric logic tradition** (Heim 1980, reformulated categorically in 2025). Per the project's core principle — every claim must be machine-checkable — this has now been operationalised as six tested theorems spanning the substrate, the meta-ontology layer, the composition layer, and the cognitive layer.
+The most prominent lineage claim in the project is the structural alignment with the **modernized syntrometric logic tradition** (Heim 1980, reformulated categorically in 2025). Per the project's core principle — every claim must be machine-checkable — this is operationalised as six tested theorems spanning the substrate, the meta-ontology layer, the composition layer, and the cognitive layer.
 
-### Verify in one command
+### Verify
 
 ```
 cargo test -p pr4xis-domains -- syntrometry
@@ -56,46 +56,21 @@ cargo test -p pr4xis-domains -- syntrometry
 
 Heim's syntrometric primitives — `Predicate`, `Predikatrix`, `Dialektik`, `Koordination`, `Aspekt`, `Syntrix`, `SyntrixLevel`, `Synkolator`, `Korporator`, `Part` — are encoded as a pr4xis ontology at [`crates/domains/src/formal/meta/syntrometry/`](../../crates/domains/src/formal/meta/syntrometry/). A `Functor: Syntrometry → Pr4xisSubstrate` carries each Heim concept to its pr4xis-core counterpart. `check_functor_laws` verifies identity preservation + composition preservation exhaustively over every morphism. The structural alignment is no longer argued — it is proven.
 
-### Measured information-loss profile (Phase 3 = object-level equivalence)
+### Measured information-loss profile
 
-The [gap analysis](../../crates/domains/src/formal/meta/gap_analysis.rs) reports the round-trip collapse:
+The [gap analysis](../../crates/domains/src/formal/meta/gap_analysis.rs) on the primary lineage functor reports **0% unit loss and 0% counit loss** — every Heim concept has a unique pr4xis-substrate target and every substrate primitive has a unique Heim representative. Object-level equivalence.
 
-| Phase | Unit loss | Counit loss | Notes |
-|---|---|---|---|
-| 1 | 40% (4/10) | 0% (0/6) | Syntrometric primitives only |
-| 2 | 28.6% (4/14) | 0% (0/10) | + teleological concepts |
-| **3** | **0% (0/14)** | **0% (0/14)** | **object-level equivalence** |
+### Cross-functors to existing pr4xis ontologies
 
-Phase 3 closed the final 28.6% gap by adding `SubOppositionCategory`, `SubProductCategory`, `SubLeveledEntity`, and `SubMereologicalMorphism` — refined sub-kinds of the substrate primitives that receive `Dialektik`, `Aspekt`, `SyntrixLevel`, and `Part` without collapsing. Every Heim concept now has a unique pr4xis-substrate target and every substrate primitive has a unique Heim representative.
+The primary lineage is the Heim ↔ Pr4xisSubstrate bijection above. Beyond that, five further functors demonstrate that Heim's vocabulary aligns with ontologies pr4xis already had for other reasons:
 
-### Cross-functors to existing pr4xis ontologies (Phases 4–6)
-
-The primary lineage is the full Heim ↔ Pr4xisSubstrate bijection above. Beyond that, five further functors demonstrate that Heim's vocabulary aligns with ontologies pr4xis already had for other reasons:
-
-- **`Syntrometry → MetaOntology`** (ontology_diagnostics) — 14.3% collapse. Heim's categorical primitives match the meta-ontology vocabulary `pr4xis` uses to diagnose gaps across ontology pairs.
+- **`Syntrometry → MetaOntology`** (ontology_diagnostics) — 14.3% collapse. Heim's categorical primitives match the meta-ontology vocabulary pr4xis uses to diagnose gaps across ontology pairs.
 - **`Syntrometry → Staging`** (Futamura 1971) — Transzendenzstufen ↦ Futamura projection levels.
-- **`Syntrometry → Algebra`** (Goguen / Zimmermann) — Korporator ↦ Mapping, Aspekt ↦ Product, Dialektik ↦ Coproduct, Telecenter ↦ Pushout. Heim's composition operators align with the categorical primitives the pr4xis `compose` API (#103) uses at runtime.
+- **`Syntrometry → Algebra`** (Goguen / Zimmermann) — Korporator ↦ Mapping, Aspekt ↦ Product, Dialektik ↦ Coproduct, Telecenter ↦ Pushout. Heim's composition operators align with the categorical primitives the pr4xis `compose` API uses at runtime.
 - **`Distinction → Syntrometry`** (Spencer-Brown 1969 → Heim, historical direction) — kinded→kinded embedding; `ReEntry` ↦ `Synkolator` preserves the self-application edge structure.
 - **`Syntrometry → C1`** (Heim → Dehaene GWT) — `Maxime` ↦ `Attention`, `Metroplex` ↦ `GlobalWorkspace`. Heim anticipated the attention/workspace split Dehaene formalises 34 years later. The `(Maxime, Aspekt, Selects)` morphism lands on the declared `(Attention, ConsciousAccess, Selects)` in C1 — Heim's "extremal of expedient ideas selects among candidate Aspekts" and Dehaene's "attention selects which coalition accesses consciousness" are structurally the same morphism.
 
-Each functor has `check_functor_laws` running against it as a test; the lineage is now verified not just structurally but quantitatively (per-functor collapse profiles) and contextually (across the meta, composition, and cognitive layers of pr4xis).
-
-### Phase 1 concept mapping
-
-Every row below is now a `match` arm in `lineage_functor.rs` with the laws verified at test time:
-
-| Heim / syntrometric concept | pr4xis substrate concept |
-|---|---|
-| `Predicate`, `SyntrixLevel` | `SubEntity` |
-| `Predikatrix` | `SubOntology` |
-| `Dialektik`, `Aspekt`, `Syntrix` | `SubCategory` |
-| `Koordination`, `Part` | `SubMorphism` |
-| `Synkolator` | `SubEndofunctor` |
-| `Korporator` | `SubFunctor` |
-
-### Phase 2 (deferred)
-
-Heim's `Telecenter`, `Maxime`, and `Transzendenzstufe` map directly to existing pr4xis cognitive architecture (`CommunicativeGoal`, BDI `Intention` / C1 `Attention`, Staging + C1/C2 consciousness split) per `project_heim_transport.md`. Phase 2 encodes them and lifts the lineage functor accordingly.
+Each functor has `check_functor_laws` running against it as a test; the lineage is verified not just structurally but quantitatively (per-functor collapse profiles) and contextually (across the meta, composition, and cognitive layers of pr4xis).
 
 What pr4xis explicitly does **not** inherit: Heim's twelve-dimensional spacetime, particle mass formulas, Metronic Gitter, or teleological cosmology. The structural substrate is verified; the metaphysical extensions are not adopted.
 

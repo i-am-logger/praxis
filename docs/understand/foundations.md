@@ -14,20 +14,21 @@ Before going section by section through the modern category-theoretic and cybern
 
 The honest claim: pr4xis is the first **executable, machine-checkable** instance of this tradition across many domains. It does not adopt Heim's physical-metaphysical claims (twelve-dimensional spacetime, particle mass formulas, teleological cosmology). The structural overlap with the modernized syntrometric logic is concrete and verifiable: both treat domains as categories with structure-preserving functors between them, use Kripke-style aspect-relative semantics, ground part/whole reasoning in classical extensional mereology, and model self-reference as a natural transformation.
 
-The lineage claim is **verified, not asserted**. Heim's 14 syntrometric primitives — the 10 of Phase 1 (`Predicate`, `Predikatrix`, `Dialektik`, `Koordination`, `Aspekt`, `Syntrix`, `SyntrixLevel`, `Synkolator`, `Korporator`, `Part`) plus the 4 teleological/hierarchical concepts (`Telecenter`, `Maxime`, `Transzendenzstufe`, `Metroplex`) of Phase 2 — are encoded as an ontology at [`crates/domains/src/formal/meta/syntrometry/`](../../crates/domains/src/formal/meta/syntrometry/). Six cross-functors verify the lineage at test time:
+The lineage claim is **verified, not asserted**. Heim's 14 syntrometric primitives — distinction primitives (`Predicate`, `Predikatrix`, `Dialektik`, `Koordination`, `Aspekt`), structures (`Syntrix`, `SyntrixLevel`, `Synkolator`, `Korporator`), mereology (`Part`), and teleological/hierarchical concepts (`Telecenter`, `Maxime`, `Transzendenzstufe`, `Metroplex`) — are encoded at [`crates/domains/src/formal/meta/syntrometry/`](../../crates/domains/src/formal/meta/syntrometry/). Six cross-functors verify the lineage at test time:
 
 ```
 cargo test -p pr4xis-domains -- syntrometry
 ```
 
-1. `Syntrometry → Pr4xisSubstrate` — the primary lineage; after Phase 3's substrate enrichment, an **object-level equivalence** (0% unit loss, 0% counit loss).
-2. `Syntrometry → MetaOntology` (pr4xis's own gap-detection meta-ontology) — 14.3% intentional collapse.
-3. `Syntrometry → Staging` (Futamura 1971 projections) — Transzendenzstufe ↦ Interpreter, Metroplex ↦ CompilerGenerator.
-4. `Syntrometry → Algebra` (Goguen/Zimmermann ontology composition) — Korporator ↦ Mapping, Aspekt ↦ Product, Dialektik ↦ Coproduct.
-5. `Distinction → Syntrometry` (Spencer-Brown 1969 → Heim, the historical direction) — kinded→kinded embedding; `ReEntry` ↦ `Synkolator` preserving the self-application edge structure.
-6. `Syntrometry → C1` (Heim → Dehaene 2014 GWT) — `Maxime` ↦ `Attention`, `Metroplex` ↦ `GlobalWorkspace`. Heim anticipated the attention/workspace split Dehaene's GWT formalises 34 years later.
+The primary `Syntrometry → Pr4xisSubstrate` functor is an **object-level equivalence** — every Heim concept has a unique pr4xis-substrate target and every substrate primitive has a unique Heim representative; gap analysis reports 0% unit loss and 0% counit loss. Five further cross-functors align Heim's vocabulary with pr4xis's existing ontologies:
 
-The [gap analysis](../../crates/domains/src/formal/meta/gap_analysis.rs) reports **0% unit loss** on the primary lineage functor (object-level equivalence after Phase 3). Each cross-functor carries its own collapse profile documented in the per-ontology [README](../../crates/domains/src/formal/meta/syntrometry/README.md).
+- `Syntrometry → MetaOntology` (pr4xis's gap-detection meta-ontology)
+- `Syntrometry → Staging` — Futamura (1971) projection levels
+- `Syntrometry → Algebra` — Goguen/Zimmermann ontology composition primitives
+- `Syntrometry → C1` — Dehaene (2014) Global Workspace Theory; `Maxime` ↦ `Attention`, `Metroplex` ↦ `GlobalWorkspace`. Heim anticipated the attention/workspace split GWT formalises 34 years later.
+- `Distinction → Syntrometry` — Spencer-Brown (1969) → Heim, the historical direction; `ReEntry` ↦ `Synkolator` preserving the self-application edge structure.
+
+Per-functor collapse profiles and gap-analysis numbers live in the [per-ontology README](../../crates/domains/src/formal/meta/syntrometry/README.md).
 
 ## Modern Foundations (Section by Section)
 

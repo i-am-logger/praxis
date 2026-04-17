@@ -1,8 +1,8 @@
-# Syntrometry — Heim's syntrometric logic (Phases 1–6)
+# Syntrometry — Heim's syntrometric logic
 
-Encodes the core of Burkhard Heim's *Syntrometrische Maximentelezentrik* — the logical/philosophical foundation underneath Heim theory — as a pr4xis ontology, and verifies the long-standing claim that "pr4xis instantiates Heim's syntrometric structure" by a Functor whose laws are checked at test time.
+Encodes the core of Burkhard Heim's *Syntrometrische Maximentelezentrik* — the logical/philosophical foundation underneath Heim theory — as a pr4xis ontology, and verifies the long-standing claim that "pr4xis instantiates Heim's syntrometric structure" by a family of Functors whose laws are checked at test time.
 
-Per `feedback_docs_need_proof.md`: the lineage claim was until now asserted in prose. This module turns it into a verified theorem — both structurally (the functor laws pass) and quantitatively (gap analysis measures exactly which distinctions Heim carries that pr4xis does not).
+Per `feedback_docs_need_proof.md`: the lineage claim was until now asserted in prose. This module turns it into a verified theorem — both structurally (all functor laws pass) and quantitatively (gap analysis measures exactly which distinctions collapse where).
 
 ## Verification — one command
 
@@ -10,30 +10,9 @@ Per `feedback_docs_need_proof.md`: the lineage claim was until now asserted in p
 cargo test -p pr4xis-domains -- formal::meta::syntrometry
 ```
 
-Runs **28+ tests**: category laws for both ontologies, six domain axioms (Phase 1 + Phase 2) as single-point + proptest sweeps, forward functor laws (`lineage_functor_laws_pass`), adjunction unit/counit round-trips, gap analysis with measured collapse percentages, plus 12 proptest-based randomised sweeps over concepts, morphisms, and round-trips.
+40+ tests run: category laws for both ontologies, six domain axioms as single-point + proptest sweeps, six cross-functor law checks, adjunction round-trips, gap analysis with measured collapse percentages, and randomised proptest sweeps over concepts, morphisms, and round-trips.
 
-The headline — "pr4xis instantiates Heim's syntrometric structure" — is verified by `lineage_functor_laws_pass`.
-
-## Measured loss profile (gap analysis)
-
-`cargo test -p pr4xis-domains -- test_syntrometry_substrate_is_object_equivalence --nocapture`
-
-| Direction | Loss | What collapses |
-|---|---|---|
-| **Unit** (Syntrometry → Substrate → Syntrometry) | **0%** (0/14) | none — object-level equivalence |
-| **Counit** (Substrate → Syntrometry → Substrate) | **0%** (0/14) | none — substrate is closed under the round-trip |
-
-Phase 3 closed the remaining 28.6% loss by adding four sub-kinds to `Pr4xisSubstrate` — `SubOppositionCategory`, `SubProductCategory`, `SubLeveledEntity`, `SubMereologicalMorphism` — so `Dialektik`, `Aspekt`, `SyntrixLevel`, and `Part` each land at a distinct substrate target. The lineage is now an **object-level equivalence**: every Heim concept has a unique pr4xis-substrate counterpart and every substrate primitive has a unique Heim representative.
-
-Each phase's incremental progress, for the record:
-
-| Phase | Unit loss | Counit loss |
-|---|---|---|
-| 1 | 40% (4/10) | 0% (0/6) |
-| 2 | 28.6% (4/14) | 0% (0/10) |
-| 3 | **0% (0/14)** | **0% (0/14)** |
-
-## Phase 1 entities (Phase 1 + Phase 2 = 14 Syntrometry + 10 Substrate)
+## Entities
 
 ### Syntrometry (14)
 
@@ -42,124 +21,73 @@ Each phase's incremental progress, for the record:
 | Distinction primitives (5) | `Predicate`, `Predikatrix`, `Dialektik`, `Koordination`, `Aspekt` |
 | Syntrometric structures (4) | `Syntrix`, `SyntrixLevel`, `Synkolator`, `Korporator` |
 | Mereology (1) | `Part` |
-| **Teleological / hierarchical (Phase 2) (4)** | `Telecenter`, `Maxime`, `Transzendenzstufe`, `Metroplex` |
+| Teleological / hierarchical (4) | `Telecenter`, `Maxime`, `Transzendenzstufe`, `Metroplex` |
 
 ### Pr4xis-substrate (14)
 
 | Family | Entities |
 |---|---|
 | Core categorical primitives (6) | `SubEntity`, `SubMorphism`, `SubCategory`, `SubFunctor`, `SubEndofunctor`, `SubOntology` |
-| Architectural primitives (Phase 2) (4) | `SubEigenform`, `SubIntention`, `SubStagingLevel`, `SubSystemOfSystems` |
-| **Refined sub-kinds (Phase 3) (4)** | `SubOppositionCategory`, `SubProductCategory`, `SubLeveledEntity`, `SubMereologicalMorphism` |
+| Architectural primitives (4) | `SubEigenform`, `SubIntention`, `SubStagingLevel`, `SubSystemOfSystems` |
+| Refined sub-kinds (4) | `SubOppositionCategory`, `SubProductCategory`, `SubLeveledEntity`, `SubMereologicalMorphism` |
 
-## The lineage mapping (object-level equivalence after Phase 3)
+## Lineage mappings (six verified functors)
 
-| Syntrometry | Pr4xis substrate | Interpretation |
+### Primary: `Syntrometry → Pr4xisSubstrate`
+
+Object-level equivalence. Every Heim concept has a unique pr4xis-substrate target and every substrate primitive has a unique Heim representative.
+
+| Syntrometry | Pr4xis substrate |
+|---|---|
+| `Predicate`     | `SubEntity` |
+| `Predikatrix`   | `SubOntology` |
+| `Dialektik`     | `SubOppositionCategory` |
+| `Koordination`  | `SubMorphism` |
+| `Aspekt`        | `SubProductCategory` |
+| `Syntrix`       | `SubCategory` |
+| `SyntrixLevel`  | `SubLeveledEntity` |
+| `Synkolator`    | `SubEndofunctor` |
+| `Korporator`    | `SubFunctor` |
+| `Part`          | `SubMereologicalMorphism` |
+| `Telecenter`    | `SubEigenform` |
+| `Maxime`        | `SubIntention` |
+| `Transzendenzstufe` | `SubStagingLevel` |
+| `Metroplex`     | `SubSystemOfSystems` |
+
+Gap analysis: **0% unit loss, 0% counit loss** — verified by `test_syntrometry_substrate_is_object_equivalence`.
+
+### Cross-functors into existing pr4xis ontologies
+
+Each of the five cross-functors below passes `check_functor_laws` and carries its own collapse profile, demonstrating that Heim's vocabulary aligns with pr4xis's meta-ontology, composition, staging, and cognitive layers:
+
+| Functor | Target | Headline mapping |
 |---|---|---|
-| `Predicate`     | `SubEntity` | atomic distinction = Entity variant |
-| `Predikatrix`   | `SubOntology` | predicate-system = small ontology |
-| `Dialektik`     | `SubOppositionCategory` | binary-opposition structure (Phase 3) |
-| `Koordination`  | `SubMorphism` | ordering between predicates = morphism |
-| `Aspekt`        | `SubProductCategory` | product [D × K × P] = product category (Phase 3) |
-| `Syntrix`       | `SubCategory` | C_SL (§2.2 — Category of Leveled Structures) |
-| `SyntrixLevel`  | `SubLeveledEntity` | grade-indexed entity (Phase 3) |
-| `Synkolator`    | `SubEndofunctor` | endofunctor on the Syntrix |
-| `Korporator`    | `SubFunctor` | structure-mapping functor |
-| `Part`          | `SubMereologicalMorphism` | CEM-satisfying morphism (Phase 3) |
-| `Telecenter`    | `SubEigenform` | goal-attractor = X=F(X) (Phase 2) |
-| `Maxime`        | `SubIntention` | extremal selection = BDI Intention (Phase 2) |
-| `Transzendenzstufe` | `SubStagingLevel` | transcendence-level (Phase 2) |
-| `Metroplex`     | `SubSystemOfSystems` | hierarchical container (Phase 2) |
+| `Syntrometry → MetaOntology` | `formal::meta::ontology_diagnostics` | `Synkolator` / `Korporator` ↦ `Functor`, `Maxime` ↦ `PropertyTest` |
+| `Syntrometry → Staging` | `formal::meta::staging` (Futamura 1971) | `Transzendenzstufe` ↦ `Interpreter`, `Metroplex` ↦ `CompilerGenerator` |
+| `Syntrometry → Algebra` | `formal::meta::algebra` (Goguen / Zimmermann) | `Korporator` ↦ `Mapping`, `Aspekt` ↦ `Product`, `Telecenter` ↦ `Pushout` |
+| `Syntrometry → C1` | `cognitive::cognition::consciousness` (Dehaene GWT 2014) | `Maxime` ↦ `Attention`, `Metroplex` ↦ `GlobalWorkspace` |
+| `Distinction → Syntrometry` | — (historical direction, Spencer-Brown 1969 → Heim) | `ReEntry` ↦ `Synkolator` |
 
-Bijection: every Heim concept has a unique substrate target; every substrate primitive has a unique Heim representative. Verified by `test_syntrometry_substrate_is_object_equivalence`.
+The `Syntrometry → C1` mapping is the most load-bearing interpretive claim: Heim's `Maxime` (extremal-selection operator) and Dehaene's GWT `Attention` (spotlight selection) are structurally the same morphism, landing on C1's declared `(Attention, ConsciousAccess, Selects)` edge. Heim anticipated the attention/workspace split Dehaene's GWT formalises 34 years later.
 
 ## Domain axioms (6)
 
 | Axiom | Source | Claim |
 |---|---|---|
 | `AspektIsTripleProduct` | Heim §1 | Aspekt mereologically contains `{Dialektik, Koordination, Predikatrix}` |
-| `SynkolatorIsKorporator` | Mac Lane Ch. II §1 | Endofunctor specialises functor (structural) |
+| `SynkolatorIsKorporator` | Mac Lane Ch. II §1 | Endofunctor specialises functor |
 | `SyntrixIsLeveled` | Heim §2.2 | Syntrix carries `LevelOf` and `InhabitsLevelOf` edges |
 | `MetroplexContainsSyntrixAndLevels` | Heim Metroplextheorie | Metroplex mereologically contains `{Syntrix, Transzendenzstufe}` |
 | `MaximeConvergesTowardTelecenter` | Heim Telezentrik | Maxime carries `ConvergesToward` edge into Telecenter |
-| `TelecenterIsSynkolatorFixedPoint` | Heim Telezentrik × Mac Lane | Synkolator carries `FixedPointOf` edge into Telecenter (eigenform) |
-
-## Phase 4 — cross-functors to existing pr4xis ontologies
-
-Phase 4 demonstrates that Heim's syntrometric vocabulary aligns not only with the Pr4xisSubstrate mirror but with existing workspace meta-ontologies. The first cross-functor is:
-
-### `Syntrometry → MetaOntology`
-
-Maps each of the 14 Syntrometry concepts to a `formal::meta::ontology_diagnostics::MetaEntity`:
-
-| Syntrometry | MetaEntity |
-|---|---|
-| `Predicate`     | `DomainOntology` |
-| `Predikatrix`   | `TaxonomyStructure` |
-| `Dialektik`     | `CausalStructure` |
-| `Koordination`  | `NaturalTransformation` |
-| `Aspekt`        | `QualityStructure` |
-| `Syntrix`, `SyntrixLevel` | `CategoryStructure` (intentional collapse) |
-| `Synkolator`, `Korporator` | `Functor` (intentional collapse) |
-| `Part`          | `UnitMorphism` |
-| `Telecenter`    | `CanonicalRepresentative` |
-| `Maxime`        | `PropertyTest` |
-| `Transzendenzstufe` | `IntermediateDomain` |
-| `Metroplex`     | `Structure` |
-
-Collapse rate: 2/14 (14.3%). The two collapses are deliberate — pr4xis's meta-ontology doesn't distinguish `SyntrixLevel` from `Syntrix` or `Synkolator` from `Korporator` at that level of abstraction. Verified by `meta_ontology_functor_laws_pass` + proptest sweeps.
-
-## Phase 5 — cross-functors to domain meta-ontologies
-
-Phase 5 adds two more cross-functors to demonstrate Heim's vocabulary aligns across pr4xis's whole meta-layer, not just the diagnostic one.
-
-### `Syntrometry → Staging` (Futamura 1971 projections)
-
-Transzendenzstufe ↦ Interpreter, Metroplex ↦ CompilerGenerator, Synkolator/Maxime ↦ Specializer, Korporator ↦ Compiler, Telecenter ↦ ObjectProgram, and several concepts collapse to `Program`. Collapse: ~57% (Futamura's vocabulary is deliberately coarser than Heim's). Verified by `staging_functor_laws_pass`.
-
-### `Syntrometry → Algebra` (Goguen/Zimmermann ontology algebra)
-
-Korporator ↦ Mapping, Aspekt ↦ Product, Dialektik ↦ Coproduct, Part/Maxime ↦ Pullback, Telecenter ↦ Pushout, Syntrix/Transzendenzstufe/Metroplex ↦ Diagram. Verified by `algebra_functor_laws_pass`. This is the alignment between Heim's composition operators and the categorical primitives pr4xis's `compose` API (#103) actually uses.
-
-## Phase 6 — kinded→kinded cross-functors (foundation-completeness)
-
-Phase 6 closes the remaining open functors so the lineage is fully grounded across pr4xis's cognitive layer, not just the meta layer. Two new cross-functors, both kinded → kinded — a harder case than dense targets because source morphism `(from, to, kind)` must land on a target morphism that actually exists (Identity, declared edge, or Composed self-loop).
-
-### `Distinction → Syntrometry` (Spencer-Brown → Heim)
-
-Historical direction: *Laws of Form* (1969) precedes *Syntrometrische Maximentelezentrik* (ca. 1980). Every distinction primitive has a syntrometric counterpart; the functor embeds Spencer-Brown's 6-concept vocabulary into Heim's 14-concept system:
-
-| Distinction | Syntrometry |
-|---|---|
-| `Void`, `Mark`, `Boundary`, `MarkedSpace`, `UnmarkedSpace` | `Syntrix` |
-| `ReEntry` | `Synkolator` |
-
-5:1 collapse to `Syntrix` is honest — Spencer-Brown's calculus doesn't distinguish Heim's layered structure. What matters is that `ReEntry` (self-applied distinction) lands at `Synkolator` (endofunctor) with the right edge structure. Verified by `distinction_to_syntrometry_laws_pass`.
-
-### `Syntrometry → C1` (Heim → Dehaene GWT)
-
-Heim's `Maxime` and `Metroplex` align directly with Dehaene's (2014) Global Workspace Theory primitives:
-
-| Syntrometry | C1 | Why |
-|---|---|---|
-| `Maxime` | `Attention` | Extremal selection = GWT spotlight |
-| `Metroplex` | `GlobalWorkspace` | Hierarchical container = workspace |
-| everything else | `ConsciousAccess` | honest collapse |
-
-Edge `(Maxime, Aspekt, Selects)` lands on C1's declared `(Attention, ConsciousAccess, Selects)` — Heim's "extremal of expedient ideas selects among candidate Aspekts" and GWT's "attention selects which coalition accesses consciousness" are structurally the same morphism. **Heim anticipated the attention/workspace split Dehaene formalised 34 years later.** Verified by `syntrometry_to_c1_laws_pass`.
-
-### Technical insight from kinded→kinded
-
-Both functors required a non-trivial insight about `map_morphism`: source `Composed` kind must map to target `Composed` kind so that `F(g∘f) = F(g)∘F(f)` holds (target compose always produces `Composed` for non-Identity inputs). The earlier dense-target functors hid this because dense categories don't carry kind information. Documented in both functor modules' comments.
+| `TelecenterIsSynkolatorFixedPoint` | Heim × Mac Lane | Synkolator carries `FixedPointOf` edge into Telecenter (eigenform X = F(X)) |
 
 ## Files
 
-- `ontology.rs` — `SyntrometryOntology` (14 concepts) + 6 domain axioms + qualities
-- `substrate.rs` — `Pr4xisSubstrateOntology` (10 concepts, functor target)
-- `lineage_functor.rs` — `SyntrometryToPr4xisSubstrate` + verification test
-- `substrate_functor.rs` — `map_substrate` reverse object map (for gap analysis)
+- `ontology.rs` — `SyntrometryOntology` + the six domain axioms + qualities
+- `substrate.rs` — `Pr4xisSubstrateOntology` (functor target, mirrors pr4xis core + architectural primitives)
+- `lineage_functor.rs` — the primary `Syntrometry → Pr4xisSubstrate` functor + verification test
+- `substrate_functor.rs` — reverse object map (feeds gap analysis)
 - `adjunction.rs` — `unit_pair` / `counit_pair` helpers + round-trip tests
-- `proptests.rs` — 12 proptest sweeps over concepts, morphisms, axioms, round-trips
-- `mod.rs` — module wiring
-- `README.md` — this file
-- `citings.md` — bibliography
+- `meta_ontology_functor.rs`, `staging_functor.rs`, `algebra_functor.rs`, `consciousness_functor.rs`, `distinction_functor.rs` — cross-functors into existing pr4xis ontologies
+- `proptests.rs` — proptest sweeps for every functor + axiom
+- `README.md`, `citings.md` — documentation + bibliography

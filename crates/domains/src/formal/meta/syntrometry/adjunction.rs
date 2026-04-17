@@ -67,7 +67,7 @@ mod tests {
         }
     }
 
-    /// Phase 3 target: the lineage is an equivalence at the object level.
+    /// The lineage is an equivalence at the object level.
     /// Every syntrometric concept has a distinct substrate target and
     /// round-trips back to itself. The remaining "adjunction" is trivial
     /// in the Cat-sense but the *content* is the full Heim ↔ pr4xis
@@ -83,13 +83,13 @@ mod tests {
             .collect();
         assert!(
             collapses.is_empty(),
-            "Phase 3 target is 0% unit loss; residual collapses: {:?}",
+            "lineage must be an equivalence; residual collapses: {:?}",
             collapses
         );
     }
 
     /// All 14 syntrometric concepts are round-trip fixed points after
-    /// Phase 3's substrate enrichment.
+    /// substrate enrichment.
     #[test]
     fn unit_preserves_all_concepts() {
         let preserved: Vec<_> = SyntrometryConcept::variants()
