@@ -22,7 +22,7 @@ This is the case #98's issue body already diagnoses, citing Nelson & Narens (199
 - `PhenomenalMonitoring` (IIT cause-effect structure)
 - `BroadcastMessage` (GWT broadcast)
 
-With no target object for these, any functor has to map them to *something*, and whatever that something is, it will collide with the image of another source concept — breaking injectivity that the composition law needs under the current mapping.
+With no target object for these, any functor has to map them to *something*, and under the current attempted mapping that forces object collisions or other unnatural assignments. The morphism mapping then becomes ill-typed or cannot preserve identities and composition consistently — not because functor laws demand object-injectivity (they don't; many-to-one is fine in principle) but because the forced collisions leave no well-typed choice of morphism image.
 
 **Fix:** enrich metacognition. This is a content problem, not a structural one. Once the three concepts land in metacognition, the functor should type-check.
 
@@ -52,7 +52,7 @@ cargo test -p pr4xis-domains -- resilience::dependability_functor
 
 Code: `crates/domains/src/applied/resilience/dependability_functor.rs`. The `ResilienceToFaultTolerance` functor sends every Resilience object to `FaultTolerance` and every morphism to `id_FaultTolerance`, and `check_functor_laws` passes. The previous "laws failed" claim in the Dependability/Resilience `mod.rs` notes reflected an attempt to preserve non-trivial morphism structure without enriching the target — not a structural impossibility.
 
-What fails in the repo's current check is the expected *non-trivial* mapping where morphism kinds are preserved. A Resilience `Retry --Schedules--> BackoffStrategy` wants to map to a Dependability morphism carrying a compatible kind between whatever `Retry` and `BackoffStrategy` map to — and no such typed morphism exists in Dependability because `FaultTolerance` has no internal structure.
+What fails in the repo's current check is the expected *non-trivial* mapping where morphism kinds are preserved. A Resilience `Retry --Schedules--> BackoffStrategy` wants to map to a Dependability morphism carrying a compatible kind between whatever `Retry` and `BackoffStrategy` map to. Dependability's category is dense (no `edges:` block; only Identity and Composed morphism kinds), so it cannot express kind-bearing morphisms like `Schedules` at all — regardless of whether `FaultTolerance` has taxonomic children (it does: `ErrorDetection`, `ErrorRecovery`, etc.). The mismatch is about missing typed-morphism presentation in the target, not about `FaultTolerance` itself lacking structure.
 
 **Fix: choose between two routes.**
 

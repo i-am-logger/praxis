@@ -25,7 +25,7 @@
 //! Dependability's means hierarchy, which is a content decision separate from
 //! the functor laws. See the research doc for the recommendation.
 
-use pr4xis::category::Functor;
+use pr4xis::category::{Category, Functor};
 
 use crate::applied::dependability::ontology::{
     DependabilityCategory, DependabilityConcept, DependabilityRelation,
@@ -46,10 +46,9 @@ impl Functor for ResilienceToFaultTolerance {
     }
 
     fn map_morphism(_: &ResilienceRelation) -> DependabilityRelation {
-        DependabilityRelation {
-            from: DependabilityConcept::FaultTolerance,
-            to: DependabilityConcept::FaultTolerance,
-        }
+        // Delegate identity construction to the category so the functor stays
+        // correct if the generated relation type ever gains extra fields.
+        DependabilityCategory::identity(&DependabilityConcept::FaultTolerance)
     }
 }
 
