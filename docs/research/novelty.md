@@ -42,14 +42,14 @@ After subtracting the prior art, the things we believe pr4xis contributes — pe
 
 5. **The explicit codegen / async / mmap functor equivalence.** Three different mechanisms for delivering ontology data into the runtime, all proven equivalent as functors from the same source. This is a small-but-load-bearing piece of infrastructure that lets the same ontology run as a static binary, an asynchronously loaded resource, or a memory-mapped file without semantic drift.
 
-## The Heim lineage — machine-verified (Phase 1)
+## The Heim lineage — machine-verified across six functors
 
-The most prominent lineage claim in the project is the structural alignment with the **modernized syntrometric logic tradition** (Heim 1980, reformulated categorically in 2025). Per the project's core principle — every claim must be machine-checkable — this has now been operationalised as a tested theorem.
+The most prominent lineage claim in the project is the structural alignment with the **modernized syntrometric logic tradition** (Heim 1980, reformulated categorically in 2025). Per the project's core principle — every claim must be machine-checkable — this has now been operationalised as six tested theorems spanning the substrate, the meta-ontology layer, the composition layer, and the cognitive layer.
 
 ### Verify in one command
 
 ```
-cargo test -p pr4xis-domains -- formal::meta::syntrometry::lineage_functor::tests::lineage_functor_laws_pass
+cargo test -p pr4xis-domains -- syntrometry
 ```
 
 ### What the test proves
@@ -67,6 +67,18 @@ The [gap analysis](../../crates/domains/src/formal/meta/gap_analysis.rs) reports
 | **3** | **0% (0/14)** | **0% (0/14)** | **object-level equivalence** |
 
 Phase 3 closed the final 28.6% gap by adding `SubOppositionCategory`, `SubProductCategory`, `SubLeveledEntity`, and `SubMereologicalMorphism` — refined sub-kinds of the substrate primitives that receive `Dialektik`, `Aspekt`, `SyntrixLevel`, and `Part` without collapsing. Every Heim concept now has a unique pr4xis-substrate target and every substrate primitive has a unique Heim representative.
+
+### Cross-functors to existing pr4xis ontologies (Phases 4–6)
+
+The primary lineage is the full Heim ↔ Pr4xisSubstrate bijection above. Beyond that, five further functors demonstrate that Heim's vocabulary aligns with ontologies pr4xis already had for other reasons:
+
+- **`Syntrometry → MetaOntology`** (ontology_diagnostics) — 14.3% collapse. Heim's categorical primitives match the meta-ontology vocabulary `pr4xis` uses to diagnose gaps across ontology pairs.
+- **`Syntrometry → Staging`** (Futamura 1971) — Transzendenzstufen ↦ Futamura projection levels.
+- **`Syntrometry → Algebra`** (Goguen / Zimmermann) — Korporator ↦ Mapping, Aspekt ↦ Product, Dialektik ↦ Coproduct, Telecenter ↦ Pushout. Heim's composition operators align with the categorical primitives the pr4xis `compose` API (#103) uses at runtime.
+- **`Distinction → Syntrometry`** (Spencer-Brown 1969 → Heim, historical direction) — kinded→kinded embedding; `ReEntry` ↦ `Synkolator` preserves the self-application edge structure.
+- **`Syntrometry → C1`** (Heim → Dehaene GWT) — `Maxime` ↦ `Attention`, `Metroplex` ↦ `GlobalWorkspace`. Heim anticipated the attention/workspace split Dehaene formalises 34 years later. The `(Maxime, Aspekt, Selects)` morphism lands on the declared `(Attention, ConsciousAccess, Selects)` in C1 — Heim's "extremal of expedient ideas selects among candidate Aspekts" and Dehaene's "attention selects which coalition accesses consciousness" are structurally the same morphism.
+
+Each functor has `check_functor_laws` running against it as a test; the lineage is now verified not just structurally but quantitatively (per-functor collapse profiles) and contextually (across the meta, composition, and cognitive layers of pr4xis).
 
 ### Phase 1 concept mapping
 

@@ -201,6 +201,33 @@ proptest! {
         prop_assert_eq!(f_id, id_fc);
     }
 
+    /// Phase 6: Syntrometry → C1 preserves identity across all concepts.
+    #[test]
+    fn c1_functor_preserves_identity(c in arb_syntrometry_concept()) {
+        use super::consciousness_functor::SyntrometryToC1;
+        use crate::cognitive::cognition::consciousness::ontology::C1Category;
+        let id_c = SyntrometryCategory::identity(&c);
+        let f_id = SyntrometryToC1::map_morphism(&id_c);
+        let id_fc = C1Category::identity(&SyntrometryToC1::map_object(&c));
+        prop_assert_eq!(f_id, id_fc);
+    }
+
+    /// Phase 6: Distinction → Syntrometry (kinded→kinded) preserves identity.
+    #[test]
+    fn distinction_functor_preserves_identity(_ in 0..32u32) {
+        use super::distinction_functor::DistinctionToSyntrometry;
+        use crate::cognitive::cognition::distinction::{
+            DistinctionCategory, DistinctionConcept,
+        };
+        use pr4xis::category::Entity;
+        for c in DistinctionConcept::variants() {
+            let id_c = DistinctionCategory::identity(&c);
+            let f_id = DistinctionToSyntrometry::map_morphism(&id_c);
+            let id_fc = SyntrometryCategory::identity(&DistinctionToSyntrometry::map_object(&c));
+            prop_assert_eq!(f_id, id_fc);
+        }
+    }
+
     /// Every kind of Syntrometry morphism (Identity, every declared edge
     /// kind, Composed) shows up in `morphisms()`. Without this the
     /// category's closure claim would be empty.

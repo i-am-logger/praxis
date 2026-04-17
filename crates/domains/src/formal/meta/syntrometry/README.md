@@ -1,4 +1,4 @@
-# Syntrometry — Heim's syntrometric logic (Phases 1–5)
+# Syntrometry — Heim's syntrometric logic (Phases 1–6)
 
 Encodes the core of Burkhard Heim's *Syntrometrische Maximentelezentrik* — the logical/philosophical foundation underneath Heim theory — as a pr4xis ontology, and verifies the long-standing claim that "pr4xis instantiates Heim's syntrometric structure" by a Functor whose laws are checked at test time.
 
@@ -121,9 +121,36 @@ Transzendenzstufe ↦ Interpreter, Metroplex ↦ CompilerGenerator, Synkolator/M
 
 Korporator ↦ Mapping, Aspekt ↦ Product, Dialektik ↦ Coproduct, Part/Maxime ↦ Pullback, Telecenter ↦ Pushout, Syntrix/Transzendenzstufe/Metroplex ↦ Diagram. Verified by `algebra_functor_laws_pass`. This is the alignment between Heim's composition operators and the categorical primitives pr4xis's `compose` API (#103) actually uses.
 
-### Still open
+## Phase 6 — kinded→kinded cross-functors (foundation-completeness)
 
-`Syntrometry → Distinction` (Spencer-Brown, the reverse-direction lineage) needs kinded-to-kinded functor authoring with kind alignment — deferred until we pick a consistent kind-mapping rubric.
+Phase 6 closes the remaining open functors so the lineage is fully grounded across pr4xis's cognitive layer, not just the meta layer. Two new cross-functors, both kinded → kinded — a harder case than dense targets because source morphism `(from, to, kind)` must land on a target morphism that actually exists (Identity, declared edge, or Composed self-loop).
+
+### `Distinction → Syntrometry` (Spencer-Brown → Heim)
+
+Historical direction: *Laws of Form* (1969) precedes *Syntrometrische Maximentelezentrik* (ca. 1980). Every distinction primitive has a syntrometric counterpart; the functor embeds Spencer-Brown's 6-concept vocabulary into Heim's 14-concept system:
+
+| Distinction | Syntrometry |
+|---|---|
+| `Void`, `Mark`, `Boundary`, `MarkedSpace`, `UnmarkedSpace` | `Syntrix` |
+| `ReEntry` | `Synkolator` |
+
+5:1 collapse to `Syntrix` is honest — Spencer-Brown's calculus doesn't distinguish Heim's layered structure. What matters is that `ReEntry` (self-applied distinction) lands at `Synkolator` (endofunctor) with the right edge structure. Verified by `distinction_to_syntrometry_laws_pass`.
+
+### `Syntrometry → C1` (Heim → Dehaene GWT)
+
+Heim's `Maxime` and `Metroplex` align directly with Dehaene's (2014) Global Workspace Theory primitives:
+
+| Syntrometry | C1 | Why |
+|---|---|---|
+| `Maxime` | `Attention` | Extremal selection = GWT spotlight |
+| `Metroplex` | `GlobalWorkspace` | Hierarchical container = workspace |
+| everything else | `ConsciousAccess` | honest collapse |
+
+Edge `(Maxime, Aspekt, Selects)` lands on C1's declared `(Attention, ConsciousAccess, Selects)` — Heim's "extremal of expedient ideas selects among candidate Aspekts" and GWT's "attention selects which coalition accesses consciousness" are structurally the same morphism. **Heim anticipated the attention/workspace split Dehaene formalised 34 years later.** Verified by `syntrometry_to_c1_laws_pass`.
+
+### Technical insight from kinded→kinded
+
+Both functors required a non-trivial insight about `map_morphism`: source `Composed` kind must map to target `Composed` kind so that `F(g∘f) = F(g)∘F(f)` holds (target compose always produces `Composed` for non-Identity inputs). The earlier dense-target functors hid this because dense categories don't carry kind information. Documented in both functor modules' comments.
 
 ## Files
 
