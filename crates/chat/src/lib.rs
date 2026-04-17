@@ -778,9 +778,10 @@ pub fn observe_self(lang: &English) -> SelfModelInstance {
     SelfModelInstance::observe(loaded_ontologies(lang))
 }
 
-/// JSON encoding of the eigenform for transport (WASM boundary).
-pub fn self_describe(lang: &English) -> String {
-    observe_self(lang).to_json()
+/// Describe the eigenform structurally. Callers that need JSON (WASM
+/// boundary) should call `.to_json()` on the result themselves.
+pub fn self_describe(lang: &English) -> SelfModelInstance {
+    observe_self(lang)
 }
 
 #[cfg(test)]
@@ -905,10 +906,30 @@ mod tests {
     #[test]
     fn self_describe_has_ontologies() {
         let en = sample_english();
-        let json = self_describe(&en);
-        assert!(json.contains("ontology_count"));
-        assert!(json.contains("SelfModel"));
-        assert!(json.contains("Knowledge"));
+        let instance = self_describe(&en);
+        assert!(
+            !instance.components.is_empty(),
+            "expected at least one registered vocabulary"
+        );
+        // SelfModel is on the new ontology! proc macro — Vocabulary name
+        // is the macro's `name:` + "Ontology" suffix = "SelfModelOntology".
+        assert!(
+            instance
+                .components
+                .iter()
+                .any(|v| v.name() == "SelfModelOntology"),
+            "expected SelfModelOntology in registered vocabularies"
+        );
+        // Knowledge is still on define_ontology! — Vocabulary name is the
+        // struct name "KnowledgeOntology". Both macros now produce the
+        // same name format.
+        assert!(
+            instance
+                .components
+                .iter()
+                .any(|v| v.name() == "KnowledgeOntology"),
+            "expected KnowledgeOntology in registered vocabularies"
+        );
     }
 
     #[test]
