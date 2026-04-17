@@ -14,7 +14,7 @@ pub struct TokenizeResult<'a> {
 
 impl Traceable for TokenizeResult<'_> {
     fn step(&self) -> PipelineStep {
-        PipelineStep::Tokenize
+        PipelineStep::TOKENIZE
     }
 
     fn trace_detail(&self) -> String {
@@ -47,7 +47,7 @@ impl Traceable for TokenizeResult<'_> {
 /// Traceable wrapper for parse (reduction) results.
 impl Traceable for ReductionResult {
     fn step(&self) -> PipelineStep {
-        PipelineStep::Parse
+        PipelineStep::PARSE
     }
 
     fn trace_detail(&self) -> String {
@@ -75,7 +75,7 @@ pub struct InterpretResult<'a> {
 
 impl Traceable for InterpretResult<'_> {
     fn step(&self) -> PipelineStep {
-        PipelineStep::Interpret
+        PipelineStep::INTERPRET
     }
 
     fn trace_detail(&self) -> String {
@@ -115,7 +115,7 @@ pub struct EpistemicResult {
 
 impl Traceable for EpistemicResult {
     fn step(&self) -> PipelineStep {
-        PipelineStep::EpistemicClassification
+        PipelineStep::EPISTEMIC_CLASSIFICATION
     }
 
     fn trace_detail(&self) -> String {
@@ -141,7 +141,7 @@ pub struct EntityLookupResult {
 
 impl Traceable for EntityLookupResult {
     fn step(&self) -> PipelineStep {
-        PipelineStep::EntityLookup
+        PipelineStep::ENTITY_LOOKUP
     }
 
     fn trace_detail(&self) -> String {
@@ -166,7 +166,7 @@ pub struct TaxonomyResult {
 
 impl Traceable for TaxonomyResult {
     fn step(&self) -> PipelineStep {
-        PipelineStep::TaxonomyTraversal
+        PipelineStep::TAXONOMY_TRAVERSAL
     }
 
     fn trace_detail(&self) -> String {
@@ -190,7 +190,7 @@ pub struct RealizationResult {
 
 impl Traceable for RealizationResult {
     fn step(&self) -> PipelineStep {
-        PipelineStep::Realization
+        PipelineStep::REALIZATION
     }
 
     fn trace_detail(&self) -> String {
@@ -213,7 +213,7 @@ pub struct ResponseResult {
 
 impl Traceable for ResponseResult {
     fn step(&self) -> PipelineStep {
-        PipelineStep::ContentDetermination
+        PipelineStep::CONTENT_DETERMINATION
     }
 
     fn trace_detail(&self) -> String {

@@ -171,18 +171,18 @@ pub fn process_with_metadata(lang: &English, input: &str) -> ProcessResult {
             &trace_impls::InterpretResult { meaning: &meaning },
         ))
         .tell(PipelineTrace::single(
-            PipelineStep::SpeechActClassification,
+            PipelineStep::SPEECH_ACT_CLASSIFICATION,
             &format!("{:?}", user_act),
             true,
         ))
         .tell(PipelineTrace::single(
-            PipelineStep::Metacognition,
+            PipelineStep::METACOGNITION,
             metacog_decision,
             true,
         ))
         .tell(PipelineTrace::from_traceable(&response_result))
         .tell(PipelineTrace::single(
-            PipelineStep::Realization,
+            PipelineStep::REALIZATION,
             &format!("{response_len} chars generated"),
             true,
         ));
@@ -801,15 +801,15 @@ mod tests {
         // PipelineTrace forms a monoid under concatenation.
         // This enables Writer<PipelineTrace, A> — the pipeline IS a writer monad.
         let empty = PipelineTrace::empty();
-        let t1 = PipelineTrace::single(PipelineStep::Tokenize, "5 tokens", true);
-        let t2 = PipelineTrace::single(PipelineStep::Parse, "success", true);
+        let t1 = PipelineTrace::single(PipelineStep::TOKENIZE, "5 tokens", true);
+        let t2 = PipelineTrace::single(PipelineStep::PARSE, "success", true);
 
         // Left identity: empty ++ t = t
         assert_eq!(empty.combine(&t1).entries.len(), 1);
         // Right identity: t ++ empty = t
         assert_eq!(t1.combine(&empty).entries.len(), 1);
         // Associativity
-        let t3 = PipelineTrace::single(PipelineStep::Interpret, "question", true);
+        let t3 = PipelineTrace::single(PipelineStep::INTERPRET, "question", true);
         assert_eq!(
             t1.combine(&t2).combine(&t3).entries.len(),
             t1.combine(&t2.combine(&t3)).entries.len()
@@ -822,21 +822,21 @@ mod tests {
         // Monadic bind composes pipeline steps and accumulates trace.
         let step1: TracedPipeline<usize> = pr4xis::category::Writer::new(
             5,
-            PipelineTrace::single(PipelineStep::Tokenize, "5 tokens", true),
+            PipelineTrace::single(PipelineStep::TOKENIZE, "5 tokens", true),
         );
 
         let result = step1
             .bind(|count| {
                 pr4xis::category::Writer::new(
                     count > 0,
-                    PipelineTrace::single(PipelineStep::Parse, "parsed", true),
+                    PipelineTrace::single(PipelineStep::PARSE, "parsed", true),
                 )
             })
             .bind(|parsed| {
                 let msg = if parsed { "question" } else { "unknown" };
                 pr4xis::category::Writer::new(
                     msg,
-                    PipelineTrace::single(PipelineStep::Interpret, msg, parsed),
+                    PipelineTrace::single(PipelineStep::INTERPRET, msg, parsed),
                 )
             });
 
@@ -967,10 +967,10 @@ mod tests {
 
         // First entry is always Tokenize — the writer log respects order
         // because Vec::combine concatenates left-to-right.
-        assert_eq!(result.trace.entries[0].step, PipelineStep::Tokenize);
+        assert_eq!(result.trace.entries[0].step, PipelineStep::TOKENIZE);
         // Last entry is Realization — the final step of the writer chain.
         let last = result.trace.entries.last().unwrap();
-        assert_eq!(last.step, PipelineStep::Realization);
+        assert_eq!(last.step, PipelineStep::REALIZATION);
     }
 
     #[test]
@@ -981,7 +981,7 @@ mod tests {
         let result = process_with_metadata(&en, "");
         assert_eq!(result.token_count, 0);
         assert_eq!(result.trace.entries.len(), 1);
-        assert_eq!(result.trace.entries[0].step, PipelineStep::Tokenize);
+        assert_eq!(result.trace.entries[0].step, PipelineStep::TOKENIZE);
     }
 
     #[test]
@@ -989,12 +989,12 @@ mod tests {
         // The writer monad's `tell` preserves order because Vec monoid
         // concatenation is left-associative. Verifying directly:
         let pipeline: TracedPipeline<()> = Writer::pure(())
-            .tell(PipelineTrace::single(PipelineStep::Tokenize, "a", true))
-            .tell(PipelineTrace::single(PipelineStep::Parse, "b", true))
-            .tell(PipelineTrace::single(PipelineStep::Interpret, "c", true));
+            .tell(PipelineTrace::single(PipelineStep::TOKENIZE, "a", true))
+            .tell(PipelineTrace::single(PipelineStep::PARSE, "b", true))
+            .tell(PipelineTrace::single(PipelineStep::INTERPRET, "c", true));
         assert_eq!(pipeline.log.entries.len(), 3);
-        assert_eq!(pipeline.log.entries[0].step, PipelineStep::Tokenize);
-        assert_eq!(pipeline.log.entries[1].step, PipelineStep::Parse);
-        assert_eq!(pipeline.log.entries[2].step, PipelineStep::Interpret);
+        assert_eq!(pipeline.log.entries[0].step, PipelineStep::TOKENIZE);
+        assert_eq!(pipeline.log.entries[1].step, PipelineStep::PARSE);
+        assert_eq!(pipeline.log.entries[2].step, PipelineStep::INTERPRET);
     }
 }

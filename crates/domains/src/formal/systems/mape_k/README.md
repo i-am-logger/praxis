@@ -12,7 +12,7 @@ The `PipelineStep` enum in `formal::information::diagnostics::trace_functors` wa
 cargo test -p pr4xis-domains -- mape_k
 ```
 
-Runs **15+ tests**: category laws, ontology validation, three domain axioms (`FourPhaseCycle`, `LoopIsClosed`, `EveryPhaseConsultsKnowledge`) as single-point + proptest sweeps, plus the `PipelineStepToMapeK` cross-functor laws and concrete step-to-phase assignments.
+Runs **16 tests**: category laws, ontology validation, three domain axioms (`FourPhaseCycle`, `LoopIsClosed`, `EveryPhaseConsultsKnowledge`) as single-point + proptest sweeps, plus the `PipelineStepToMapeK` cross-functor laws and concrete step-to-phase assignments.
 
 ## Entities (6)
 

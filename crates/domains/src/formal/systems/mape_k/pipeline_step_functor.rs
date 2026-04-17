@@ -2,10 +2,16 @@
 //!
 //! Rather than rewrite the 13-variant `PipelineStep` into a different
 //! structure, this functor carries each step to its MAPE-K phase. It
-//! makes the claim "the pr4xis chat pipeline IS a MAPE-K loop" verifiable
-//! at test time: if every step lands on a MAPE-K phase consistent with
-//! both its semantic role and its ordering in the pipeline, the functor
-//! laws pass and the claim is proven.
+//! makes the pipeline's phase classification verifiable at test time:
+//! if every step lands on a MAPE-K phase consistent with its semantic
+//! role, the functor laws confirm the object mapping is well-defined
+//! and identity-preserving.
+//!
+//! Because the source category here is discrete (identity-only morphisms),
+//! these laws do **not** by themselves verify pipeline ordering or prove
+//! an M → A → P → E → M loop; that would require enriching
+//! `PipelineStepCategory` with sequencing morphisms between steps and
+//! mapping them into the corresponding `HandsOffTo` relations.
 //!
 //! This is also the answer to `#117` Part 1 (mechanical refactor):
 //! the existing `PipelineStep` stays, just gets a literature-grounded
@@ -48,10 +54,25 @@ use crate::formal::information::diagnostics::trace_functors::PipelineStep;
 pub struct PipelineStepCategory;
 
 /// Identity-only wrapper morphism for `PipelineStep`.
+///
+/// Fields are private so callers can't construct non-identity morphisms
+/// that would break the discrete-category contract assumed by
+/// `map_morphism` below. Construct via `identity()`.
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct PipelineStepMorphism {
-    pub from: PipelineStep,
-    pub to: PipelineStep,
+    from: PipelineStep,
+    to: PipelineStep,
+}
+
+impl PipelineStepMorphism {
+    /// The only public constructor — produces an identity morphism on `step`.
+    /// Enforces the discrete-category invariant at the type-system boundary.
+    pub fn identity(step: PipelineStep) -> Self {
+        Self {
+            from: step,
+            to: step,
+        }
+    }
 }
 
 impl pr4xis::category::Relationship for PipelineStepMorphism {
@@ -64,71 +85,41 @@ impl pr4xis::category::Relationship for PipelineStepMorphism {
     }
 }
 
-impl pr4xis::category::Entity for PipelineStep {
-    fn variants() -> Vec<Self> {
-        vec![
-            PipelineStep::Tokenize,
-            PipelineStep::Parse,
-            PipelineStep::Interpret,
-            PipelineStep::EntityLookup,
-            PipelineStep::TaxonomyTraversal,
-            PipelineStep::CommonAncestor,
-            PipelineStep::Metacognition,
-            PipelineStep::SpeechActClassification,
-            PipelineStep::ResponseFrameSelection,
-            PipelineStep::ContentDetermination,
-            PipelineStep::DocumentPlanning,
-            PipelineStep::Realization,
-            PipelineStep::EpistemicClassification,
-        ]
-    }
-}
+// `PipelineStep` derives `Entity` at its definition in `trace_functors.rs`,
+// so variants() stays in sync with the enum automatically.
 
 impl Category for PipelineStepCategory {
     type Object = PipelineStep;
     type Morphism = PipelineStepMorphism;
 
     fn identity(obj: &PipelineStep) -> PipelineStepMorphism {
-        PipelineStepMorphism {
-            from: *obj,
-            to: *obj,
-        }
+        PipelineStepMorphism::identity(*obj)
     }
 
     fn compose(f: &PipelineStepMorphism, g: &PipelineStepMorphism) -> Option<PipelineStepMorphism> {
-        if f.to != g.from {
-            return None;
+        // Discrete category: the only valid composition is identity ∘ identity
+        // on the same object. Any other shape is rejected.
+        if f.from == f.to && g.from == g.to && f.to == g.from {
+            Some(PipelineStepMorphism::identity(f.from))
+        } else {
+            None
         }
-        Some(PipelineStepMorphism {
-            from: f.from,
-            to: g.to,
-        })
     }
 
     fn morphisms() -> Vec<PipelineStepMorphism> {
         use pr4xis::category::Entity;
         PipelineStep::variants()
             .into_iter()
-            .map(|s| PipelineStepMorphism { from: s, to: s })
+            .map(PipelineStepMorphism::identity)
             .collect()
     }
 }
 
 fn map_step(step: &PipelineStep) -> MapeKConcept {
-    use MapeKConcept as M;
-    use PipelineStep as P;
-    match step {
-        // Monitor: sensing input + sensing self.
-        P::Tokenize | P::Parse | P::Interpret | P::Metacognition | P::EpistemicClassification => {
-            M::Monitor
-        }
-        // Analyze: reasoning over knowledge.
-        P::EntityLookup | P::TaxonomyTraversal | P::CommonAncestor => M::Analyze,
-        // Plan: deciding what to say.
-        P::SpeechActClassification | P::ResponseFrameSelection => M::Plan,
-        // Execute: producing the utterance.
-        P::ContentDetermination | P::DocumentPlanning | P::Realization => M::Execute,
-    }
+    // `PipelineStep` now directly carries its MAPE-K phase — the mapping
+    // is definitional rather than pattern-matched. The functor simply
+    // projects out the phase field.
+    step.phase()
 }
 
 /// Functor: the 13-step `PipelineStep` category → the 5-concept MAPE-K
@@ -146,8 +137,17 @@ impl Functor for PipelineStepToMapeK {
 
     fn map_morphism(m: &PipelineStepMorphism) -> MapeKRelation {
         // Source is a discrete category, so every morphism is an identity.
-        // Map to the target's identity at the image object.
-        MapeKCategory::identity(&map_step(&m.from))
+        // The `PipelineStepMorphism::identity(..)` constructor is the only
+        // public path in, so this invariant holds by construction. The
+        // debug_assert documents the assumption and guards against future
+        // drift if new constructors get added.
+        use pr4xis::category::Relationship;
+        debug_assert_eq!(
+            m.source(),
+            m.target(),
+            "PipelineStepCategory is discrete — non-identity morphisms should be unreachable"
+        );
+        MapeKCategory::identity(&map_step(&m.source()))
     }
 }
 
@@ -166,18 +166,18 @@ mod tests {
     fn step_assignments_match_literature() {
         use MapeKConcept as M;
         use PipelineStep as P;
-        assert_eq!(PipelineStepToMapeK::map_object(&P::Tokenize), M::Monitor);
+        assert_eq!(PipelineStepToMapeK::map_object(&P::TOKENIZE), M::Monitor);
         assert_eq!(
-            PipelineStepToMapeK::map_object(&P::EntityLookup),
+            PipelineStepToMapeK::map_object(&P::ENTITY_LOOKUP),
             M::Analyze
         );
         assert_eq!(
-            PipelineStepToMapeK::map_object(&P::SpeechActClassification),
+            PipelineStepToMapeK::map_object(&P::SPEECH_ACT_CLASSIFICATION),
             M::Plan
         );
-        assert_eq!(PipelineStepToMapeK::map_object(&P::Realization), M::Execute);
+        assert_eq!(PipelineStepToMapeK::map_object(&P::REALIZATION), M::Execute);
         assert_eq!(
-            PipelineStepToMapeK::map_object(&P::Metacognition),
+            PipelineStepToMapeK::map_object(&P::METACOGNITION),
             M::Monitor
         );
     }

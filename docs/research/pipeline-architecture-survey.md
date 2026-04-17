@@ -41,10 +41,10 @@ No step is orphaned. No MAPE-K phase is unused. The current pipeline IS a MAPE-K
 
 One top-level `MapeK` ontology formalising:
 
-- Five concepts — `Monitor`, `Analyze`, `Plan`, `Execute`, `Knowledge`
-- Four transition edges — `Monitor → Analyze`, `Analyze → Plan`, `Plan → Execute`, `Execute → Monitor` (the loop closes)
+- Six concepts — `MapeKPhase`, `Monitor`, `Analyze`, `Plan`, `Execute`, `Knowledge`
+- Four transition edges — `Monitor → Analyze`, `Analyze → Plan`, `Plan → Execute`, `Execute → Monitor`
 - Each phase `Consults` `Knowledge`
-- Domain axioms: FourPhaseCycle (the loop is closed), EveryPhaseConsultsKnowledge (MAPE-K is a knowledge-based loop), not-three-phase (Kephart & Chess explicitly reject three-phase variants)
+- Domain axioms: `FourPhaseCycle` (the four operational phases are the children of `MapeKPhase`), `LoopIsClosed` (the `Execute → Monitor` edge closes the loop), `EveryPhaseConsultsKnowledge` (MAPE-K is a knowledge-based loop)
 
 Plus a cross-functor `PipelineStep → MapeK` that maps each existing step to its phase. That puts the existing 13 steps in a literature-grounded structural home without rewriting the steps themselves.
 

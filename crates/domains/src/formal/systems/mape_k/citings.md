@@ -13,8 +13,8 @@
 
 ## Cross-references
 
-- Workspace bibliography: [`docs/papers/references.md`](../../../../../../../docs/papers/references.md)
-- Research note: [`docs/research/pipeline-architecture-survey.md`](../../../../../../../docs/research/pipeline-architecture-survey.md) — why MAPE-K was picked over 7 alternatives for the chat pipeline.
+- Workspace bibliography: [`docs/papers/references.md`](../../../../../../docs/papers/references.md)
+- Research note: [`docs/research/pipeline-architecture-survey.md`](../../../../../../docs/research/pipeline-architecture-survey.md) — why MAPE-K was picked over 7 alternatives for the chat pipeline.
 - Related workspace ontologies:
   - `formal::systems` — Wiener cybernetics; MAPE-K is a specific cybernetic feedback loop.
   - `cognitive::cognition::metacognition` — second-order monitoring; lives in the Monitor phase.
