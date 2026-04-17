@@ -610,3 +610,64 @@ mod proc_macro_test {
         assert!(pairs.contains(&(CommunicationConcept::Noise, CommunicationConcept::Code)));
     }
 }
+
+// =============================================================================
+// proc macro ontology! — dense category case (no explicit edges)
+// =============================================================================
+
+mod proc_macro_dense_test {
+    use crate as pr4xis;
+    use crate::category::Entity;
+    use crate::category::validate::check_category_laws;
+
+    pr4xis::ontology! {
+        name: "Biology",
+        source: "Mayr (1982)",
+        being: AbstractObject,
+
+        concepts: [Cell, Tissue, Organ, Organism],
+
+        labels: {
+            Cell: ("en", "Cell", "The basic structural unit of all organisms"),
+            Tissue: ("en", "Tissue", "Aggregation of similar cells"),
+        },
+
+        is_a: [
+            (Cell, Tissue),
+            (Tissue, Organ),
+            (Organ, Organism),
+        ],
+    }
+
+    #[test]
+    fn dense_category_generated() {
+        let concepts = BiologyConcept::variants();
+        assert_eq!(concepts.len(), 4);
+    }
+
+    #[test]
+    fn dense_category_laws() {
+        check_category_laws::<BiologyCategory>().unwrap();
+    }
+
+    #[test]
+    fn dense_vocabulary() {
+        let vocab = BiologyOntology::vocabulary();
+        assert_eq!(vocab.concept_count, 4);
+        assert_eq!(vocab.source, "Mayr (1982)");
+    }
+
+    #[test]
+    fn dense_taxonomy() {
+        use crate::ontology::reasoning::taxonomy::TaxonomyDef;
+        let rels = BiologyTaxonomy::relations();
+        assert_eq!(rels.len(), 3);
+        assert!(rels.contains(&(BiologyConcept::Cell, BiologyConcept::Tissue)));
+    }
+
+    #[test]
+    fn dense_labels() {
+        let labels = BiologyOntology::labels();
+        assert_eq!(labels.len(), 2);
+    }
+}
