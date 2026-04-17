@@ -63,21 +63,29 @@ pr4xis::ontology! {
     },
 
     is_a: [
-        // An Aspekt is the characteristic element built from D, K, P — each
-        // of those is a constitutive *part* of the Aspekt.
-        (Predikatrix, Aspekt),
-        (Dialektik, Aspekt),
-        (Koordination, Aspekt),
-
-        // A Predicate is the atomic member of a Predikatrix.
-        (Predicate, Predikatrix),
-
-        // A Synkolator is a special case of Korporator (endofunctor is-a
-        // functor in category theory).
+        // True subsumption only: every Synkolator IS a Korporator, because
+        // an endofunctor is a functor specialised to Source = Target
+        // (Mac Lane Ch. II §1). Compositional / part-of relationships go
+        // into has_a: below.
         (Synkolator, Korporator),
+    ],
 
-        // A SyntrixLevel is structurally a Predikatrix at a given grade.
-        (SyntrixLevel, Predikatrix),
+    has_a: [
+        // An Aspekt is constituted from D × K × P (Heim §1). Each of the
+        // three is a proper part of every Aspekt instance.
+        (Aspekt, Dialektik),
+        (Aspekt, Koordination),
+        (Aspekt, Predikatrix),
+
+        // A Predikatrix is a structured collection OF Predicates.
+        (Predikatrix, Predicate),
+
+        // A Syntrix contains Levels.
+        (Syntrix, SyntrixLevel),
+
+        // A SyntrixLevel is a Predikatrix-at-a-given-grade; mereologically
+        // it contains the same predicates its parent Predikatrix would.
+        (SyntrixLevel, Predicate),
     ],
 
     edges: [
@@ -97,10 +105,6 @@ pr4xis::ontology! {
         // === Syntrometric operators ===
         (Synkolator, Syntrix, EndomorphismOn),
         (Korporator, Syntrix, MapsBetween),
-
-        // === Mereology ===
-        (Part, Aspekt, MereologicalPartOf),
-        (Part, Syntrix, MereologicalPartOf),
     ],
 }
 
@@ -130,11 +134,12 @@ impl Quality for SyntrometryCategoryOf {
 // Helpers
 // ---------------------------------------------------------------------------
 
-fn direct_children_of(parent: SyntrometryConcept) -> Vec<SyntrometryConcept> {
-    use pr4xis::ontology::reasoning::taxonomy::TaxonomyDef;
-    SyntrometryTaxonomy::relations()
+/// Direct mereological parts of a whole (non-transitive).
+fn direct_parts_of(whole: SyntrometryConcept) -> Vec<SyntrometryConcept> {
+    use pr4xis::ontology::reasoning::mereology::MereologyDef;
+    SyntrometryMereology::relations()
         .into_iter()
-        .filter_map(|(child, p)| if p == parent { Some(child) } else { None })
+        .filter_map(|(w, part)| if w == whole { Some(part) } else { None })
         .collect()
 }
 
@@ -143,22 +148,22 @@ fn direct_children_of(parent: SyntrometryConcept) -> Vec<SyntrometryConcept> {
 // ---------------------------------------------------------------------------
 
 /// Axiom: an Aspekt is the product [Dialektik × Koordination × Predikatrix]
-/// (§1 of the modernized paper). The three must all appear as its direct
-/// parents in the taxonomy.
+/// (§1 of the modernized paper). The three must all appear as direct
+/// mereological parts of Aspekt.
 pub struct AspektIsTripleProduct;
 
 impl Axiom for AspektIsTripleProduct {
     fn description(&self) -> &str {
-        "Aspekt is composed from {Dialektik, Koordination, Predikatrix} (Heim §1)"
+        "Aspekt mereologically contains {Dialektik, Koordination, Predikatrix} (Heim §1)"
     }
     fn holds(&self) -> bool {
-        let children = direct_children_of(SyntrometryConcept::Aspekt);
+        let parts = direct_parts_of(SyntrometryConcept::Aspekt);
         let expected = [
             SyntrometryConcept::Dialektik,
             SyntrometryConcept::Koordination,
             SyntrometryConcept::Predikatrix,
         ];
-        expected.iter().all(|e| children.contains(e))
+        expected.iter().all(|e| parts.contains(e))
     }
 }
 

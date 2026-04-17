@@ -33,11 +33,9 @@ pr4xis::ontology! {
     },
 
     is_a: [
-        // Every Endofunctor is a Functor (Mac Lane Ch. II §1).
+        // True subsumption only: every Endofunctor is a Functor specialised
+        // to Source = Target (Mac Lane Ch. II §1).
         (SubEndofunctor, SubFunctor),
-        // Every Entity is a trivial one-object Category (discrete cat).
-        // Recorded for completeness; not load-bearing.
-        (SubEntity, SubCategory),
     ],
 }
 

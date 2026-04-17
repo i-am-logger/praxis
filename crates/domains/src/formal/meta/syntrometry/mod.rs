@@ -12,6 +12,10 @@
 //! teleological concepts that map to pr4xis's goal-directed planning
 //! architecture.
 
+pub mod adjunction;
 pub mod lineage_functor;
 pub mod ontology;
+#[cfg(test)]
+mod proptests;
 pub mod substrate;
+pub mod substrate_functor;

@@ -7,10 +7,23 @@ Per `feedback_docs_need_proof.md`: the lineage claim was until now asserted in p
 ## Verification — one command
 
 ```
-cargo test -p pr4xis-domains -- formal::meta::syntrometry::lineage_functor::tests::lineage_functor_laws_pass
+cargo test -p pr4xis-domains -- formal::meta::syntrometry
 ```
 
-Passes iff the encoding compiles, both ontologies' category laws hold, and the `SyntrometryToPr4xisSubstrate` functor preserves identity + composition on every morphism.
+Runs **25 tests**: category laws for both ontologies, all three domain axioms (single-point + proptest sweeps), forward functor laws (`lineage_functor_laws_pass`), adjunction unit/counit round-trips, gap analysis with measured collapse percentages, plus 12 proptest-based randomised sweeps over concepts, morphisms, and round-trips.
+
+The headline — "pr4xis instantiates Heim's syntrometric structure" — is verified by `lineage_functor_laws_pass`.
+
+## Measured loss profile (gap analysis)
+
+`cargo test -p pr4xis-domains -- test_syntrometry_substrate_gaps_surface_missing_distinctions --nocapture`
+
+| Direction | Loss | What collapses |
+|---|---|---|
+| **Unit** (Syntrometry → Substrate → Syntrometry) | **40%** (4/10) | `Dialektik → Syntrix`, `Aspekt → Syntrix`, `SyntrixLevel → Predicate`, `Part → Koordination` |
+| **Counit** (Substrate → Syntrometry → Substrate) | **0%** (0/6) | none — substrate is closed under the round-trip |
+
+The four unit collapses are the specific distinctions Heim carries that pr4xis's core substrate does not. They are actionable future work: add `OppositionCategory`, `ProductCategory`, `LeveledEntity`, and `MereologicalMorphism` sub-kinds to the substrate if the round-trip loss should drop.
 
 ## Phase 1 entities (16)
 
