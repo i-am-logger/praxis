@@ -2,3 +2,4 @@
 //! substrate-independent.
 
 pub mod dialectics;
+pub mod kripke;

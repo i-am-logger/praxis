@@ -876,8 +876,11 @@ mod tests {
         let unique = mapped.len();
         let collapse = total - unique;
         assert_eq!(
-            collapse, 2,
-            "expected exactly 2 intentional collapses (Syntrix/SyntrixLevel both → CategoryStructure; Synkolator/Korporator both → Functor); got {}",
+            collapse, 6,
+            "expected 6 intentional collapses (Syntrix/SyntrixLevel → CategoryStructure; \
+             Synkolator/Korporator/SequencePermutation/OrientationPermutation → Functor; \
+             Predicate/Aspektivsystem → DomainOntology; Koordination/Reflexivity → NaturalTransformation); \
+             got {}",
             collapse
         );
         eprintln!(
@@ -889,7 +892,7 @@ mod tests {
     }
 
     #[test]
-    fn test_syntrometry_substrate_dialektik_collapses() {
+    fn test_syntrometry_substrate_intentional_collapses() {
         let report = analyze_syntrometry_substrate();
         // The substrate is closed — every substrate primitive round-trips.
         assert!(
@@ -897,19 +900,21 @@ mod tests {
             "counit gaps should be empty (substrate is closed): {:?}",
             report.counit_gaps
         );
-        // Exactly one unit collapse: Dialektik → Syntrix. Opposition-structure
-        // lives in the dedicated Dialectics ontology (reached via the
-        // `SyntrometryToDialectics` cross-functor), not in the core substrate.
+        // Intentional collapses:
+        // - Dialektik → SubCategory → Syntrix (opposition lives in Dialectics)
+        // - SequencePermutation, OrientationPermutation → SubEndofunctor (both collapse with Synkolator)
+        // - Aspektivsystem → SubOntology (collapses with Predikatrix)
         assert_eq!(
             report.unit_gaps.len(),
-            1,
-            "expected exactly one collapse (Dialektik); got {:?}",
+            4,
+            "expected four intentional collapses; got {:?}",
             report.unit_gaps
         );
         eprintln!(
-            "\nSyntrometry ⊣ Pr4xisSubstrate: {}/{} unit preserved (Dialektik collapses — handled by Dialectics cross-functor); {}/{} counit preserved",
+            "\nSyntrometry ⊣ Pr4xisSubstrate: {}/{} unit preserved ({} intentional collapses); {}/{} counit preserved",
             report.unit_preserved.len(),
             report.unit_preserved.len() + report.unit_gaps.len(),
+            report.unit_gaps.len(),
             report.counit_preserved.len(),
             report.counit_preserved.len() + report.counit_gaps.len(),
         );

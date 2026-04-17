@@ -51,6 +51,9 @@ fn map_concept(c: &SyntrometryConcept) -> MetaEntity {
         S::Maxime => M::PropertyTest,
         S::Transzendenzstufe => M::IntermediateDomain,
         S::Metroplex => M::Structure,
+        S::SequencePermutation | S::OrientationPermutation => M::Functor,
+        S::Aspektivsystem => M::DomainOntology,
+        S::Reflexivity => M::NaturalTransformation,
     }
 }
 

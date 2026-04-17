@@ -109,12 +109,20 @@ proptest! {
         prop_assert!(SyntrometryConcept::variants().contains(&rt));
     }
 
-    /// 13 of the 14 syntrometric concepts round-trip cleanly; Dialektik
-    /// is the intentional exception, handled by the dedicated Dialectics
-    /// cross-functor rather than by the core substrate.
+    /// 14 of the 18 syntrometric concepts round-trip cleanly through
+    /// the primary substrate functor. The four intentional collapses
+    /// (Dialektik, SequencePermutation, OrientationPermutation,
+    /// Aspektivsystem) are handled by dedicated cross-functors.
     #[test]
-    fn non_dialektik_concepts_are_round_trip_fixed_points(c in arb_syntrometry_concept()) {
-        if c == SyntrometryConcept::Dialektik {
+    fn non_collapsed_concepts_are_round_trip_fixed_points(c in arb_syntrometry_concept()) {
+        use SyntrometryConcept as S;
+        let collapses = [
+            S::Dialektik,
+            S::SequencePermutation,
+            S::OrientationPermutation,
+            S::Aspektivsystem,
+        ];
+        if collapses.contains(&c) {
             return Ok(());
         }
         let (source, rt) = unit_pair(&c);
@@ -150,6 +158,20 @@ proptest! {
     #[test]
     fn substrate_ontology_validates_consistently(_ in 0..32u32) {
         prop_assert!(Pr4xisSubstrateOntology::validate().is_ok());
+    }
+
+    /// The four substrate domain axioms (literature-grounded structural
+    /// claims) must all hold under any sampling of invocations.
+    #[test]
+    fn substrate_domain_axioms_hold_under_sweep(_ in 0..64u32) {
+        use super::substrate::{
+            EndofunctorIsFunctor, GradedObjectIsEntity, ProductCategoryIsCategory,
+            SubobjectIsMorphism,
+        };
+        prop_assert!(EndofunctorIsFunctor.holds());
+        prop_assert!(ProductCategoryIsCategory.holds());
+        prop_assert!(GradedObjectIsEntity.holds());
+        prop_assert!(SubobjectIsMorphism.holds());
     }
 
     // -----------------------------------------------------------------------

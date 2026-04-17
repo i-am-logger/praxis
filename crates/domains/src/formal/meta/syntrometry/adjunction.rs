@@ -67,12 +67,18 @@ mod tests {
         }
     }
 
-    /// 13 of the 14 syntrometric concepts round-trip cleanly through the
-    /// substrate. Dialektik intentionally collapses to Syntrix because
-    /// opposition-structure is carried by the dedicated Dialectics
-    /// ontology, not by the core substrate.
+    /// Exactly four syntrometric concepts intentionally collapse in the
+    /// primary substrate functor:
+    /// - `Dialektik` → opposition-structure lives in Dialectics.
+    /// - `SequencePermutation`, `OrientationPermutation` → both are
+    ///   endomorphisms; substrate collapses them with Synkolator.
+    /// - `Aspektivsystem` → a predicate-system-of-aspects; substrate
+    ///   collapses it with Predikatrix.
+    /// Richer distinctions live in the Syntrometry ontology itself and
+    /// in the Dialectics cross-functor.
     #[test]
-    fn unit_collapses_only_dialektik() {
+    fn unit_collapses_are_intentional() {
+        use SyntrometryConcept as S;
         let collapses: Vec<_> = SyntrometryConcept::variants()
             .into_iter()
             .filter(|obj| {
@@ -80,18 +86,31 @@ mod tests {
                 source != rt
             })
             .collect();
+        let expected = [
+            S::Dialektik,
+            S::SequencePermutation,
+            S::OrientationPermutation,
+            S::Aspektivsystem,
+        ];
         assert_eq!(
-            collapses,
-            vec![SyntrometryConcept::Dialektik],
-            "only Dialektik should collapse (opposition lives in Dialectics); got {:?}",
+            collapses.len(),
+            expected.len(),
+            "unexpected collapses: {:?}",
             collapses
         );
+        for e in &expected {
+            assert!(
+                collapses.contains(e),
+                "expected {:?} in collapses; got {:?}",
+                e,
+                collapses
+            );
+        }
     }
 
-    /// 13 of the 14 concepts are round-trip fixed points; Dialektik is
-    /// the intentional exception.
+    /// 14 of the 18 concepts round-trip as fixed points.
     #[test]
-    fn unit_preserves_thirteen_concepts() {
+    fn unit_preserves_fourteen_concepts() {
         let preserved: Vec<_> = SyntrometryConcept::variants()
             .into_iter()
             .filter(|obj| {
@@ -99,6 +118,6 @@ mod tests {
                 source == rt
             })
             .collect();
-        assert_eq!(preserved.len(), 13);
+        assert_eq!(preserved.len(), 14);
     }
 }

@@ -50,8 +50,13 @@ pub fn map_substrate(c: &Pr4xisSubstrateConcept) -> SyntrometryConcept {
         // (opposition-structure was removed; it now lives in the dedicated
         // Dialectics ontology reached via `SyntrometryToDialectics`).
         P::SubProductCategory => S::Aspekt,
-        P::SubLeveledEntity => S::SyntrixLevel,
-        P::SubMereologicalMorphism => S::Part,
+        P::SubGradedObject => S::SyntrixLevel,
+        P::SubObject => S::Part,
+        // Reflexivity is the canonical natural transformation — the
+        // self-observation primitive Heim's ρ names. Other Syntrometry
+        // concepts that round-trip through SubNaturalTransformation don't
+        // exist, so SubNaturalTransformation uniquely maps back to Reflexivity.
+        P::SubNaturalTransformation => S::Reflexivity,
     }
 }
 

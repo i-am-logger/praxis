@@ -59,13 +59,21 @@ fn map_concept(c: &SyntrometryConcept) -> Pr4xisSubstrateConcept {
         // Refined distinctions — the substrate sub-kinds preserve these
         // without collapsing them to their parent.
         S::Aspekt => P::SubProductCategory,
-        S::SyntrixLevel => P::SubLeveledEntity,
-        S::Part => P::SubMereologicalMorphism,
+        S::SyntrixLevel => P::SubGradedObject,
+        S::Part => P::SubObject,
         // Dialektik intentionally collapses to the plain SubCategory in
         // the primary substrate — opposition structure lives in the
         // dedicated Dialectics ontology, reached via the
         // `SyntrometryToDialectics` cross-functor.
         S::Dialektik => P::SubCategory,
+        // Permutation operators are endomorphism-like (automorphisms on the
+        // predicate-sequence / orientation structure).
+        S::SequencePermutation | S::OrientationPermutation => P::SubEndofunctor,
+        // Aspektivsystem is a structured multi-aspect collection = a small
+        // ontology at the substrate level.
+        S::Aspektivsystem => P::SubOntology,
+        // Reflexivity is a natural transformation (Mac Lane Ch. II §4).
+        S::Reflexivity => P::SubNaturalTransformation,
     }
 }
 

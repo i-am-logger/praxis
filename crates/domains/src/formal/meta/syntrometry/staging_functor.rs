@@ -46,6 +46,12 @@ fn map_concept(c: &SyntrometryConcept) -> StageConcept {
         S::Telecenter => Stg::ObjectProgram,
         S::Transzendenzstufe => Stg::Interpreter,
         S::Metroplex => Stg::CompilerGenerator,
+        // Permutations act program-on-program — specializer-like.
+        S::SequencePermutation | S::OrientationPermutation => Stg::Specializer,
+        // Aspektivsystem is a structured system of programs = Program.
+        S::Aspektivsystem => Stg::Program,
+        // Reflexivity is the self-interpreter pattern.
+        S::Reflexivity => Stg::Interpreter,
     }
 }
 

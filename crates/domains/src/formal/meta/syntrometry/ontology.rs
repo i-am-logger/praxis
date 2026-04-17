@@ -46,6 +46,19 @@ pr4xis::ontology! {
         Maxime,
         Transzendenzstufe,
         Metroplex,
+
+        // === Permutation operators (§1) ===
+        // Heim's two operators on predicate sequences and orientations.
+        // C (capital) permutes predicate SEQUENCES; c (lowercase) permutes
+        // orientations within a single predicate.
+        SequencePermutation,
+        OrientationPermutation,
+
+        // === Multi-aspect structure (§2) ===
+        Aspektivsystem,
+
+        // === Self-observation (reflexivity ρ) ===
+        Reflexivity,
     ],
 
     labels: {
@@ -62,6 +75,10 @@ pr4xis::ontology! {
 
         Part: ("en", "Part", "The mereological part-of primitive Part(A, B). Classical Extensional Mereology (CEM) as used by Heim; must satisfy Weak Supplementation."),
 
+        SequencePermutation: ("en", "Sequence permutation C", "Heim §1: the operator C that permutes predicate sequences within a Predikatrix. Categorically an automorphism on the sequence-ordering — composition under associativity of the underlying Koordination."),
+        OrientationPermutation: ("en", "Orientation permutation c", "Heim §1: the operator c that permutes the orientation (direction) of an individual predicate. Paired with C to give the full Heim permutation algebra C/c."),
+        Aspektivsystem: ("en", "Aspektivsystem", "Heim §2: a structured system of Aspekts with aspect-relative relations between them. Aspektrelativität (aspect-relative truth) is the property an Aspektivsystem exhibits — different Aspekts see different facets of the same underlying distinction-system. Maps via Kripke semantics to pr4xis's 'multiple ontologies viewing the same domain via functors' pattern."),
+        Reflexivity: ("en", "Reflexivity ρ", "Heim: the self-observation natural transformation — a Syntrix observing itself. Categorically a natural transformation ρ : Id ⇒ Synkolator (or Synkolator ⇒ Id), encoding von Foerster's eigenform operationally."),
         Telecenter: ("en", "Telecenter", "A goal-attractor — an organising target that convergent syntrometric activity tends toward. Categorically a colimit / fixed-point; cybernetically an Ashby 'good regulator' attractor; in pr4xis maps to CommunicativeGoal / Eigenform (X = F(X)). Source: Heim Telezentrik."),
         Maxime: ("en", "Maxime", "An extremal of expedient ideas — the selection operator choosing among candidate Aspekts which ones actualise toward a Telecenter. Cybernetically Conant-Ashby 'every regulator is a model of its system'; in pr4xis maps to BDI Intention / C1 Attention / Optimization. Source: Heim Maximentelezentrik."),
         Transzendenzstufe: ("en", "Transzendenzstufe", "A transcendence-level — a qualitative leap between grades of abstraction within a Metroplex hierarchy. In pr4xis maps to Staging levels (Futamura projections) / Metroplex grades / C1 vs C2 consciousness split. Source: Heim §§ Metroplextheorie."),
@@ -100,6 +117,9 @@ pr4xis::ontology! {
         // A Telecenter carries Maximes (the selection operators that
         // actualise which Aspekts converge toward the Telecenter).
         (Telecenter, Maxime),
+
+        // Aspektivsystem contains Aspekts by definition — a system-of-aspects.
+        (Aspektivsystem, Aspekt),
     ],
 
     edges: [
@@ -119,6 +139,19 @@ pr4xis::ontology! {
         // === Syntrometric operators ===
         (Synkolator, Syntrix, EndomorphismOn),
         (Korporator, Syntrix, MapsBetween),
+
+        // === Permutation operators (C/c) ===
+        (SequencePermutation, Koordination, Permutes),
+        (OrientationPermutation, Predicate, Permutes),
+
+        // === Multi-aspect structure ===
+        // Aspektivsystem organises Aspekts at the categorical level.
+        (Aspektivsystem, Syntrix, OrganisesOver),
+
+        // === Self-observation (Reflexivity ρ) ===
+        // Reflexivity is a natural transformation on Synkolator — the
+        // Syntrix observes itself via the endofunctor.
+        (Reflexivity, Synkolator, NaturallyTransforms),
 
         // === Teleological / hierarchical ===
         // A Maxime selects among candidate Aspekts for a Telecenter.
@@ -156,6 +189,9 @@ impl Quality for SyntrometryCategoryOf {
             S::Telecenter | S::Maxime | S::Transzendenzstufe | S::Metroplex => {
                 "teleological-hierarchical"
             }
+            S::SequencePermutation | S::OrientationPermutation => "permutation-operator",
+            S::Aspektivsystem => "multi-aspect",
+            S::Reflexivity => "self-observation",
         })
     }
 }
