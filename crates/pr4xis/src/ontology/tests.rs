@@ -671,3 +671,67 @@ mod proc_macro_dense_test {
         assert_eq!(labels.len(), 2);
     }
 }
+
+// =============================================================================
+// proc macro transitive closure — morphisms() must be closed under compose()
+// =============================================================================
+
+mod proc_macro_closure_test {
+    use crate as pr4xis;
+    use crate::category::Category;
+
+    pr4xis::ontology! {
+        name: "ChainedEdges",
+        concepts: [A, B, C, D],
+        edges: [
+            (A, B, Step1),
+            (B, C, Step2),
+            (C, D, Step3),
+        ],
+    }
+
+    #[test]
+    fn transitive_closure_is_in_morphisms() {
+        let morphisms = ChainedEdgesCategory::morphisms();
+        let ac = morphisms
+            .iter()
+            .find(|m| m.from == ChainedEdgesConcept::A && m.to == ChainedEdgesConcept::C);
+        assert!(
+            ac.is_some(),
+            "(A, C) should be in morphisms() via transitive closure"
+        );
+        let ad = morphisms
+            .iter()
+            .find(|m| m.from == ChainedEdgesConcept::A && m.to == ChainedEdgesConcept::D);
+        assert!(
+            ad.is_some(),
+            "(A, D) should be in morphisms() via transitive closure"
+        );
+        let bd = morphisms
+            .iter()
+            .find(|m| m.from == ChainedEdgesConcept::B && m.to == ChainedEdgesConcept::D);
+        assert!(
+            bd.is_some(),
+            "(B, D) should be in morphisms() via transitive closure"
+        );
+    }
+
+    #[test]
+    fn compose_output_is_in_morphisms() {
+        let morphisms = ChainedEdgesCategory::morphisms();
+        for f in &morphisms {
+            for g in &morphisms {
+                if let Some(composed) = ChainedEdgesCategory::compose(f, g) {
+                    let found = morphisms
+                        .iter()
+                        .any(|m| m.from == composed.from && m.to == composed.to);
+                    assert!(
+                        found,
+                        "compose({:?}, {:?}) = {:?} not in morphisms()",
+                        f, g, composed
+                    );
+                }
+            }
+        }
+    }
+}
