@@ -1,4 +1,4 @@
-# Syntrometry — Heim's syntrometric logic (Phases 1–4)
+# Syntrometry — Heim's syntrometric logic (Phases 1–5)
 
 Encodes the core of Burkhard Heim's *Syntrometrische Maximentelezentrik* — the logical/philosophical foundation underneath Heim theory — as a pr4xis ontology, and verifies the long-standing claim that "pr4xis instantiates Heim's syntrometric structure" by a Functor whose laws are checked at test time.
 
@@ -109,9 +109,21 @@ Maps each of the 14 Syntrometry concepts to a `formal::meta::ontology_diagnostic
 
 Collapse rate: 2/14 (14.3%). The two collapses are deliberate — pr4xis's meta-ontology doesn't distinguish `SyntrixLevel` from `Syntrix` or `Synkolator` from `Korporator` at that level of abstraction. Verified by `meta_ontology_functor_laws_pass` + proptest sweeps.
 
-### Future cross-functors
+## Phase 5 — cross-functors to domain meta-ontologies
 
-Additional targets remain open as follow-ups: `Syntrometry → Algebra` (Korporator ↦ Mapping, Aspekt ↦ Product), `Syntrometry → Staging` (Transzendenzstufe ↦ Futamura-projection levels). Each would satisfy the functor laws by construction (kinded source → dense target) and add its own collapse profile.
+Phase 5 adds two more cross-functors to demonstrate Heim's vocabulary aligns across pr4xis's whole meta-layer, not just the diagnostic one.
+
+### `Syntrometry → Staging` (Futamura 1971 projections)
+
+Transzendenzstufe ↦ Interpreter, Metroplex ↦ CompilerGenerator, Synkolator/Maxime ↦ Specializer, Korporator ↦ Compiler, Telecenter ↦ ObjectProgram, and several concepts collapse to `Program`. Collapse: ~57% (Futamura's vocabulary is deliberately coarser than Heim's). Verified by `staging_functor_laws_pass`.
+
+### `Syntrometry → Algebra` (Goguen/Zimmermann ontology algebra)
+
+Korporator ↦ Mapping, Aspekt ↦ Product, Dialektik ↦ Coproduct, Part/Maxime ↦ Pullback, Telecenter ↦ Pushout, Syntrix/Transzendenzstufe/Metroplex ↦ Diagram. Verified by `algebra_functor_laws_pass`. This is the alignment between Heim's composition operators and the categorical primitives pr4xis's `compose` API (#103) actually uses.
+
+### Still open
+
+`Syntrometry → Distinction` (Spencer-Brown, the reverse-direction lineage) needs kinded-to-kinded functor authoring with kind alignment — deferred until we pick a consistent kind-mapping rubric.
 
 ## Files
 

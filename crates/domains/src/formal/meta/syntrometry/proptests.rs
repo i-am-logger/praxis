@@ -179,6 +179,28 @@ proptest! {
         prop_assert_eq!(f_id, id_fc);
     }
 
+    /// Phase 5: staging cross-functor is deterministic and preserves identity.
+    #[test]
+    fn staging_functor_preserves_identity(c in arb_syntrometry_concept()) {
+        use super::staging_functor::SyntrometryToStaging;
+        use crate::formal::meta::staging::ontology::StagingCategory;
+        let id_c = SyntrometryCategory::identity(&c);
+        let f_id = SyntrometryToStaging::map_morphism(&id_c);
+        let id_fc = StagingCategory::identity(&SyntrometryToStaging::map_object(&c));
+        prop_assert_eq!(f_id, id_fc);
+    }
+
+    /// Phase 5: algebra cross-functor is deterministic and preserves identity.
+    #[test]
+    fn algebra_functor_preserves_identity(c in arb_syntrometry_concept()) {
+        use super::algebra_functor::SyntrometryToAlgebra;
+        use crate::formal::meta::algebra::ontology::AlgebraCategory;
+        let id_c = SyntrometryCategory::identity(&c);
+        let f_id = SyntrometryToAlgebra::map_morphism(&id_c);
+        let id_fc = AlgebraCategory::identity(&SyntrometryToAlgebra::map_object(&c));
+        prop_assert_eq!(f_id, id_fc);
+    }
+
     /// Every kind of Syntrometry morphism (Identity, every declared edge
     /// kind, Composed) shows up in `morphisms()`. Without this the
     /// category's closure claim would be empty.

@@ -13,10 +13,12 @@
 //! architecture.
 
 pub mod adjunction;
+pub mod algebra_functor;
 pub mod lineage_functor;
 pub mod meta_ontology_functor;
 pub mod ontology;
 #[cfg(test)]
 mod proptests;
+pub mod staging_functor;
 pub mod substrate;
 pub mod substrate_functor;

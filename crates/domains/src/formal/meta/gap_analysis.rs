@@ -803,6 +803,63 @@ mod tests {
     /// uniquely; SyntrixLevel/Syntrix both go to CategoryStructure and
     /// Synkolator/Korporator both go to Functor — the two intentional
     /// collapses documented in meta_ontology_functor.rs.
+    /// Phase 5: Syntrometry → Staging collapses Heim's finer grain into
+    /// Futamura's coarser vocabulary. Expected 6+ collapses (many concepts
+    /// land at Program).
+    #[test]
+    fn test_syntrometry_to_staging_collapse_is_measured() {
+        use crate::formal::meta::staging::ontology::StageConcept;
+        use crate::formal::meta::syntrometry::ontology::SyntrometryConcept;
+        use crate::formal::meta::syntrometry::staging_functor::SyntrometryToStaging;
+        use pr4xis::category::{Entity, Functor};
+        use std::collections::HashSet;
+
+        let mapped: HashSet<StageConcept> = SyntrometryConcept::variants()
+            .into_iter()
+            .map(|c| SyntrometryToStaging::map_object(&c))
+            .collect();
+        let total = SyntrometryConcept::variants().len();
+        let unique = mapped.len();
+        let collapse = total - unique;
+        assert!(
+            collapse >= 6,
+            "Syntrometry → Staging expected to collapse significantly (Futamura vocabulary is coarser); got only {} collapses",
+            collapse
+        );
+        eprintln!(
+            "\nSyntrometry → Staging collapse: {}/{} ({:.1}%)",
+            collapse,
+            total,
+            collapse as f64 / total as f64 * 100.0
+        );
+    }
+
+    /// Phase 5: Syntrometry → Algebra maps Heim's operators onto Goguen /
+    /// Zimmermann ontology-algebra primitives.
+    #[test]
+    fn test_syntrometry_to_algebra_collapse_is_measured() {
+        use crate::formal::meta::algebra::ontology::AlgebraConcept;
+        use crate::formal::meta::syntrometry::algebra_functor::SyntrometryToAlgebra;
+        use crate::formal::meta::syntrometry::ontology::SyntrometryConcept;
+        use pr4xis::category::{Entity, Functor};
+        use std::collections::HashSet;
+
+        let mapped: HashSet<AlgebraConcept> = SyntrometryConcept::variants()
+            .into_iter()
+            .map(|c| SyntrometryToAlgebra::map_object(&c))
+            .collect();
+        let total = SyntrometryConcept::variants().len();
+        let unique = mapped.len();
+        let collapse = total - unique;
+        eprintln!(
+            "\nSyntrometry → Algebra collapse: {}/{} ({:.1}%)",
+            collapse,
+            total,
+            collapse as f64 / total as f64 * 100.0
+        );
+        assert!(collapse < total, "functor is not trivial");
+    }
+
     #[test]
     fn test_syntrometry_to_meta_ontology_collapse_is_two() {
         use crate::formal::meta::ontology_diagnostics::ontology::MetaEntity;
