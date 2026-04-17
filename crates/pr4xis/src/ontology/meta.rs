@@ -13,6 +13,171 @@ pub struct OntologyMeta {
     pub module_path: &'static str,
 }
 
+/// Lexical metadata for a concept or morphism — Ontolex-Lemon (W3C 2016).
+///
+/// Each identifier can optionally carry its label, definition, and language.
+/// This is the "lemon" attached to every name in the ontology.
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
+pub struct Lexical {
+    pub label: String,
+    pub definition: String,
+    pub language: String,
+}
+
+impl Lexical {
+    pub fn new(
+        label: impl Into<String>,
+        definition: impl Into<String>,
+        language: impl Into<String>,
+    ) -> Self {
+        Self {
+            label: label.into(),
+            definition: definition.into(),
+            language: language.into(),
+        }
+    }
+}
+
+/// Name of a concept — a typed identifier for an individual in an ontology.
+///
+/// Instance of Lemon LexicalEntry: carries the canonical form (identifier)
+/// and optionally the lexical data (label, definition, language).
+/// Typed so it can't be confused with a plain string or OntologyName.
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
+pub struct ConceptName {
+    identifier: Cow<'static, str>,
+    lexical: Option<Lexical>,
+}
+
+impl ConceptName {
+    pub const fn new_static(s: &'static str) -> Self {
+        Self {
+            identifier: Cow::Borrowed(s),
+            lexical: None,
+        }
+    }
+
+    pub fn new(s: impl Into<Cow<'static, str>>) -> Self {
+        Self {
+            identifier: s.into(),
+            lexical: None,
+        }
+    }
+
+    pub fn with_lexical(mut self, lexical: Lexical) -> Self {
+        self.lexical = Some(lexical);
+        self
+    }
+
+    pub fn as_str(&self) -> &str {
+        &self.identifier
+    }
+
+    pub fn lexical(&self) -> Option<&Lexical> {
+        self.lexical.as_ref()
+    }
+}
+
+impl From<&'static str> for ConceptName {
+    fn from(s: &'static str) -> Self {
+        Self::new_static(s)
+    }
+}
+
+impl From<String> for ConceptName {
+    fn from(s: String) -> Self {
+        Self::new(s)
+    }
+}
+
+impl AsRef<str> for ConceptName {
+    fn as_ref(&self) -> &str {
+        &self.identifier
+    }
+}
+
+impl fmt::Display for ConceptName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        self.identifier.fmt(f)
+    }
+}
+
+/// Kind of a morphism — the relation type between concepts.
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
+pub enum MorphismKind {
+    Identity,
+    IsA,
+    HasA,
+    Causes,
+    Opposes,
+    Equivalent,
+    Composed,
+    Custom(Cow<'static, str>),
+}
+
+impl MorphismKind {
+    pub fn as_str(&self) -> &str {
+        match self {
+            MorphismKind::Identity => "Identity",
+            MorphismKind::IsA => "IsA",
+            MorphismKind::HasA => "HasA",
+            MorphismKind::Causes => "Causes",
+            MorphismKind::Opposes => "Opposes",
+            MorphismKind::Equivalent => "Equivalent",
+            MorphismKind::Composed => "Composed",
+            MorphismKind::Custom(s) => s,
+        }
+    }
+}
+
+impl fmt::Display for MorphismKind {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.as_str())
+    }
+}
+
+/// A morphism in an ontology — the full structure, not just an identifier.
+///
+/// Carries source concept, target concept, relation kind, and optional
+/// lexical metadata (for "what does this relation mean" in a language).
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
+pub struct Morphism {
+    pub from: ConceptName,
+    pub to: ConceptName,
+    pub kind: MorphismKind,
+    lexical: Option<Lexical>,
+}
+
+impl Morphism {
+    pub fn new(
+        from: impl Into<ConceptName>,
+        to: impl Into<ConceptName>,
+        kind: MorphismKind,
+    ) -> Self {
+        Self {
+            from: from.into(),
+            to: to.into(),
+            kind,
+            lexical: None,
+        }
+    }
+
+    pub fn with_lexical(mut self, lexical: Lexical) -> Self {
+        self.lexical = Some(lexical);
+        self
+    }
+
+    pub fn lexical(&self) -> Option<&Lexical> {
+        self.lexical.as_ref()
+    }
+}
+
+impl fmt::Display for Morphism {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}--{}-->{}", self.from, self.kind, self.to)
+    }
+}
+
 /// Name of an ontology — a typed identifier, not a raw string.
 ///
 /// Compile-time names are `Cow::Borrowed(&'static str)` — zero allocation.
@@ -254,13 +419,13 @@ pub struct Vocabulary {
 enum Source {
     /// Static ontology: concepts/morphisms pulled from type-driven functions each call.
     Static {
-        concepts: fn() -> Vec<String>,
-        morphisms: fn() -> Vec<String>,
+        concepts: fn() -> Vec<ConceptName>,
+        morphisms: fn() -> Vec<Morphism>,
     },
     /// Runtime ontology: concepts/morphisms captured at Vocabulary construction.
     Captured {
-        concepts: Vec<String>,
-        morphisms: Vec<String>,
+        concepts: Vec<ConceptName>,
+        morphisms: Vec<Morphism>,
     },
 }
 
@@ -273,18 +438,18 @@ impl Vocabulary {
         self.ontology_name.as_str()
     }
 
-    /// List of concept names — calculated each call for static ontologies,
+    /// Typed concept names — calculated each call for static ontologies,
     /// captured from the instance for runtime ontologies.
     /// Call `.len()` for the count.
-    pub fn concepts(&self) -> Vec<String> {
+    pub fn concepts(&self) -> Vec<ConceptName> {
         match &self.source_of_truth {
             Source::Static { concepts, .. } => concepts(),
             Source::Captured { concepts, .. } => concepts.clone(),
         }
     }
 
-    /// List of morphism identifiers. Call `.len()` for the count.
-    pub fn morphisms(&self) -> Vec<String> {
+    /// Full morphisms with source/target/kind. Call `.len()` for the count.
+    pub fn morphisms(&self) -> Vec<Morphism> {
         match &self.source_of_truth {
             Source::Static { morphisms, .. } => morphisms(),
             Source::Captured { morphisms, .. } => morphisms.clone(),
@@ -307,13 +472,20 @@ impl Vocabulary {
                 concepts: || {
                     <E as crate::category::entity::Entity>::variants()
                         .iter()
-                        .map(|v| format!("{v:?}"))
+                        .map(|v| ConceptName::new(format!("{v:?}")))
                         .collect()
                 },
                 morphisms: || {
+                    use crate::category::Relationship;
                     <C as crate::category::Category>::morphisms()
                         .iter()
-                        .map(|m| format!("{m:?}"))
+                        .map(|m| {
+                            Morphism::new(
+                                ConceptName::new(format!("{:?}", m.source())),
+                                ConceptName::new(format!("{:?}", m.target())),
+                                MorphismKind::Custom(Cow::Owned(format!("{m:?}"))),
+                            )
+                        })
                         .collect()
                 },
             },
@@ -326,8 +498,8 @@ impl Vocabulary {
         module_path: impl Into<ModulePath>,
         source: impl Into<Citation>,
         being: Option<Being>,
-        concepts: Vec<String>,
-        morphisms: Vec<String>,
+        concepts: Vec<ConceptName>,
+        morphisms: Vec<Morphism>,
     ) -> Self {
         Self {
             ontology_name: name.into(),

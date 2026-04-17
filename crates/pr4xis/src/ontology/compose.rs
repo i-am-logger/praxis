@@ -29,27 +29,8 @@ use std::collections::BTreeSet;
 use crate::ontology::Vocabulary;
 use crate::ontology::upper::being::Being;
 
-/// Lexical metadata for a concept — Ontolex-Lemon (W3C 2016).
-///
-/// Each concept carries its labels, definitions, and senses
-/// in the ontology's source language. This is what gets frozen
-/// into the binary alongside the structure.
-#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
-pub struct Lexical {
-    pub label: String,
-    pub definition: String,
-    pub language: String,
-}
-
-impl Lexical {
-    pub fn new(label: &str, definition: &str, language: &str) -> Self {
-        Self {
-            label: String::from(label),
-            definition: String::from(definition),
-            language: String::from(language),
-        }
-    }
-}
+// `Lexical` is defined in crate::ontology::meta and re-exported.
+pub use crate::ontology::Lexical;
 
 /// A concept in a composed ontology — an object with lexical metadata.
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
@@ -143,24 +124,21 @@ impl Ontology {
         self.being
     }
 
-    pub fn concept_names(&self) -> BTreeSet<String> {
-        self.concepts.keys().cloned().collect()
+    /// The concepts in this ontology — a map from name to Concept.
+    /// Call `.len()` for count, iterate for traversal.
+    pub fn concepts(&self) -> &BTreeMap<String, Concept> {
+        &self.concepts
     }
 
+    /// Look up a single concept by name.
     pub fn concept(&self, name: &str) -> Option<&Concept> {
         self.concepts.get(name)
     }
 
+    /// The morphisms (edges) in this ontology.
+    /// Call `.len()` for count, iterate for traversal.
     pub fn edges(&self) -> &BTreeSet<Edge> {
         &self.edges
-    }
-
-    pub fn concept_count(&self) -> usize {
-        self.concepts.len()
-    }
-
-    pub fn morphism_count(&self) -> usize {
-        self.edges.len()
     }
 
     /// The synkolation level — depth of composition.
@@ -367,16 +345,44 @@ impl Ontology {
     ///
     /// Uses `Cow::Owned` for runtime-composed names/sources — no leak.
     pub fn vocabulary(&self) -> Vocabulary {
+        use crate::ontology::{ConceptName, Morphism, MorphismKind};
+        let concepts: Vec<ConceptName> = self
+            .concepts
+            .iter()
+            .map(|(name, c)| {
+                let mut cn = ConceptName::new(name.clone());
+                if let Some(lex) = &c.lexical {
+                    cn = cn.with_lexical(crate::ontology::Lexical::new(
+                        &lex.label,
+                        &lex.definition,
+                        &lex.language,
+                    ));
+                }
+                cn
+            })
+            .collect();
+        let morphisms: Vec<Morphism> = self
+            .edges
+            .iter()
+            .map(|e| {
+                let kind = match e.kind {
+                    EdgeKind::Identity => MorphismKind::Identity,
+                    EdgeKind::IsA => MorphismKind::IsA,
+                    EdgeKind::HasA => MorphismKind::HasA,
+                    EdgeKind::Causes => MorphismKind::Causes,
+                    EdgeKind::Opposes => MorphismKind::Opposes,
+                    EdgeKind::Custom => MorphismKind::Composed,
+                };
+                Morphism::new(e.from.clone(), e.to.clone(), kind)
+            })
+            .collect();
         Vocabulary::from_captured(
             self.name.clone(),
             "runtime::compose",
             self.source.clone(),
             self.being,
-            self.concepts.keys().cloned().collect(),
-            self.edges
-                .iter()
-                .map(|e| format!("{}->{}", e.from, e.to))
-                .collect(),
+            concepts,
+            morphisms,
         )
     }
 
@@ -935,7 +941,7 @@ mod tests {
             .build();
 
         assert_eq!(bio.name(), "Biology");
-        assert_eq!(bio.concept_count(), 3);
+        assert_eq!(bio.concepts().len(), 3);
         assert_eq!(bio.level(), 0);
         assert_eq!(bio.staging(), Staging::Composed);
         assert!(bio.validate().is_ok());
@@ -973,7 +979,7 @@ mod tests {
 
         let coupled = bio.couple(&chem);
 
-        assert_eq!(coupled.concept_count(), 4);
+        assert_eq!(coupled.concepts().len(), 4);
         assert!(coupled.concept("Animal").is_some());
         assert!(coupled.concept("Molecule").is_some());
         assert_eq!(coupled.level(), 1);
@@ -1000,7 +1006,7 @@ mod tests {
         assert_eq!(shared.len(), 1);
 
         let composed = bio.compose(&molecular);
-        assert_eq!(composed.concept_count(), 3);
+        assert_eq!(composed.concepts().len(), 3);
         assert!(composed.name().contains("&"));
     }
 
@@ -1136,13 +1142,25 @@ mod tests {
 
     #[test]
     fn from_vocabulary_is_embedded_staging() {
+        use crate::ontology::{ConceptName, Morphism, MorphismKind};
+        let concepts: Vec<ConceptName> =
+            (0..5).map(|i| ConceptName::new(format!("c{i}"))).collect();
+        let morphisms: Vec<Morphism> = (0..10)
+            .map(|i| {
+                Morphism::new(
+                    ConceptName::new(format!("c{i}")),
+                    ConceptName::new(format!("c{i}")),
+                    MorphismKind::Identity,
+                )
+            })
+            .collect();
         let vocab = Vocabulary::from_captured(
             "Test",
             "test::path",
             "Test (2024)",
             Some(Being::AbstractObject),
-            (0..5).map(|i| format!("c{i}")).collect(),
-            (0..10).map(|i| format!("m{i}")).collect(),
+            concepts,
+            morphisms,
         );
 
         let s = from_vocabulary(&vocab);
@@ -1189,7 +1207,7 @@ mod tests {
             .is_a("Tissue", "Organ")
             .build();
 
-        assert_eq!(extended.concept_count(), 3);
+        assert_eq!(extended.concepts().len(), 3);
         assert!(extended.concept("Organ").is_some());
         assert!(extended.concept("Cell").is_some());
     }
@@ -1205,7 +1223,7 @@ mod tests {
             .build();
 
         let reduced = onto.without("B");
-        assert_eq!(reduced.concept_count(), 2);
+        assert_eq!(reduced.concepts().len(), 2);
         assert!(reduced.concept("B").is_none());
         let b_edges: Vec<_> = reduced
             .edges()
@@ -1224,7 +1242,7 @@ mod tests {
             .build();
 
         let restricted = onto.restrict(&["A", "B"]);
-        assert_eq!(restricted.concept_count(), 2);
+        assert_eq!(restricted.concepts().len(), 2);
         assert!(restricted.concept("A").is_some());
         assert!(restricted.concept("C").is_none());
     }
@@ -1348,7 +1366,7 @@ mod tests {
         let _ = original.rename("A", "Z");
         let _ = original.extend().concept("C").build();
 
-        assert_eq!(original.concept_count(), 2);
+        assert_eq!(original.concepts().len(), 2);
         assert!(original.concept("A").is_some());
     }
 }
