@@ -7,7 +7,7 @@ use pr4xis::ontology::{Axiom, Ontology, Quality};
 
 pr4xis::ontology! {
     name: "LidarCamera",
-    source: "Qi et al. (2018)",
+    source: "Caltagirone et al. (2019); Qi et al. (2018)",
     being: Process,
 
     concepts: [Detection, Projection, Association, Fusion],

@@ -7,7 +7,7 @@ use pr4xis::ontology::{Axiom, Ontology, Quality};
 
 pr4xis::ontology! {
     name: "Slam",
-    source: "Durrant-Whyte & Bailey (2006)",
+    source: "Grisetti et al. (2010); Durrant-Whyte & Bailey (2006)",
     being: Process,
 
     concepts: [Pose, Landmark, Constraint, LoopClosure],
