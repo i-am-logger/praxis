@@ -71,8 +71,3 @@ pr4xis::ontology! {
         (EpistemicAssessment, Gap, Classifies),
     ],
 }
-
-/// Backward-compatibility re-exports for existing callers.
-pub use MetaCognitionConcept as MetaConcept;
-pub use MetaCognitionRelation as MetaRelation;
-pub use MetaCognitionRelationKind as MetaRelationKind;

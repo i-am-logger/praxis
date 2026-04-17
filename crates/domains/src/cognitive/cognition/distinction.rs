@@ -43,9 +43,6 @@ pr4xis::ontology! {
     ],
 }
 
-/// Backward-compatibility re-export for existing callers (supports glob imports).
-pub use DistinctionConcept as DistinctionElement;
-
 /// Draw a distinction — the fundamental cognitive act.
 /// Returns the two sides of the distinction.
 pub fn draw_distinction<T: Clone + PartialEq + std::fmt::Debug>(marked: T, unmarked: T) -> (T, T) {

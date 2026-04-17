@@ -121,13 +121,15 @@ pub enum ResponseFrame {
 
 impl ResponseFrame {
     /// Map from epistemic state to response frame.
-    pub fn from_epistemic(state: &crate::cognitive::cognition::epistemics::EpistemicState) -> Self {
-        use crate::cognitive::cognition::epistemics::EpistemicState;
+    pub fn from_epistemic(
+        state: &crate::cognitive::cognition::epistemics::EpistemicConcept,
+    ) -> Self {
+        use crate::cognitive::cognition::epistemics::EpistemicConcept;
         match state {
-            EpistemicState::KnownKnown => Self::AssertKnowledge,
-            EpistemicState::KnownUnknown => Self::AcknowledgeGap,
-            EpistemicState::UnknownKnown => Self::SuggestInterpretation,
-            EpistemicState::UnknownUnknown => Self::AdmitLimitation,
+            EpistemicConcept::KnownKnown => Self::AssertKnowledge,
+            EpistemicConcept::KnownUnknown => Self::AcknowledgeGap,
+            EpistemicConcept::UnknownKnown => Self::SuggestInterpretation,
+            EpistemicConcept::UnknownUnknown => Self::AdmitLimitation,
         }
     }
 }
@@ -186,21 +188,21 @@ mod tests {
 
     #[test]
     fn epistemic_frames_map_correctly() {
-        use crate::cognitive::cognition::epistemics::EpistemicState;
+        use crate::cognitive::cognition::epistemics::EpistemicConcept;
         assert_eq!(
-            ResponseFrame::from_epistemic(&EpistemicState::KnownKnown),
+            ResponseFrame::from_epistemic(&EpistemicConcept::KnownKnown),
             ResponseFrame::AssertKnowledge
         );
         assert_eq!(
-            ResponseFrame::from_epistemic(&EpistemicState::KnownUnknown),
+            ResponseFrame::from_epistemic(&EpistemicConcept::KnownUnknown),
             ResponseFrame::AcknowledgeGap
         );
         assert_eq!(
-            ResponseFrame::from_epistemic(&EpistemicState::UnknownKnown),
+            ResponseFrame::from_epistemic(&EpistemicConcept::UnknownKnown),
             ResponseFrame::SuggestInterpretation
         );
         assert_eq!(
-            ResponseFrame::from_epistemic(&EpistemicState::UnknownUnknown),
+            ResponseFrame::from_epistemic(&EpistemicConcept::UnknownUnknown),
             ResponseFrame::AdmitLimitation
         );
     }

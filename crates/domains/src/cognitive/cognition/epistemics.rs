@@ -42,25 +42,20 @@ pr4xis::ontology! {
     ],
 }
 
-/// Backward-compatibility re-exports for existing callers.
-pub use EpistemicConcept as EpistemicState;
-pub use EpistemicRelation as EpistemicTransition;
-pub use EpistemicRelationKind as TransitionKind;
-
 /// Classify the epistemic state of a query result.
 pub fn classify_result<T>(
     query_parsed: bool,
     knowledge_exists: bool,
     result: Option<T>,
-) -> EpistemicState {
+) -> EpistemicConcept {
     match (query_parsed, knowledge_exists, result.is_some()) {
-        (true, true, true) => EpistemicState::KnownKnown,
-        (true, false, false) => EpistemicState::KnownUnknown,
-        (false, true, false) => EpistemicState::UnknownKnown,
-        (false, false, false) => EpistemicState::UnknownUnknown,
-        (true, true, false) => EpistemicState::UnknownKnown,
-        (true, false, true) => EpistemicState::KnownKnown,
-        (false, true, true) => EpistemicState::KnownKnown,
-        (false, false, true) => EpistemicState::KnownKnown,
+        (true, true, true) => EpistemicConcept::KnownKnown,
+        (true, false, false) => EpistemicConcept::KnownUnknown,
+        (false, true, false) => EpistemicConcept::UnknownKnown,
+        (false, false, false) => EpistemicConcept::UnknownUnknown,
+        (true, true, false) => EpistemicConcept::UnknownKnown,
+        (true, false, true) => EpistemicConcept::KnownKnown,
+        (false, true, true) => EpistemicConcept::KnownKnown,
+        (false, false, true) => EpistemicConcept::KnownKnown,
     }
 }
