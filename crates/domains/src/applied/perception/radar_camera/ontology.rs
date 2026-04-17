@@ -1,8 +1,10 @@
+//! Fusion pipeline stages for radar+camera sensor fusion.
+//!
+//! Source: Nobis et al. (2019), "A Deep Learning-based Radar and Camera Sensor Fusion Architecture"
+
 use pr4xis::category::Category;
 use pr4xis::ontology::{Axiom, Ontology, Quality};
 
-// Fusion pipeline stages for radar+camera sensor fusion.
-// Source: Nobis et al. (2019), "A Deep Learning-based Radar and Camera Sensor Fusion Architecture"
 pr4xis::ontology! {
     name: "RadarCamera",
     source: "Nobis et al. (2019)",

@@ -1,3 +1,7 @@
+//! State estimation concepts.
+//!
+//! Source: Kalman (1960); Maybeck (1979).
+
 use pr4xis::ontology::{Axiom, Ontology, Quality};
 
 use crate::formal::math::linear_algebra::matrix::Matrix;
@@ -7,7 +11,6 @@ use crate::applied::sensor_fusion::state::covariance;
 use crate::applied::sensor_fusion::state::estimate::StateEstimate;
 use crate::applied::sensor_fusion::state::information::InformationEstimate;
 
-// State estimation concepts.
 pr4xis::ontology! {
     name: "StateEstimation",
     source: "Kalman (1960); Maybeck (1979)",

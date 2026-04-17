@@ -1,8 +1,10 @@
+//! Spacecraft attitude determination sensors.
+//!
+//! Source: Wertz (1978), *Spacecraft Attitude Determination and Control*
+
 use pr4xis::category::Entity;
 use pr4xis::ontology::{Axiom, Ontology, Quality};
 
-// Spacecraft attitude determination sensors.
-// Source: Wertz (1978), *Spacecraft Attitude Determination and Control*
 pr4xis::ontology! {
     name: "Attitude",
     source: "Wertz (1978); Markley & Crassidis (2014)",

@@ -1,7 +1,9 @@
+//! Classical orbital elements (Keplerian elements).
+//!
+//! Source: Vallado (2013), *Fundamentals of Astrodynamics and Applications*, 4th ed.
+
 use pr4xis::ontology::{Axiom, Ontology, Quality};
 
-// Classical orbital elements (Keplerian elements).
-// Source: Vallado (2013), *Fundamentals of Astrodynamics and Applications*, 4th ed.
 pr4xis::ontology! {
     name: "Orbit",
     source: "Vallado (2013); Battin (1999)",

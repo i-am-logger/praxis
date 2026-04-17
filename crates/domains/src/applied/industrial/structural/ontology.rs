@@ -1,7 +1,9 @@
+//! Structural health monitoring sensor types.
+//!
+//! Source: Farrar & Worden (2007), "An Introduction to Structural Health Monitoring"
+
 use pr4xis::ontology::{Axiom, Ontology, Quality};
 
-// Structural health monitoring sensor types.
-// Source: Farrar & Worden (2007), "An Introduction to Structural Health Monitoring"
 pr4xis::ontology! {
     name: "Structural",
     source: "Farrar & Worden (2007); Paris & Erdogan (1963)",

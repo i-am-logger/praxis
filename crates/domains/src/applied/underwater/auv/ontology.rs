@@ -1,7 +1,9 @@
+//! AUV navigation sensor types.
+//!
+//! Source: Kinsey et al. (2006), "A Survey of Underwater Vehicle Navigation"
+
 use pr4xis::ontology::{Axiom, Ontology, Quality};
 
-// AUV navigation sensor types.
-// Source: Kinsey et al. (2006), "A Survey of Underwater Vehicle Navigation"
 pr4xis::ontology! {
     name: "Auv",
     source: "Kinsey et al. (2006); Paull et al. (2014)",

@@ -1,8 +1,10 @@
+//! IMU measurement types — what the accelerometer and gyroscope measure.
+//!
+//! Source: Titterton & Weston (2004), Chapter 4; Groves (2013), Chapter 4.
+
 use pr4xis::ontology::reasoning::taxonomy;
 use pr4xis::ontology::{Axiom, Ontology, Quality};
 
-// IMU measurement types — what the accelerometer and gyroscope measure.
-// Source: Titterton & Weston (2004), Chapter 4; Groves (2013), Chapter 4.
 pr4xis::ontology! {
     name: "Imu",
     source: "Titterton & Weston (2004); Groves (2013)",

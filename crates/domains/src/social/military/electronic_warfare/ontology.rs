@@ -1,7 +1,9 @@
+//! Electronic warfare observable types for emitter geolocation.
+//!
+//! Source: Poisel (2012), *Electronic Warfare Target Location Methods*
+
 use pr4xis::ontology::{Axiom, Ontology, Quality};
 
-// Electronic warfare observable types for emitter geolocation.
-// Source: Poisel (2012), *Electronic Warfare Target Location Methods*
 pr4xis::ontology! {
     name: "Ew",
     source: "Poisel (2012); JP 3-13.1",

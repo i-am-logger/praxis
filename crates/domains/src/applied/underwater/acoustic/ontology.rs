@@ -1,7 +1,9 @@
+//! Acoustic positioning system types.
+//!
+//! Source: Milne (1983), *Underwater Acoustic Positioning Systems*
+
 use pr4xis::ontology::{Axiom, Ontology, Quality};
 
-// Acoustic positioning system types.
-// Source: Milne (1983), *Underwater Acoustic Positioning Systems*
 pr4xis::ontology! {
     name: "Acoustic",
     source: "Milne (1983); Kinsey et al. (2006)",

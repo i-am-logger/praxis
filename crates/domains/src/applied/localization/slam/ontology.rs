@@ -1,8 +1,10 @@
+//! SLAM graph components.
+//!
+//! Source: Grisetti et al. (2010), "A Tutorial on Graph-Based SLAM"
+
 use pr4xis::category::Category;
 use pr4xis::ontology::{Axiom, Ontology, Quality};
 
-// SLAM graph components.
-// Source: Grisetti et al. (2010), "A Tutorial on Graph-Based SLAM"
 pr4xis::ontology! {
     name: "Slam",
     source: "Durrant-Whyte & Bailey (2006)",

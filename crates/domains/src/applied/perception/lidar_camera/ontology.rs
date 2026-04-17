@@ -1,8 +1,10 @@
+//! Fusion pipeline stages for LiDAR+camera sensor fusion.
+//!
+//! Source: Caltagirone et al. (2019), "LiDAR-Camera Fusion for Road Detection"
+
 use pr4xis::category::Category;
 use pr4xis::ontology::{Axiom, Ontology, Quality};
 
-// Fusion pipeline stages for LiDAR+camera sensor fusion.
-// Source: Caltagirone et al. (2019), "LiDAR-Camera Fusion for Road Detection"
 pr4xis::ontology! {
     name: "LidarCamera",
     source: "Qi et al. (2018)",

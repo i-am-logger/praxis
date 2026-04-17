@@ -1,3 +1,7 @@
+//! Observation processing stages (JDL Level 0).
+//!
+//! Source: JDL (1999); Bar-Shalom et al. (2001).
+
 use pr4xis::ontology::{Axiom, Ontology, Quality};
 
 use crate::formal::math::linear_algebra::matrix::Matrix;
@@ -7,7 +11,6 @@ use crate::applied::sensor_fusion::observation::gating::ValidationGate;
 use crate::applied::sensor_fusion::observation::innovation::Innovation;
 use crate::applied::sensor_fusion::observation::observation_model::LinearObservationModel;
 
-// Observation processing stages (JDL Level 0).
 pr4xis::ontology! {
     name: "Observation",
     source: "JDL (1999); Bar-Shalom et al. (2001)",

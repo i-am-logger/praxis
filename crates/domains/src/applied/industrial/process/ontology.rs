@@ -1,7 +1,9 @@
+//! Process control variables.
+//!
+//! Source: Ogunnaike & Ray (1994), *Process Dynamics, Modeling, and Control*
+
 use pr4xis::ontology::{Axiom, Ontology, Quality};
 
-// Process control variables.
-// Source: Ogunnaike & Ray (1994), *Process Dynamics, Modeling, and Control*
 pr4xis::ontology! {
     name: "Process",
     source: "Ogunnaike & Ray (1994); Seborg et al. (2011)",

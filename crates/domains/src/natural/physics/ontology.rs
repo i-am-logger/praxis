@@ -1,7 +1,10 @@
+//! Physics ontology: laws of physics as entities with relationships.
+//!
+//! Source: Newton (1687); Maxwell (1865).
+
 use pr4xis::category::Entity;
 use pr4xis::ontology::{Axiom, Ontology, Quality};
 
-// Physics ontology: laws of physics as entities with relationships.
 pr4xis::ontology! {
     name: "Physics",
     source: "Newton (1687); Maxwell (1865)",
