@@ -156,6 +156,16 @@ impl Adjunction for AnalysisSynthesis {
         }
     }
 }
+
+impl pr4xis::category::Arrow for AnalysisSynthesis {
+    type Source = AcousticsToSignalProcessing;
+    type Target = SignalProcessingToAcoustics;
+    type Kind = pr4xis::category::AdjunctionKind;
+
+    fn meta() -> pr4xis::ontology::meta::RelationshipMeta {
+        <AnalysisSynthesis as pr4xis::category::Adjunction>::meta()
+    }
+}
 pr4xis::register_adjunction!(AnalysisSynthesis);
 
 // =============================================================================
@@ -334,6 +344,16 @@ impl Adjunction for HealthDisease {
         }
     }
 }
+
+impl pr4xis::category::Arrow for HealthDisease {
+    type Source = AnatomyToPathology;
+    type Target = PathologyToAnatomy;
+    type Kind = pr4xis::category::AdjunctionKind;
+
+    fn meta() -> pr4xis::ontology::meta::RelationshipMeta {
+        <HealthDisease as pr4xis::category::Adjunction>::meta()
+    }
+}
 pr4xis::register_adjunction!(HealthDisease);
 
 // =============================================================================
@@ -469,6 +489,16 @@ impl Adjunction for BottomUpTopDown {
         }
     }
 }
+
+impl pr4xis::category::Arrow for BottomUpTopDown {
+    type Source = PsychoacousticsToMusic;
+    type Target = MusicToPsychoacoustics;
+    type Kind = pr4xis::category::AdjunctionKind;
+
+    fn meta() -> pr4xis::ontology::meta::RelationshipMeta {
+        <BottomUpTopDown as pr4xis::category::Adjunction>::meta()
+    }
+}
 pr4xis::register_adjunction!(BottomUpTopDown);
 
 // =============================================================================
@@ -594,6 +624,16 @@ impl Adjunction for DiagnosisTreatment {
             to: *obj,
             kind,
         }
+    }
+}
+
+impl pr4xis::category::Arrow for DiagnosisTreatment {
+    type Source = PathologyToDevices;
+    type Target = DevicesToPathology;
+    type Kind = pr4xis::category::AdjunctionKind;
+
+    fn meta() -> pr4xis::ontology::meta::RelationshipMeta {
+        <DiagnosisTreatment as pr4xis::category::Adjunction>::meta()
     }
 }
 pr4xis::register_adjunction!(DiagnosisTreatment);

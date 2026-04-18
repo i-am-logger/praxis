@@ -3,6 +3,7 @@ pub mod macros;
 pub mod adjunction;
 pub mod algebra;
 pub mod applicative;
+pub mod arrow;
 #[allow(clippy::module_inception)]
 pub mod category;
 pub mod comonad;
@@ -34,6 +35,7 @@ pub mod yoneda;
 pub use adjunction::Adjunction;
 pub use algebra::{Algebra, Coalgebra};
 pub use applicative::Ap;
+pub use arrow::Arrow;
 pub use category::Category;
 pub use comonad::{Cofree, Focused};
 pub use endofunctor::Endofunctor;

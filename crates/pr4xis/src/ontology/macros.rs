@@ -569,6 +569,20 @@ macro_rules! adjunction {
             }
         }
 
+        // Arrow impl — adjunction is a structured 2-cell pair in Cat
+        // (Mac Lane XII.3). Rust's coherence rules don't allow a blanket
+        // `impl<A: Adjunction> Arrow for A` alongside the Functor blanket,
+        // so we emit Arrow per-adjunction here.
+        impl $crate::category::Arrow for $name {
+            type Source = $left;
+            type Target = $right;
+            type Kind = $crate::category::AdjunctionKind;
+
+            fn meta() -> $crate::ontology::meta::RelationshipMeta {
+                <$name as $crate::category::Adjunction>::meta()
+            }
+        }
+
         // Auto-register into the ADJUNCTIONS distributed slice (native only).
         #[cfg(not(target_arch = "wasm32"))]
         $crate::paste::paste! {
@@ -629,6 +643,18 @@ macro_rules! natural_transformation {
                     citation: $crate::ontology::meta::Citation::parse_static($citation),
                     module_path: $crate::ontology::meta::ModulePath::new_static(module_path!()),
                 }
+            }
+        }
+
+        // Arrow impl — natural transformation is a 2-cell in Cat
+        // (Mac Lane XII.3). Per-impl (not blanket) for coherence reasons.
+        impl $crate::category::Arrow for $name {
+            type Source = $from;
+            type Target = $to;
+            type Kind = $crate::category::NatTransKind;
+
+            fn meta() -> $crate::ontology::meta::RelationshipMeta {
+                <$name as $crate::category::NaturalTransformation>::meta()
             }
         }
 

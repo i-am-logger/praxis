@@ -86,6 +86,16 @@ impl Adjunction for MolecularBioelectricAdjunction {
         }
     }
 }
+
+impl pr4xis::category::Arrow for MolecularBioelectricAdjunction {
+    type Source = MolecularToBioelectric;
+    type Target = BioelectricToMolecular;
+    type Kind = pr4xis::category::AdjunctionKind;
+
+    fn meta() -> pr4xis::ontology::meta::RelationshipMeta {
+        <MolecularBioelectricAdjunction as pr4xis::category::Adjunction>::meta()
+    }
+}
 pr4xis::register_adjunction!(MolecularBioelectricAdjunction);
 
 // ---------------------------------------------------------------------------
@@ -137,6 +147,16 @@ impl Adjunction for PharmacologyMolecularAdjunction {
         }
     }
 }
+
+impl pr4xis::category::Arrow for PharmacologyMolecularAdjunction {
+    type Source = PharmacologyToMolecular;
+    type Target = MolecularToPharmacology;
+    type Kind = pr4xis::category::AdjunctionKind;
+
+    fn meta() -> pr4xis::ontology::meta::RelationshipMeta {
+        <PharmacologyMolecularAdjunction as pr4xis::category::Adjunction>::meta()
+    }
+}
 pr4xis::register_adjunction!(PharmacologyMolecularAdjunction);
 
 // ---------------------------------------------------------------------------
@@ -184,6 +204,16 @@ impl Adjunction for BiologyBioelectricAdjunction {
             to: *obj,
             kind,
         }
+    }
+}
+
+impl pr4xis::category::Arrow for BiologyBioelectricAdjunction {
+    type Source = BiologyToBioelectric;
+    type Target = BioelectricToBiology;
+    type Kind = pr4xis::category::AdjunctionKind;
+
+    fn meta() -> pr4xis::ontology::meta::RelationshipMeta {
+        <BiologyBioelectricAdjunction as pr4xis::category::Adjunction>::meta()
     }
 }
 pr4xis::register_adjunction!(BiologyBioelectricAdjunction);
