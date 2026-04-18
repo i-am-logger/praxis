@@ -11,9 +11,8 @@
 // On wasm32, linkme is unsupported — all slices are empty. Wasm consumers
 // build a registry via domain-specific fallback instead.
 
-use crate::category::{AdjunctionMeta, FunctorMeta, NaturalTransformationMeta};
-use crate::logic::axiom::AxiomMeta;
 use crate::ontology::Vocabulary;
+use crate::ontology::meta::RelationshipMeta;
 
 /// All registered ontology vocabularies (native only).
 ///
@@ -27,25 +26,25 @@ pub static VOCABULARIES: [fn() -> Vocabulary];
 /// structural-axiom families.
 #[cfg(not(target_arch = "wasm32"))]
 #[linkme::distributed_slice]
-pub static AXIOMS: [fn() -> AxiomMeta];
+pub static AXIOMS: [fn() -> RelationshipMeta];
 
 /// All registered functor metadata (native only). Populated by
 /// `pr4xis::functor!` declarations.
 #[cfg(not(target_arch = "wasm32"))]
 #[linkme::distributed_slice]
-pub static FUNCTORS: [fn() -> FunctorMeta];
+pub static FUNCTORS: [fn() -> RelationshipMeta];
 
 /// All registered adjunction metadata (native only). Populated by
 /// `pr4xis::adjunction!` declarations.
 #[cfg(not(target_arch = "wasm32"))]
 #[linkme::distributed_slice]
-pub static ADJUNCTIONS: [fn() -> AdjunctionMeta];
+pub static ADJUNCTIONS: [fn() -> RelationshipMeta];
 
 /// All registered natural-transformation metadata (native only).
 /// Populated by `pr4xis::natural_transformation!` declarations.
 #[cfg(not(target_arch = "wasm32"))]
 #[linkme::distributed_slice]
-pub static NATURAL_TRANSFORMATIONS: [fn() -> NaturalTransformationMeta];
+pub static NATURAL_TRANSFORMATIONS: [fn() -> RelationshipMeta];
 
 /// Describe the entire knowledge base — all registered ontologies.
 ///
@@ -66,45 +65,45 @@ pub fn describe_knowledge_base() -> Vec<Vocabulary> {
 
 /// All declared axioms with structured metadata.
 #[cfg(not(target_arch = "wasm32"))]
-pub fn describe_axioms() -> Vec<AxiomMeta> {
+pub fn describe_axioms() -> Vec<RelationshipMeta> {
     AXIOMS.iter().map(|f| f()).collect()
 }
 
 #[cfg(target_arch = "wasm32")]
-pub fn describe_axioms() -> Vec<AxiomMeta> {
+pub fn describe_axioms() -> Vec<RelationshipMeta> {
     Vec::new()
 }
 
 /// All declared functors with structured metadata.
 #[cfg(not(target_arch = "wasm32"))]
-pub fn describe_functors() -> Vec<FunctorMeta> {
+pub fn describe_functors() -> Vec<RelationshipMeta> {
     FUNCTORS.iter().map(|f| f()).collect()
 }
 
 #[cfg(target_arch = "wasm32")]
-pub fn describe_functors() -> Vec<FunctorMeta> {
+pub fn describe_functors() -> Vec<RelationshipMeta> {
     Vec::new()
 }
 
 /// All declared adjunctions with structured metadata.
 #[cfg(not(target_arch = "wasm32"))]
-pub fn describe_adjunctions() -> Vec<AdjunctionMeta> {
+pub fn describe_adjunctions() -> Vec<RelationshipMeta> {
     ADJUNCTIONS.iter().map(|f| f()).collect()
 }
 
 #[cfg(target_arch = "wasm32")]
-pub fn describe_adjunctions() -> Vec<AdjunctionMeta> {
+pub fn describe_adjunctions() -> Vec<RelationshipMeta> {
     Vec::new()
 }
 
 /// All declared natural transformations with structured metadata.
 #[cfg(not(target_arch = "wasm32"))]
-pub fn describe_natural_transformations() -> Vec<NaturalTransformationMeta> {
+pub fn describe_natural_transformations() -> Vec<RelationshipMeta> {
     NATURAL_TRANSFORMATIONS.iter().map(|f| f()).collect()
 }
 
 #[cfg(target_arch = "wasm32")]
-pub fn describe_natural_transformations() -> Vec<NaturalTransformationMeta> {
+pub fn describe_natural_transformations() -> Vec<RelationshipMeta> {
     Vec::new()
 }
 

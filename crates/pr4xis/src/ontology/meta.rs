@@ -3,14 +3,37 @@ use std::fmt;
 
 use crate::ontology::upper::being::Being;
 
-/// Metadata about an ontology — for tracing and introspection.
+/// Lemon + PROV-O metadata shared by every structural entity in pr4xis —
+/// ontologies, axioms, morphisms, functors, natural transformations, and
+/// adjunctions (issue #153).
 ///
-/// Stays as `&'static str` because it's only constructed at compile time
-/// from `stringify!` and `module_path!()`. Keeping Copy is valuable here.
-#[derive(Debug, Clone, Copy)]
-pub struct OntologyMeta {
-    pub name: &'static str,
-    pub module_path: &'static str,
+/// # Shape provenance
+///
+/// - `name`, `description` — ONTOLEX-Lemon (W3C 2016) canonical form +
+///   Lemon Form label
+/// - `citation` — PROV-O (W3C 2013) provenance reference
+/// - `module_path` — implementation-specific (Rust module location)
+///
+/// # Mac Lane (1971) XII.3
+///
+/// Every "arrow" in pr4xis — whether a 1-cell morphism, a 1-cell functor
+/// in Cat, a 2-cell natural transformation, or a structured 2-cell pair
+/// adjunction — is a directed relationship with identity and provenance.
+/// Gruber (1993) / OBO-RO (Smith et al. 2005): every relation is a
+/// formally-named type. These two principles meet here: one metadata
+/// shape for every named structural entity at every dimension.
+///
+/// Replaces the four parallel structs (OntologyMeta, FunctorMeta,
+/// AdjunctionMeta, NaturalTransformationMeta) and the nearly-identical
+/// AxiomMeta. Only [`Vocabulary`] stays separate — it carries
+/// additional DOLCE `Being` classification and concept/morphism snapshots.
+#[derive(Debug, Clone)]
+pub struct RelationshipMeta {
+    pub name: OntologyName,
+    /// English-language label (Lemon Form). Defaults to name.
+    pub description: Label,
+    pub citation: Citation,
+    pub module_path: ModulePath,
 }
 
 /// BCP 47 language tag — typed identifier for a language.

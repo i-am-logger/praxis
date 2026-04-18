@@ -51,7 +51,7 @@ where
         <T::Category>::identity(&T::target())
     }
 
-    crate::functor_meta!(
+    crate::relationship_meta!(
         "TerminalFunctor",
         "constant functor collapsing source to a single target aspect",
         "Mac Lane (1971) Ch. II §1"

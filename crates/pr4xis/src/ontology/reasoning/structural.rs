@@ -18,8 +18,9 @@
 //!    kind-matching morphisms; generated per-ontology by the
 //!    `pr4xis::ontology!` macro
 //!
-//! The `AxiomMeta` carries the kind name so the Lemon registry reports
-//! e.g. `NoCyclesOnKind[Subsumption]` rather than the generic type name.
+//! The `RelationshipMeta` carries the kind name so the Lemon registry
+//! reports e.g. `NoCyclesOnKind[Subsumption]` rather than the generic
+//! type name.
 //!
 //! Sources for the structural properties themselves:
 //! - Tarski (1941) *Calculus of Relations* — the axiom names and their
@@ -34,8 +35,8 @@ use std::hash::Hash;
 use std::marker::PhantomData;
 
 use crate::category::{Category, Relationship};
-use crate::logic::axiom::{Axiom, AxiomMeta};
-use crate::ontology::meta::{Citation, Label, ModulePath, OntologyName};
+use crate::logic::axiom::Axiom;
+use crate::ontology::meta::{Citation, Label, ModulePath, OntologyName, RelationshipMeta};
 
 /// Collect (from, to) pairs from the category's morphisms, filtered to
 /// the morphisms matching the kind filter.
@@ -86,8 +87,8 @@ fn meta_for(
     axiom_name: &'static str,
     kind_name: &'static str,
     citation: &'static str,
-) -> AxiomMeta {
-    AxiomMeta {
+) -> RelationshipMeta {
+    RelationshipMeta {
         name: OntologyName::new(format!("{axiom_name}[{kind_name}]")),
         description: Label::new(format!("{axiom_name} applied to edges of kind {kind_name}")),
         citation: Citation::parse_static(citation),
@@ -134,7 +135,7 @@ where
         adj.keys().all(|e| !reachable_from(e, &adj).contains(e))
     }
 
-    fn meta(&self) -> AxiomMeta {
+    fn meta(&self) -> RelationshipMeta {
         meta_for(
             "NoCyclesOnKind",
             self.kind_name,
@@ -186,7 +187,7 @@ where
         true
     }
 
-    fn meta(&self) -> AxiomMeta {
+    fn meta(&self) -> RelationshipMeta {
         meta_for(
             "AntisymmetricOnKind",
             self.kind_name,
@@ -238,7 +239,7 @@ where
         true
     }
 
-    fn meta(&self) -> AxiomMeta {
+    fn meta(&self) -> RelationshipMeta {
         meta_for(
             "AsymmetricOnKind",
             self.kind_name,
@@ -291,7 +292,7 @@ where
         true
     }
 
-    fn meta(&self) -> AxiomMeta {
+    fn meta(&self) -> RelationshipMeta {
         meta_for(
             "SymmetricOnKind",
             self.kind_name,
@@ -339,7 +340,7 @@ where
             .all(|m| m.source() != m.target())
     }
 
-    fn meta(&self) -> AxiomMeta {
+    fn meta(&self) -> RelationshipMeta {
         meta_for(
             "IrreflexiveOnKind",
             self.kind_name,

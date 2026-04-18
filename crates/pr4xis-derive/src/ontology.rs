@@ -752,8 +752,8 @@ pub fn generate(def: OntologyDef) -> TokenStream {
     let name_lit = syn::LitStr::new(&full_name, def.name.span());
 
     // Domain axioms declared in the `axioms:` clause. Each one emits a
-    // unit struct + `impl Axiom` + `AxiomMeta`, and gets pushed into the
-    // ontology's `domain_axioms()` via the `axiom_push_calls` list.
+    // unit struct + `impl Axiom` + `RelationshipMeta`, and gets pushed into
+    // the ontology's `domain_axioms()` via the `axiom_push_calls` list.
     let axiom_structs: Vec<TokenStream> = def
         .axioms
         .iter()
@@ -776,8 +776,8 @@ pub fn generate(def: OntologyDef) -> TokenStream {
                         #holds
                     }
 
-                    fn meta(&self) -> #pr4xis::logic::axiom::AxiomMeta {
-                        #pr4xis::logic::axiom::AxiomMeta {
+                    fn meta(&self) -> #pr4xis::ontology::meta::RelationshipMeta {
+                        #pr4xis::ontology::meta::RelationshipMeta {
                             name: #pr4xis::ontology::meta::OntologyName::new_static(#name_str_lit),
                             description: #pr4xis::ontology::meta::Label::new_static(#description),
                             citation: #pr4xis::ontology::meta::Citation::parse_static(#source),
@@ -810,7 +810,7 @@ pub fn generate(def: OntologyDef) -> TokenStream {
                 #pr4xis::paste::paste! {
                     #[#pr4xis::linkme::distributed_slice(#pr4xis::ontology::AXIOMS)]
                     #[linkme(crate = #pr4xis::linkme)]
-                    static [<_REGISTER_AXIOM_ #name_ident:snake:upper>]: fn() -> #pr4xis::logic::axiom::AxiomMeta =
+                    static [<_REGISTER_AXIOM_ #name_ident:snake:upper>]: fn() -> #pr4xis::ontology::meta::RelationshipMeta =
                         || <#name_ident as #pr4xis::logic::axiom::Axiom>::meta(&#name_ident);
                 }
             }
@@ -856,10 +856,14 @@ pub fn generate(def: OntologyDef) -> TokenStream {
                 axioms
             }
 
-            pub const fn meta() -> #pr4xis::ontology::OntologyMeta {
-                #pr4xis::ontology::OntologyMeta {
-                    name: #name_lit,
-                    module_path: module_path!(),
+            /// Structured metadata — unified Lemon+PROV-O record.
+            /// Same shape as functors/adjunctions/nat-trans/axioms (issue #153).
+            pub fn meta() -> #pr4xis::ontology::meta::RelationshipMeta {
+                #pr4xis::ontology::meta::RelationshipMeta {
+                    name: #pr4xis::ontology::meta::OntologyName::new_static(#name_lit),
+                    description: #pr4xis::ontology::meta::Label::new_static(#name_lit),
+                    citation: #pr4xis::ontology::meta::Citation::EMPTY,
+                    module_path: #pr4xis::ontology::meta::ModulePath::new_static(module_path!()),
                 }
             }
 

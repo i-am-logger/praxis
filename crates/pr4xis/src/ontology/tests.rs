@@ -449,8 +449,8 @@ mod ontology_macro_test {
     #[test]
     fn macro_generates_meta() {
         let meta = AnimalOntology::meta();
-        assert_eq!(meta.name, "AnimalOntology");
-        assert!(meta.module_path.contains("ontology_macro_test"));
+        assert_eq!(meta.name.as_str(), "AnimalOntology");
+        assert!(meta.module_path.as_str().contains("ontology_macro_test"));
     }
 
     #[test]
