@@ -797,6 +797,25 @@ pub fn generate(def: OntologyDef) -> TokenStream {
         })
         .collect();
 
+    // Per-axiom auto-registration into the global AXIOMS distributed slice
+    // so the Lemon lexicon includes every declared axiom.
+    let axiom_registrations: Vec<TokenStream> = def
+        .axioms
+        .iter()
+        .map(|a| {
+            let name_ident = &a.name;
+            quote! {
+                #[cfg(not(target_arch = "wasm32"))]
+                #pr4xis::paste::paste! {
+                    #[#pr4xis::linkme::distributed_slice(#pr4xis::ontology::AXIOMS)]
+                    #[linkme(crate = #pr4xis::linkme)]
+                    static [<_REGISTER_AXIOM_ #name_ident:snake:upper>]: fn() -> #pr4xis::logic::axiom::AxiomMeta =
+                        || <#name_ident as #pr4xis::logic::axiom::Axiom>::meta(&#name_ident);
+                }
+            }
+        })
+        .collect();
+
     quote! {
         #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, #pr4xis::category::Entity)]
         pub enum #entity_name {
@@ -866,5 +885,10 @@ pub fn generate(def: OntologyDef) -> TokenStream {
             #[linkme(crate = #pr4xis::linkme)]
             static [<_REGISTER_ #ont_name:snake:upper>]: fn() -> #pr4xis::ontology::Vocabulary = #ont_name::vocabulary;
         }
+
+        // Auto-register each declared domain axiom into the AXIOMS slice.
+        // The registry then has a complete Lemon-layer lexicon including
+        // every axiom's citation (issue #148).
+        #(#axiom_registrations)*
     }
 }

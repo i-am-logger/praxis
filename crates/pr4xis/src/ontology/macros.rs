@@ -449,6 +449,15 @@ macro_rules! functor {
                 }
             }
         }
+
+        // Auto-register into the FUNCTORS distributed slice (native only).
+        #[cfg(not(target_arch = "wasm32"))]
+        $crate::paste::paste! {
+            #[$crate::linkme::distributed_slice($crate::ontology::FUNCTORS)]
+            #[linkme(crate = $crate::linkme)]
+            static [<_REGISTER_FUNCTOR_ $name:snake:upper>]: fn() -> $crate::category::FunctorMeta =
+                <$name as $crate::category::Functor>::meta;
+        }
     };
 }
 
@@ -517,6 +526,15 @@ macro_rules! adjunction {
                 }
             }
         }
+
+        // Auto-register into the ADJUNCTIONS distributed slice (native only).
+        #[cfg(not(target_arch = "wasm32"))]
+        $crate::paste::paste! {
+            #[$crate::linkme::distributed_slice($crate::ontology::ADJUNCTIONS)]
+            #[linkme(crate = $crate::linkme)]
+            static [<_REGISTER_ADJUNCTION_ $name:snake:upper>]: fn() -> $crate::category::AdjunctionMeta =
+                <$name as $crate::category::Adjunction>::meta;
+        }
     };
 }
 
@@ -569,6 +587,15 @@ macro_rules! natural_transformation {
                     module_path: $crate::ontology::meta::ModulePath::new_static(module_path!()),
                 }
             }
+        }
+
+        // Auto-register into the NATURAL_TRANSFORMATIONS distributed slice.
+        #[cfg(not(target_arch = "wasm32"))]
+        $crate::paste::paste! {
+            #[$crate::linkme::distributed_slice($crate::ontology::NATURAL_TRANSFORMATIONS)]
+            #[linkme(crate = $crate::linkme)]
+            static [<_REGISTER_NAT_TRANS_ $name:snake:upper>]: fn() -> $crate::category::NaturalTransformationMeta =
+                <$name as $crate::category::NaturalTransformation>::meta;
         }
     };
 }
