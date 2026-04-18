@@ -1,7 +1,7 @@
 use super::entity::Concept;
 use super::relationship::Relationship;
 
-/// A category: a collection of objects (entities) and morphisms (relationships)
+/// A category: a collection of objects (concepts) and morphisms (relationships)
 /// where composition and identity laws hold.
 ///
 /// # Laws

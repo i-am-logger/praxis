@@ -37,7 +37,7 @@ pub use applicative::Ap;
 pub use category::Category;
 pub use comonad::{Cofree, Focused};
 pub use endofunctor::Endofunctor;
-pub use entity::Concept;
+pub use entity::{Concept, ConceptMeta, FinitelyGenerated};
 pub use free::Chain;
 pub use functor::Functor;
 pub use galois::GaloisConnection;
