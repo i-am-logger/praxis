@@ -83,7 +83,8 @@ impl<T: OppositionDef> crate::logic::Axiom for Symmetric<T> {
 
     crate::axiom_meta!(
         "Symmetric[Opposition]",
-        "Aristotle 'Peri Hermeneias' — Square of Opposition: opposition is symmetric"
+        "opposition is symmetric: if A opposes B then B opposes A",
+        "Aristotle 'Peri Hermeneias' — Square of Opposition"
     );
 }
 
@@ -117,6 +118,7 @@ impl<T: OppositionDef> crate::logic::Axiom for Irreflexive<T> {
 
     crate::axiom_meta!(
         "Irreflexive[Opposition]",
+        "opposition is irreflexive: nothing opposes itself",
         "Aristotle 'Peri Hermeneias' — an entity is not the opposite of itself"
     );
 }
@@ -158,6 +160,7 @@ impl<T: OppositionDef, F: Fn(&T::Entity, &T::Entity) -> bool> crate::logic::Axio
 
     crate::axiom_meta!(
         "ExclusiveWithEquivalence[Opposition]",
-        "Aristotle 'Peri Hermeneias' — A opposes B implies A ≢ B (opposition excludes equivalence)"
+        "opposites cannot be equivalent (A opposes B implies A ≢ B)",
+        "Aristotle 'Peri Hermeneias' — opposition excludes equivalence"
     );
 }

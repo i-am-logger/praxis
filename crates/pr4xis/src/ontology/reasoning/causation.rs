@@ -132,7 +132,8 @@ impl<T: CausalDef> crate::logic::Axiom for Asymmetric<T> {
 
     crate::axiom_meta!(
         "Asymmetric[Causation]",
-        "Lewis (1973) 'Causation'; Reichenbach (1956) 'The Direction of Time' — causal arrows do not reverse"
+        "causation is asymmetric: if A causes B then B does not cause A",
+        "Lewis (1973) 'Causation'; Reichenbach (1956) 'The Direction of Time'"
     );
 }
 
@@ -166,7 +167,8 @@ impl<T: CausalDef> crate::logic::Axiom for NoSelfCausation<T> {
 
     crate::axiom_meta!(
         "NoSelfCausation[Causation]",
-        "Lewis (1973) 'Causation'; Humean causation — an event does not cause itself"
+        "no entity directly causes itself",
+        "Lewis (1973) 'Causation' — Humean causation"
     );
 }
 

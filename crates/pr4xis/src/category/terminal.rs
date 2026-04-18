@@ -53,7 +53,8 @@ where
 
     crate::functor_meta!(
         "TerminalFunctor",
-        "Mac Lane (1971) Ch. II §1 — constant functor collapsing source to a single target aspect"
+        "constant functor collapsing source to a single target aspect",
+        "Mac Lane (1971) Ch. II §1"
     );
 }
 

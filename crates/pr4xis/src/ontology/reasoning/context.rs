@@ -111,7 +111,8 @@ impl<T: ContextDef> crate::logic::Axiom for Deterministic<T> {
 
     crate::axiom_meta!(
         "Deterministic[Context]",
-        "Carnap (1947) 'Meaning and Necessity' — intension-plus-context determines extension"
+        "context resolution is deterministic: each (entity, signal) has at most one resolution",
+        "Carnap (1947) 'Meaning and Necessity' — intension + context → extension"
     );
 }
 
@@ -153,6 +154,7 @@ impl<T: ContextDef> crate::logic::Axiom for TrueAmbiguity<T> {
 
     crate::axiom_meta!(
         "TrueAmbiguity[Context]",
-        "Pustejovsky (1995) 'The Generative Lexicon' — lexical ambiguity requires ≥2 distinct senses"
+        "every entity in the context map has at least two distinct resolutions",
+        "Pustejovsky (1995) 'The Generative Lexicon'"
     );
 }

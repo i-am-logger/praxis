@@ -35,7 +35,8 @@ impl<C: Category> Axiom for NoDeadStates<C> {
 
     crate::axiom_meta!(
         "NoDeadStates",
-        "Mac Lane (1971) 'Categories for the Working Mathematician' Ch. I — categories have identity morphisms at every object"
+        "every object has at least one outgoing morphism",
+        "Mac Lane (1971) 'Categories for the Working Mathematician' Ch. I"
     );
 }
 
@@ -97,6 +98,7 @@ impl<C: Category> Axiom for FullyConnected<C> {
 
     crate::axiom_meta!(
         "FullyConnected",
-        "Graph connectivity invariant — every object reachable from every other via morphism composition"
+        "every object is reachable from every other object",
+        "Graph connectivity invariant on a category"
     );
 }
