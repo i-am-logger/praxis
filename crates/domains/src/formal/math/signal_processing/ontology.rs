@@ -73,7 +73,7 @@ impl Axiom for NyquistTheorem {
         true
     }
 }
-pr4xis::register_axiom!(NyquistTheorem);
+pr4xis::register_axiom!(NyquistTheorem, "Shannon (1949), Nyquist (1928).");
 
 /// Aliasing occurs when the sample rate is below the Nyquist rate.
 pub struct AliasingOccursBelowNyquist;
@@ -94,7 +94,10 @@ impl Axiom for AliasingOccursBelowNyquist {
         true
     }
 }
-pr4xis::register_axiom!(AliasingOccursBelowNyquist);
+pr4xis::register_axiom!(
+    AliasingOccursBelowNyquist,
+    "Shannon (1949), Nyquist (1928)."
+);
 
 /// Bandwidth is always positive (a signal occupies non-negative frequency range).
 pub struct BandwidthPositive;
@@ -117,7 +120,7 @@ impl Axiom for BandwidthPositive {
         true
     }
 }
-pr4xis::register_axiom!(BandwidthPositive);
+pr4xis::register_axiom!(BandwidthPositive, "Shannon (1949), Nyquist (1928).");
 
 impl Ontology for SignalProcessingOntology {
     type Cat = SignalProcessingCategory;

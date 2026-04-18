@@ -48,7 +48,10 @@ impl Axiom for AoaBounded {
         true
     }
 }
-pr4xis::register_axiom!(AoaBounded);
+pr4xis::register_axiom!(
+    AoaBounded,
+    "Poisel (2012), *Electronic Warfare Target Location Methods*"
+);
 
 /// Axiom: TDOA requires at least 2 sensors for 2D geolocation.
 pub struct TdoaRequiresSensorPair;
@@ -61,7 +64,10 @@ impl Axiom for TdoaRequiresSensorPair {
         true
     }
 }
-pr4xis::register_axiom!(TdoaRequiresSensorPair);
+pr4xis::register_axiom!(
+    TdoaRequiresSensorPair,
+    "Poisel (2012), *Electronic Warfare Target Location Methods*"
+);
 
 impl Ontology for EwOntology {
     type Cat = EwCategory;

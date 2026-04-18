@@ -156,6 +156,7 @@ impl<T: TaxonomyDef> crate::logic::Axiom for NoCycles<T> {
 
     crate::axiom_meta!(
         "NoCycles[Taxonomy]",
+        "taxonomy has no cycles (is a DAG)",
         "Guarino (2009) 'The Ontological Level'; Gruber (1993) 'A Translation Approach to Portable Ontology Specifications' — taxonomies are directed acyclic graphs"
     );
 }
@@ -196,6 +197,7 @@ impl<T: TaxonomyDef> crate::logic::Axiom for Antisymmetric<T> {
 
     crate::axiom_meta!(
         "Antisymmetric[Taxonomy]",
+        "taxonomy is antisymmetric: if A is-a B then B is not a A",
         "Guarino (2009); Mac Lane (1971) — subsumption is a partial order (antisymmetric)"
     );
 }

@@ -76,7 +76,7 @@ impl Axiom for DimensionCommutativity {
         true
     }
 }
-pr4xis::register_axiom!(DimensionCommutativity);
+pr4xis::register_axiom!(DimensionCommutativity, "BIPM SI Brochure (2019), Table 1.");
 
 /// Dimensions form an abelian group: multiplication is associative.
 pub struct DimensionAssociativity;
@@ -99,7 +99,7 @@ impl Axiom for DimensionAssociativity {
         true
     }
 }
-pr4xis::register_axiom!(DimensionAssociativity);
+pr4xis::register_axiom!(DimensionAssociativity, "BIPM SI Brochure (2019), Table 1.");
 
 /// Dimensionless is the identity element.
 pub struct DimensionIdentity;
@@ -118,7 +118,7 @@ impl Axiom for DimensionIdentity {
         true
     }
 }
-pr4xis::register_axiom!(DimensionIdentity);
+pr4xis::register_axiom!(DimensionIdentity, "BIPM SI Brochure (2019), Table 1.");
 
 /// Every dimension has an inverse: [A]·[A]⁻¹ = 1.
 pub struct DimensionInverse;
@@ -136,7 +136,7 @@ impl Axiom for DimensionInverse {
         true
     }
 }
-pr4xis::register_axiom!(DimensionInverse);
+pr4xis::register_axiom!(DimensionInverse, "BIPM SI Brochure (2019), Table 1.");
 
 /// Cannot add quantities with different dimensions.
 pub struct AdditionRequiresSameDimension;
@@ -168,7 +168,10 @@ impl Axiom for AdditionRequiresSameDimension {
         true
     }
 }
-pr4xis::register_axiom!(AdditionRequiresSameDimension);
+pr4xis::register_axiom!(
+    AdditionRequiresSameDimension,
+    "BIPM SI Brochure (2019), Table 1."
+);
 
 /// Multiplication produces correct derived dimension.
 pub struct DerivedDimensionConsistency;
@@ -185,7 +188,10 @@ impl Axiom for DerivedDimensionConsistency {
         v.dimension == Dimension::VELOCITY && (v.value - 5.0).abs() < 1e-10
     }
 }
-pr4xis::register_axiom!(DerivedDimensionConsistency);
+pr4xis::register_axiom!(
+    DerivedDimensionConsistency,
+    "BIPM SI Brochure (2019), Table 1."
+);
 
 /// Unit conversion roundtrip: km → m → km.
 pub struct UnitConversionRoundtrip;
@@ -201,7 +207,7 @@ impl Axiom for UnitConversionRoundtrip {
         (km_val - km_back).abs() < 1e-10 && (m_val - 5000.0).abs() < 1e-10
     }
 }
-pr4xis::register_axiom!(UnitConversionRoundtrip);
+pr4xis::register_axiom!(UnitConversionRoundtrip, "BIPM SI Brochure (2019), Table 1.");
 
 /// Incompatible units cannot convert: meters cannot become seconds.
 pub struct IncompatibleUnitConversionFails;
@@ -214,7 +220,10 @@ impl Axiom for IncompatibleUnitConversionFails {
         unit::METER.convert(5.0, &unit::SECOND).is_none()
     }
 }
-pr4xis::register_axiom!(IncompatibleUnitConversionFails);
+pr4xis::register_axiom!(
+    IncompatibleUnitConversionFails,
+    "BIPM SI Brochure (2019), Table 1."
+);
 
 impl Ontology for QuantityOntology {
     type Cat = QuantityCategory;

@@ -57,7 +57,7 @@ impl Axiom for CovarianceIsPSD {
             .all(|e| covariance::is_valid(&e.covariance))
     }
 }
-pr4xis::register_axiom!(CovarianceIsPSD);
+pr4xis::register_axiom!(CovarianceIsPSD, "Kalman (1960); Maybeck (1979).");
 
 /// Axiom: information form roundtrip preserves the estimate.
 pub struct InformationRoundtrip;
@@ -90,7 +90,7 @@ impl Axiom for InformationRoundtrip {
         true
     }
 }
-pr4xis::register_axiom!(InformationRoundtrip);
+pr4xis::register_axiom!(InformationRoundtrip, "Kalman (1960); Maybeck (1979).");
 
 /// Axiom: information fusion is additive.
 pub struct InformationFusionAdditive;
@@ -125,7 +125,7 @@ impl Axiom for InformationFusionAdditive {
         diff < 1e-10
     }
 }
-pr4xis::register_axiom!(InformationFusionAdditive);
+pr4xis::register_axiom!(InformationFusionAdditive, "Kalman (1960); Maybeck (1979).");
 
 impl Ontology for StateEstimationOntology {
     type Cat = StateEstimationCategory;

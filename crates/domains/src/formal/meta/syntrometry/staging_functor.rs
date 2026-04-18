@@ -78,7 +78,10 @@ impl Functor for SyntrometryToStaging {
         }
     }
 }
-pr4xis::register_functor!(SyntrometryToStaging);
+pr4xis::register_functor!(
+    SyntrometryToStaging,
+    "directly to Futamura's (1971) staging hierarchy of programs. The"
+);
 
 #[cfg(test)]
 mod tests {

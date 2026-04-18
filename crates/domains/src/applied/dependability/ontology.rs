@@ -332,7 +332,10 @@ impl Axiom for ThreeThreats {
         actual.len() == expected.len() && expected.iter().all(|t| actual.contains(t))
     }
 }
-pr4xis::register_axiom!(ThreeThreats);
+pr4xis::register_axiom!(
+    ThreeThreats,
+    "> Avizienis, A., Laprie, J.-C., Randell, B., Landwehr, C. (2004)."
+);
 
 /// Helper: collect direct (non-transitive) children of a concept under
 /// the dependability taxonomy.
@@ -363,7 +366,10 @@ impl Axiom for FaultErrorFailureChain {
         activates && propagates
     }
 }
-pr4xis::register_axiom!(FaultErrorFailureChain);
+pr4xis::register_axiom!(
+    FaultErrorFailureChain,
+    "> Avizienis, A., Laprie, J.-C., Randell, B., Landwehr, C. (2004)."
+);
 
 /// Axiom: failure recursion (Avizienis §2.4).
 /// A Failure observed by another component IS a Fault for that component.
@@ -404,7 +410,10 @@ impl Axiom for FailureRecursionDocumented {
         failure_is_threat && fault_is_threat && no_direct_recursion
     }
 }
-pr4xis::register_axiom!(FailureRecursionDocumented);
+pr4xis::register_axiom!(
+    FailureRecursionDocumented,
+    "> Avizienis, A., Laprie, J.-C., Randell, B., Landwehr, C. (2004)."
+);
 
 /// Axiom: the direct children of `Attribute` are exactly the six core
 /// attributes (Avizienis §4 — excluding security extensions). Adding a
@@ -428,7 +437,10 @@ impl Axiom for SixCoreAttributes {
         actual.len() == expected.len() && expected.iter().all(|a| actual.contains(a))
     }
 }
-pr4xis::register_axiom!(SixCoreAttributes);
+pr4xis::register_axiom!(
+    SixCoreAttributes,
+    "> Avizienis, A., Laprie, J.-C., Randell, B., Landwehr, C. (2004)."
+);
 
 /// Axiom: the direct children of `Means` are exactly the four means
 /// (Avizienis §5). A fifth direct child would invalidate this axiom.
@@ -449,7 +461,10 @@ impl Axiom for FourMeans {
         actual.len() == expected.len() && expected.iter().all(|m| actual.contains(m))
     }
 }
-pr4xis::register_axiom!(FourMeans);
+pr4xis::register_axiom!(
+    FourMeans,
+    "> Avizienis, A., Laprie, J.-C., Randell, B., Landwehr, C. (2004)."
+);
 
 /// Axiom: the four Cristian (1991) operational fault models are all
 /// classified as OperationalFault. (The literature also describes a
@@ -478,7 +493,10 @@ impl Axiom for CristianFaultModelsExist {
         expected.iter().all(|m| actual.contains(m))
     }
 }
-pr4xis::register_axiom!(CristianFaultModelsExist);
+pr4xis::register_axiom!(
+    CristianFaultModelsExist,
+    "> Avizienis, A., Laprie, J.-C., Randell, B., Landwehr, C. (2004)."
+);
 
 impl Ontology for DependabilityOntology {
     type Cat = DependabilityCategory;

@@ -11,6 +11,9 @@ use crate::ontology::meta::{Citation, ModulePath, OntologyName};
 #[derive(Debug, Clone)]
 pub struct FunctorMeta {
     pub name: OntologyName,
+    /// English-language label describing what the functor expresses
+    /// (Lemon Form). Defaults to the functor's name if not declared.
+    pub description: crate::ontology::meta::Label,
     pub citation: Citation,
     pub module_path: ModulePath,
 }
@@ -31,10 +34,21 @@ pub struct FunctorMeta {
 /// ```
 #[macro_export]
 macro_rules! functor_meta {
+    ($name:literal, $description:literal, $citation:literal) => {
+        fn meta() -> $crate::category::FunctorMeta {
+            $crate::category::FunctorMeta {
+                name: $crate::ontology::meta::OntologyName::new_static($name),
+                description: $crate::ontology::meta::Label::new_static($description),
+                citation: $crate::ontology::meta::Citation::parse_static($citation),
+                module_path: $crate::ontology::meta::ModulePath::new_static(module_path!()),
+            }
+        }
+    };
     ($name:literal, $citation:literal) => {
         fn meta() -> $crate::category::FunctorMeta {
             $crate::category::FunctorMeta {
                 name: $crate::ontology::meta::OntologyName::new_static($name),
+                description: $crate::ontology::meta::Label::new_static($name),
                 citation: $crate::ontology::meta::Citation::parse_static($citation),
                 module_path: $crate::ontology::meta::ModulePath::new_static(module_path!()),
             }
@@ -78,8 +92,10 @@ pub trait Functor {
     /// Functors declared via `pr4xis::functor!` or with the
     /// [`functor_meta!`](crate::functor_meta!) helper override it.
     fn meta() -> FunctorMeta {
+        let tn = std::any::type_name::<Self>().to_string();
         FunctorMeta {
-            name: OntologyName::new(std::any::type_name::<Self>().to_string()),
+            name: OntologyName::new(tn.clone()),
+            description: crate::ontology::meta::Label::new(tn),
             citation: Citation::EMPTY,
             module_path: ModulePath::new(module_path!().to_string()),
         }

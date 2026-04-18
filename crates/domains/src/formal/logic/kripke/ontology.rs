@@ -145,7 +145,10 @@ impl Axiom for TwoModalOperators {
         actual.len() == expected.len() && expected.iter().all(|c| actual.contains(c))
     }
 }
-pr4xis::register_axiom!(TwoModalOperators);
+pr4xis::register_axiom!(
+    TwoModalOperators,
+    "- Kripke, S. (1959). *A Completeness Theorem in Modal Logic*. JSL 24(1)."
+);
 
 /// Axiom: the four standard frame conditions are all direct children of
 /// FrameCondition. (S4 needs reflexive + transitive; S5 needs equivalence =
@@ -168,7 +171,10 @@ impl Axiom for StandardFrameConditions {
         actual.len() == expected.len() && expected.iter().all(|c| actual.contains(c))
     }
 }
-pr4xis::register_axiom!(StandardFrameConditions);
+pr4xis::register_axiom!(
+    StandardFrameConditions,
+    "- Kripke, S. (1959). *A Completeness Theorem in Modal Logic*. JSL 24(1)."
+);
 
 /// Axiom: the Kripke frame mereologically contains both `PossibleWorld` and
 /// `AccessibilityRelation` as its constitutive parts. Without this, the
@@ -195,7 +201,10 @@ impl Axiom for FrameContainsWorldsAndRelation {
             && parts.contains(&KripkeConcept::AccessibilityRelation)
     }
 }
-pr4xis::register_axiom!(FrameContainsWorldsAndRelation);
+pr4xis::register_axiom!(
+    FrameContainsWorldsAndRelation,
+    "- Kripke, S. (1959). *A Completeness Theorem in Modal Logic*. JSL 24(1)."
+);
 
 impl Ontology for KripkeOntology {
     type Cat = KripkeCategory;

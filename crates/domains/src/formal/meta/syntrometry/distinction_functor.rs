@@ -111,7 +111,10 @@ impl Functor for DistinctionToSyntrometry {
         }
     }
 }
-pr4xis::register_functor!(DistinctionToSyntrometry);
+pr4xis::register_functor!(
+    DistinctionToSyntrometry,
+    "Historically Spencer-Brown's *Laws of Form* (1969) is older than Heim's"
+);
 
 #[cfg(test)]
 mod tests {

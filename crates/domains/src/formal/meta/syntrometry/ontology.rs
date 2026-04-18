@@ -231,7 +231,10 @@ impl Axiom for AspectIsTripleProduct {
         expected.iter().all(|e| parts.contains(e))
     }
 }
-pr4xis::register_axiom!(AspectIsTripleProduct);
+pr4xis::register_axiom!(
+    AspectIsTripleProduct,
+    "> \"A Modernized Syntrometric Logic: Foundations and Applications\" (2025)"
+);
 
 /// Axiom: Syncolator is-a Composer — every endofunctor is a functor
 /// specialised to the same source and target. (Mac Lane Ch. II §1.)
@@ -248,7 +251,10 @@ impl Axiom for SyncolatorIsComposer {
         })
     }
 }
-pr4xis::register_axiom!(SyncolatorIsComposer);
+pr4xis::register_axiom!(
+    SyncolatorIsComposer,
+    "> \"A Modernized Syntrometric Logic: Foundations and Applications\" (2025)"
+);
 
 /// Axiom: the Syntrix hierarchy has the expected level/aspekt edges into
 /// Syntrix — without them the leveled-category structure collapses.
@@ -270,7 +276,10 @@ impl Axiom for SyntrixIsLeveled {
             && has(S::Aspect, S::Syntrix, K::InhabitsLevelOf)
     }
 }
-pr4xis::register_axiom!(SyntrixIsLeveled);
+pr4xis::register_axiom!(
+    SyntrixIsLeveled,
+    "> \"A Modernized Syntrometric Logic: Foundations and Applications\" (2025)"
+);
 
 /// A Metroplex mereologically contains Syntrices organised
 /// by TranscendenceLevels. Both parts must be present.
@@ -286,7 +295,10 @@ impl Axiom for MetroplexContainsSyntrixAndLevels {
             && parts.contains(&SyntrometryConcept::TranscendenceLevel)
     }
 }
-pr4xis::register_axiom!(MetroplexContainsSyntrixAndLevels);
+pr4xis::register_axiom!(
+    MetroplexContainsSyntrixAndLevels,
+    "> \"A Modernized Syntrometric Logic: Foundations and Applications\" (2025)"
+);
 
 /// Every Maxim ConvergesToward a Telecenter. The pair
 /// (Maxim, Telecenter) must exist with the ConvergesToward kind —
@@ -306,7 +318,10 @@ impl Axiom for MaximConvergesTowardTelecenter {
             .any(|r| r.from == S::Maxim && r.to == S::Telecenter && r.kind == K::ConvergesToward)
     }
 }
-pr4xis::register_axiom!(MaximConvergesTowardTelecenter);
+pr4xis::register_axiom!(
+    MaximConvergesTowardTelecenter,
+    "> \"A Modernized Syntrometric Logic: Foundations and Applications\" (2025)"
+);
 
 /// A Telecenter is a fixed-point of a Syncolator — the categorical
 /// content of the eigenform / goal-attractor mapping. Encoded as
@@ -327,7 +342,10 @@ impl Axiom for TelecenterIsSyncolatorFixedPoint {
             .any(|r| r.from == S::Telecenter && r.to == S::Syncolator && r.kind == K::FixedPointOf)
     }
 }
-pr4xis::register_axiom!(TelecenterIsSyncolatorFixedPoint);
+pr4xis::register_axiom!(
+    TelecenterIsSyncolatorFixedPoint,
+    "> \"A Modernized Syntrometric Logic: Foundations and Applications\" (2025)"
+);
 
 impl Ontology for SyntrometryOntology {
     type Cat = SyntrometryCategory;

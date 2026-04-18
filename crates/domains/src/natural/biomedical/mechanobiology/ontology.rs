@@ -251,7 +251,10 @@ impl Axiom for MechanobiologyTaxonomyIsDAG {
         taxonomy::NoCycles::<MechanobiologyTaxonomy>::new().holds()
     }
 }
-pr4xis::register_axiom!(MechanobiologyTaxonomyIsDAG);
+pr4xis::register_axiom!(
+    MechanobiologyTaxonomyIsDAG,
+    "- PMID:37459546 (2023): Piezo1 membrane stretch threshold lambda=1.9"
+);
 
 /// Axiom: mechanobiology causal graph is asymmetric.
 pub struct MechanobiologyCausalAsymmetric;
@@ -265,7 +268,10 @@ impl Axiom for MechanobiologyCausalAsymmetric {
         causation::Asymmetric::<MechanobiologyCauses>::new().holds()
     }
 }
-pr4xis::register_axiom!(MechanobiologyCausalAsymmetric);
+pr4xis::register_axiom!(
+    MechanobiologyCausalAsymmetric,
+    "- PMID:37459546 (2023): Piezo1 membrane stretch threshold lambda=1.9"
+);
 
 /// Axiom: mechanical load transitively causes intracellular signaling.
 pub struct MechanicalLoadCausesSignaling;
@@ -282,7 +288,10 @@ impl Axiom for MechanicalLoadCausesSignaling {
         effects.contains(&IntracellularSignaling)
     }
 }
-pr4xis::register_axiom!(MechanicalLoadCausesSignaling);
+pr4xis::register_axiom!(
+    MechanicalLoadCausesSignaling,
+    "- PMID:37459546 (2023): Piezo1 membrane stretch threshold lambda=1.9"
+);
 
 /// Axiom: repetitive stimulus causes frequency-dependent response (Lewis 2017).
 pub struct RepetitiveStimulusCausesFrequencyResponse;
@@ -299,7 +308,10 @@ impl Axiom for RepetitiveStimulusCausesFrequencyResponse {
         effects.contains(&FrequencyDependentResponse)
     }
 }
-pr4xis::register_axiom!(RepetitiveStimulusCausesFrequencyResponse);
+pr4xis::register_axiom!(
+    RepetitiveStimulusCausesFrequencyResponse,
+    "- PMID:37459546 (2023): Piezo1 membrane stretch threshold lambda=1.9"
+);
 
 /// Axiom: mechanosensitive channel is frequency-dependent (Lewis 2017).
 pub struct MechanosensitiveChannelIsFrequencyDependent;
@@ -313,7 +325,10 @@ impl Axiom for MechanosensitiveChannelIsFrequencyDependent {
         IsFrequencyDependent.get(&MechanobiologyEntity::MechanosensitiveChannel) == Some(true)
     }
 }
-pr4xis::register_axiom!(MechanosensitiveChannelIsFrequencyDependent);
+pr4xis::register_axiom!(
+    MechanosensitiveChannelIsFrequencyDependent,
+    "- PMID:37459546 (2023): Piezo1 membrane stretch threshold lambda=1.9"
+);
 
 /// Axiom: channel gating requires membrane tension.
 pub struct ChannelGatingRequiresTension;
@@ -327,7 +342,10 @@ impl Axiom for ChannelGatingRequiresTension {
         RequiresMembraneTension.get(&MechanobiologyEntity::OpenState) == Some(true)
     }
 }
-pr4xis::register_axiom!(ChannelGatingRequiresTension);
+pr4xis::register_axiom!(
+    ChannelGatingRequiresTension,
+    "- PMID:37459546 (2023): Piezo1 membrane stretch threshold lambda=1.9"
+);
 
 /// Axiom: sustained force causes mechanoadaptation (threshold shifts with chronic loading).
 pub struct SustainedForceCausesAdaptation;
@@ -343,7 +361,10 @@ impl Axiom for SustainedForceCausesAdaptation {
         effects.contains(&ThresholdShift)
     }
 }
-pr4xis::register_axiom!(SustainedForceCausesAdaptation);
+pr4xis::register_axiom!(
+    SustainedForceCausesAdaptation,
+    "- PMID:37459546 (2023): Piezo1 membrane stretch threshold lambda=1.9"
+);
 
 /// Axiom: OpenState opposes ClosedState.
 pub struct OpenOpposesClosedState;
@@ -358,7 +379,10 @@ impl Axiom for OpenOpposesClosedState {
         opposition::are_opposed::<MechanobiologyOpposition>(&OpenState, &ClosedState)
     }
 }
-pr4xis::register_axiom!(OpenOpposesClosedState);
+pr4xis::register_axiom!(
+    OpenOpposesClosedState,
+    "- PMID:37459546 (2023): Piezo1 membrane stretch threshold lambda=1.9"
+);
 
 /// Axiom: mechanobiology opposition is symmetric.
 pub struct MechanobiologyOppositionSymmetric;
@@ -372,7 +396,10 @@ impl Axiom for MechanobiologyOppositionSymmetric {
         opposition::Symmetric::<MechanobiologyOpposition>::new().holds()
     }
 }
-pr4xis::register_axiom!(MechanobiologyOppositionSymmetric);
+pr4xis::register_axiom!(
+    MechanobiologyOppositionSymmetric,
+    "- PMID:37459546 (2023): Piezo1 membrane stretch threshold lambda=1.9"
+);
 
 /// Axiom: mechanobiology opposition is irreflexive.
 pub struct MechanobiologyOppositionIrreflexive;
@@ -386,7 +413,10 @@ impl Axiom for MechanobiologyOppositionIrreflexive {
         opposition::Irreflexive::<MechanobiologyOpposition>::new().holds()
     }
 }
-pr4xis::register_axiom!(MechanobiologyOppositionIrreflexive);
+pr4xis::register_axiom!(
+    MechanobiologyOppositionIrreflexive,
+    "- PMID:37459546 (2023): Piezo1 membrane stretch threshold lambda=1.9"
+);
 
 // ---------------------------------------------------------------------------
 // Ontology

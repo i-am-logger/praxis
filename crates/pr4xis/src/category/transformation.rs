@@ -8,6 +8,8 @@ use crate::ontology::meta::{Citation, ModulePath, OntologyName};
 #[derive(Debug, Clone)]
 pub struct NaturalTransformationMeta {
     pub name: OntologyName,
+    /// English-language label (Lemon Form). Defaults to name.
+    pub description: crate::ontology::meta::Label,
     pub citation: Citation,
     pub module_path: ModulePath,
 }
@@ -49,8 +51,10 @@ pub trait NaturalTransformation {
     /// `pr4xis::natural_transformation!` or
     /// [`natural_transformation_meta!`](crate::natural_transformation_meta!).
     fn meta() -> NaturalTransformationMeta {
+        let tn = std::any::type_name::<Self>().to_string();
         NaturalTransformationMeta {
-            name: OntologyName::new(std::any::type_name::<Self>().to_string()),
+            name: OntologyName::new(tn.clone()),
+            description: crate::ontology::meta::Label::new(tn),
             citation: Citation::EMPTY,
             module_path: ModulePath::new(module_path!().to_string()),
         }
@@ -61,10 +65,21 @@ pub trait NaturalTransformation {
 /// `impl NaturalTransformation` with a literature citation in one line.
 #[macro_export]
 macro_rules! natural_transformation_meta {
+    ($name:literal, $description:literal, $citation:literal) => {
+        fn meta() -> $crate::category::NaturalTransformationMeta {
+            $crate::category::NaturalTransformationMeta {
+                name: $crate::ontology::meta::OntologyName::new_static($name),
+                description: $crate::ontology::meta::Label::new_static($description),
+                citation: $crate::ontology::meta::Citation::parse_static($citation),
+                module_path: $crate::ontology::meta::ModulePath::new_static(module_path!()),
+            }
+        }
+    };
     ($name:literal, $citation:literal) => {
         fn meta() -> $crate::category::NaturalTransformationMeta {
             $crate::category::NaturalTransformationMeta {
                 name: $crate::ontology::meta::OntologyName::new_static($name),
+                description: $crate::ontology::meta::Label::new_static($name),
                 citation: $crate::ontology::meta::Citation::parse_static($citation),
                 module_path: $crate::ontology::meta::ModulePath::new_static(module_path!()),
             }

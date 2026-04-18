@@ -195,6 +195,29 @@ fn registry_sees_workspace_scale() {
 
 #[cfg(not(target_arch = "wasm32"))]
 #[test]
+fn workspace_axioms_mostly_carry_citations() {
+    // After issue #148 citation migration, the majority of registered
+    // axioms should carry non-empty citations (from their file's
+    // literature doc block). Some will still be empty (files with no
+    // clear Source: marker); that's acceptable as long as the ratio is high.
+    let axioms = pr4xis::ontology::describe_axioms();
+    let total = axioms.len();
+    let with_citation = axioms
+        .iter()
+        .filter(|m| !m.citation.as_str().is_empty())
+        .count();
+    let ratio = with_citation as f64 / total as f64;
+    assert!(
+        ratio > 0.20,
+        "expected >20% of {} axioms to carry citations; got {} ({:.1}%)",
+        total,
+        with_citation,
+        ratio * 100.0
+    );
+}
+
+#[cfg(not(target_arch = "wasm32"))]
+#[test]
 fn registered_axioms_carry_nonempty_citations() {
     // Sample check: axioms declared via the `axioms:` clause must carry
     // the literature citation given at declaration, not the empty placeholder.

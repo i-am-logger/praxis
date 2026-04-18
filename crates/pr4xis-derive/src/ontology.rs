@@ -779,6 +779,7 @@ pub fn generate(def: OntologyDef) -> TokenStream {
                     fn meta(&self) -> #pr4xis::logic::axiom::AxiomMeta {
                         #pr4xis::logic::axiom::AxiomMeta {
                             name: #pr4xis::ontology::meta::OntologyName::new_static(#name_str_lit),
+                            description: #pr4xis::ontology::meta::Label::new_static(#description),
                             citation: #pr4xis::ontology::meta::Citation::parse_static(#source),
                             module_path: #pr4xis::ontology::meta::ModulePath::new_static(module_path!()),
                         }

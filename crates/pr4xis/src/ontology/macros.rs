@@ -444,6 +444,7 @@ macro_rules! functor {
             fn meta() -> $crate::category::FunctorMeta {
                 $crate::category::FunctorMeta {
                     name: $crate::ontology::meta::OntologyName::new_static(stringify!($name)),
+                    description: $crate::ontology::meta::Label::new_static(stringify!($name)),
                     citation: $crate::ontology::meta::Citation::parse_static($citation),
                     module_path: $crate::ontology::meta::ModulePath::new_static(module_path!()),
                 }
@@ -521,6 +522,7 @@ macro_rules! adjunction {
             fn meta() -> $crate::category::AdjunctionMeta {
                 $crate::category::AdjunctionMeta {
                     name: $crate::ontology::meta::OntologyName::new_static(stringify!($name)),
+                    description: $crate::ontology::meta::Label::new_static(stringify!($name)),
                     citation: $crate::ontology::meta::Citation::parse_static($citation),
                     module_path: $crate::ontology::meta::ModulePath::new_static(module_path!()),
                 }
@@ -583,6 +585,7 @@ macro_rules! natural_transformation {
             fn meta() -> $crate::category::NaturalTransformationMeta {
                 $crate::category::NaturalTransformationMeta {
                     name: $crate::ontology::meta::OntologyName::new_static(stringify!($name)),
+                    description: $crate::ontology::meta::Label::new_static(stringify!($name)),
                     citation: $crate::ontology::meta::Citation::parse_static($citation),
                     module_path: $crate::ontology::meta::ModulePath::new_static(module_path!()),
                 }
@@ -624,6 +627,8 @@ macro_rules! register_axiom {
     // Axioms that want their declared citation in the registry should
     // add an explicit `meta()` override via the `axiom_meta!` helper AND
     // register with `register_axiom!(Name, &instance)` instead.
+    // Single-argument — type-name identity + empty citation, works for
+    // any type regardless of its field layout.
     ($name:ident) => {
         #[cfg(not(target_arch = "wasm32"))]
         $crate::paste::paste! {
@@ -632,14 +637,33 @@ macro_rules! register_axiom {
             static [<_REGISTER_AXIOM_ $name:snake:upper>]: fn() -> $crate::logic::axiom::AxiomMeta =
                 || $crate::logic::axiom::AxiomMeta {
                     name: $crate::ontology::meta::OntologyName::new_static(stringify!($name)),
+                    description: $crate::ontology::meta::Label::new_static(stringify!($name)),
                     citation: $crate::ontology::meta::Citation::EMPTY,
                     module_path: $crate::ontology::meta::ModulePath::new_static(module_path!()),
                 };
         }
     };
-    // Registration with an explicit instance expression — calls the
-    // instance's `meta()` method so declared citations propagate.
-    ($name:ident, $instance:expr) => {
+    // Two-argument with a citation literal — name and module path from the
+    // type identity, description defaults to the name, citation is the
+    // literal. Keeps axiom impl bodies untouched; the surrounding file's
+    // literature citation is passed in directly.
+    ($name:ident, $citation:literal) => {
+        #[cfg(not(target_arch = "wasm32"))]
+        $crate::paste::paste! {
+            #[$crate::linkme::distributed_slice($crate::ontology::AXIOMS)]
+            #[linkme(crate = $crate::linkme)]
+            static [<_REGISTER_AXIOM_ $name:snake:upper>]: fn() -> $crate::logic::axiom::AxiomMeta =
+                || $crate::logic::axiom::AxiomMeta {
+                    name: $crate::ontology::meta::OntologyName::new_static(stringify!($name)),
+                    description: $crate::ontology::meta::Label::new_static(stringify!($name)),
+                    citation: $crate::ontology::meta::Citation::parse_static($citation),
+                    module_path: $crate::ontology::meta::ModulePath::new_static(module_path!()),
+                };
+        }
+    };
+    // Instance-propagating — calls the instance's `meta()` method so any
+    // description / citation declared inside `impl Axiom` propagates.
+    ($name:ident, instance: $instance:expr) => {
         #[cfg(not(target_arch = "wasm32"))]
         $crate::paste::paste! {
             #[$crate::linkme::distributed_slice($crate::ontology::AXIOMS)]
@@ -662,6 +686,20 @@ macro_rules! register_functor {
                 <$name as $crate::category::Functor>::meta;
         }
     };
+    ($name:ident, $citation:literal) => {
+        #[cfg(not(target_arch = "wasm32"))]
+        $crate::paste::paste! {
+            #[$crate::linkme::distributed_slice($crate::ontology::FUNCTORS)]
+            #[linkme(crate = $crate::linkme)]
+            static [<_REGISTER_FUNCTOR_ $name:snake:upper>]: fn() -> $crate::category::FunctorMeta =
+                || $crate::category::FunctorMeta {
+                    name: $crate::ontology::meta::OntologyName::new_static(stringify!($name)),
+                    description: $crate::ontology::meta::Label::new_static(stringify!($name)),
+                    citation: $crate::ontology::meta::Citation::parse_static($citation),
+                    module_path: $crate::ontology::meta::ModulePath::new_static(module_path!()),
+                };
+        }
+    };
 }
 
 /// Register a hand-written `impl Adjunction for X` into the ADJUNCTIONS slice.
@@ -676,6 +714,20 @@ macro_rules! register_adjunction {
                 <$name as $crate::category::Adjunction>::meta;
         }
     };
+    ($name:ident, $citation:literal) => {
+        #[cfg(not(target_arch = "wasm32"))]
+        $crate::paste::paste! {
+            #[$crate::linkme::distributed_slice($crate::ontology::ADJUNCTIONS)]
+            #[linkme(crate = $crate::linkme)]
+            static [<_REGISTER_ADJUNCTION_ $name:snake:upper>]: fn() -> $crate::category::AdjunctionMeta =
+                || $crate::category::AdjunctionMeta {
+                    name: $crate::ontology::meta::OntologyName::new_static(stringify!($name)),
+                    description: $crate::ontology::meta::Label::new_static(stringify!($name)),
+                    citation: $crate::ontology::meta::Citation::parse_static($citation),
+                    module_path: $crate::ontology::meta::ModulePath::new_static(module_path!()),
+                };
+        }
+    };
 }
 
 /// Register a hand-written `impl NaturalTransformation for X` into the slice.
@@ -688,6 +740,20 @@ macro_rules! register_natural_transformation {
             #[linkme(crate = $crate::linkme)]
             static [<_REGISTER_NAT_TRANS_ $name:snake:upper>]: fn() -> $crate::category::NaturalTransformationMeta =
                 <$name as $crate::category::NaturalTransformation>::meta;
+        }
+    };
+    ($name:ident, $citation:literal) => {
+        #[cfg(not(target_arch = "wasm32"))]
+        $crate::paste::paste! {
+            #[$crate::linkme::distributed_slice($crate::ontology::NATURAL_TRANSFORMATIONS)]
+            #[linkme(crate = $crate::linkme)]
+            static [<_REGISTER_NAT_TRANS_ $name:snake:upper>]: fn() -> $crate::category::NaturalTransformationMeta =
+                || $crate::category::NaturalTransformationMeta {
+                    name: $crate::ontology::meta::OntologyName::new_static(stringify!($name)),
+                    description: $crate::ontology::meta::Label::new_static(stringify!($name)),
+                    citation: $crate::ontology::meta::Citation::parse_static($citation),
+                    module_path: $crate::ontology::meta::ModulePath::new_static(module_path!()),
+                };
         }
     };
 }

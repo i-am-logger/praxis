@@ -12,6 +12,9 @@ use crate::ontology::meta::{Citation, ModulePath, OntologyName};
 #[derive(Debug, Clone)]
 pub struct AxiomMeta {
     pub name: OntologyName,
+    /// English-language label / description of the axiom (Lemon Form).
+    /// For most axioms this is the same string returned by `description()`.
+    pub description: crate::ontology::meta::Label,
     pub citation: Citation,
     pub module_path: ModulePath,
 }
@@ -31,10 +34,24 @@ pub struct AxiomMeta {
 /// ```
 #[macro_export]
 macro_rules! axiom_meta {
+    // Three-argument form — name, description (English label), citation.
+    ($name:literal, $description:literal, $citation:literal) => {
+        fn meta(&self) -> $crate::logic::axiom::AxiomMeta {
+            $crate::logic::axiom::AxiomMeta {
+                name: $crate::ontology::meta::OntologyName::new_static($name),
+                description: $crate::ontology::meta::Label::new_static($description),
+                citation: $crate::ontology::meta::Citation::parse_static($citation),
+                module_path: $crate::ontology::meta::ModulePath::new_static(module_path!()),
+            }
+        }
+    };
+    // Two-argument form — name + citation, description defaults to name.
+    // Convenience for axioms where the struct name is itself the English label.
     ($name:literal, $citation:literal) => {
         fn meta(&self) -> $crate::logic::axiom::AxiomMeta {
             $crate::logic::axiom::AxiomMeta {
                 name: $crate::ontology::meta::OntologyName::new_static($name),
+                description: $crate::ontology::meta::Label::new_static($name),
                 citation: $crate::ontology::meta::Citation::parse_static($citation),
                 module_path: $crate::ontology::meta::ModulePath::new_static(module_path!()),
             }
@@ -75,8 +92,10 @@ pub trait Axiom {
     /// [`axiom_meta!`](crate::axiom_meta!) helper inline override the
     /// default with the actual literature reference.
     fn meta(&self) -> AxiomMeta {
+        let tn = std::any::type_name::<Self>().to_string();
         AxiomMeta {
-            name: OntologyName::new(std::any::type_name::<Self>().to_string()),
+            name: OntologyName::new(tn.clone()),
+            description: crate::ontology::meta::Label::new(self.description().to_string()),
             citation: Citation::EMPTY,
             module_path: ModulePath::new(module_path!().to_string()),
         }
