@@ -1,5 +1,16 @@
 use super::category::Category;
 use super::functor::Functor;
+use crate::ontology::meta::{Citation, ModulePath, OntologyName};
+
+/// Lemon-style lexical metadata for a natural transformation — name,
+/// citation, module path. Matches `OntologyMeta` / `AxiomMeta` /
+/// `FunctorMeta` / `AdjunctionMeta` shape (issue #148).
+#[derive(Debug, Clone)]
+pub struct NaturalTransformationMeta {
+    pub name: OntologyName,
+    pub citation: Citation,
+    pub module_path: ModulePath,
+}
 
 /// A natural transformation is a morphism between two functors.
 ///
@@ -13,6 +24,9 @@ use super::functor::Functor;
 ///
 /// This ensures the transformation is "natural" — it commutes with
 /// the structure of the categories.
+///
+/// Every natural transformation announces itself via `meta()` — same
+/// Lemon-uniform shape as ontologies, axioms, functors, and adjunctions.
 pub trait NaturalTransformation {
     type SourceFunctor: Functor;
     type TargetFunctor: Functor<
@@ -27,4 +41,15 @@ pub trait NaturalTransformation {
     fn component(
         obj: &<<Self::SourceFunctor as Functor>::Source as Category>::Object,
     ) -> <<Self::SourceFunctor as Functor>::Target as Category>::Morphism;
+
+    /// Structured metadata — name, citation, module path. Default
+    /// derives identity from `type_name`; override via the
+    /// `natural_transformation!` macro.
+    fn meta() -> NaturalTransformationMeta {
+        NaturalTransformationMeta {
+            name: OntologyName::new(std::any::type_name::<Self>().to_string()),
+            citation: Citation::EMPTY,
+            module_path: ModulePath::new(module_path!().to_string()),
+        }
+    }
 }

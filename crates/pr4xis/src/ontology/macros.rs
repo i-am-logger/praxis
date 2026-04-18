@@ -378,3 +378,197 @@ macro_rules! define_ontology {
         }
     };
 }
+
+/// Declare a functor between two categories, with Lemon-style metadata.
+///
+/// Issue #148: functors live *between* ontologies, so they get their own
+/// macro (sibling to `ontology!`, not a clause inside it). The macro
+/// emits:
+///
+/// - a unit struct with the given name
+/// - `impl Functor<Source = ..., Target = ...>` with the user's object
+///   and morphism mappings
+/// - `FunctorMeta` (name + citation + module_path) wired into the
+///   trait's `meta()` override
+///
+/// # Example
+///
+/// ```ignore
+/// pr4xis::functor! {
+///     name: SomeFunctor,
+///     source: SourceCategory,
+///     target: TargetCategory,
+///     citation: "Kephart & Chess (2003); Mac Lane (1971) Ch. II §1",
+///     map_object: |obj| -> SomeTargetConcept { /* ... */ },
+///     map_morphism: |m| -> SomeTargetRelation { /* ... */ },
+/// }
+/// ```
+///
+/// `map_object` and `map_morphism` accept any Rust expression — typically
+/// a `|arg| { ... }` closure or a `|arg| expr` shorthand. The macro
+/// inlines them in the trait's required methods.
+#[macro_export]
+macro_rules! functor {
+    (
+        name: $name:ident,
+        source: $source:ty,
+        target: $target:ty,
+        citation: $citation:literal,
+        map_object: $map_obj:expr,
+        map_morphism: $map_morph:expr $(,)?
+    ) => {
+        pub struct $name;
+
+        impl $crate::category::Functor for $name {
+            type Source = $source;
+            type Target = $target;
+
+            fn map_object(
+                obj: &<$source as $crate::category::Category>::Object,
+            ) -> <$target as $crate::category::Category>::Object {
+                let f: fn(
+                    &<$source as $crate::category::Category>::Object,
+                ) -> <$target as $crate::category::Category>::Object = $map_obj;
+                f(obj)
+            }
+
+            fn map_morphism(
+                m: &<$source as $crate::category::Category>::Morphism,
+            ) -> <$target as $crate::category::Category>::Morphism {
+                let f: fn(
+                    &<$source as $crate::category::Category>::Morphism,
+                ) -> <$target as $crate::category::Category>::Morphism = $map_morph;
+                f(m)
+            }
+
+            fn meta() -> $crate::category::FunctorMeta {
+                $crate::category::FunctorMeta {
+                    name: $crate::ontology::meta::OntologyName::new_static(stringify!($name)),
+                    citation: $crate::ontology::meta::Citation::parse_static($citation),
+                    module_path: $crate::ontology::meta::ModulePath::new_static(module_path!()),
+                }
+            }
+        }
+    };
+}
+
+/// Declare an adjunction F ⊣ G, with Lemon-style metadata.
+///
+/// Issue #148: adjunctions live *between* two functors — their own
+/// structural object. The macro emits:
+///
+/// - a unit struct with the given name
+/// - `impl Adjunction<Left = F, Right = G>` with the user's unit and
+///   counit component functions
+/// - `AdjunctionMeta` (name + citation + module_path) in the trait's
+///   `meta()` override
+///
+/// # Example
+///
+/// ```ignore
+/// pr4xis::adjunction! {
+///     name: ParseGenerate,
+///     left: ParseFunctor,
+///     right: GenerateFunctor,
+///     citation: "de Groote (2001); Lambek & Scott (1986)",
+///     unit: |obj| { /* A → G(F(A)) */ },
+///     counit: |obj| { /* F(G(B)) → B */ },
+/// }
+/// ```
+#[macro_export]
+macro_rules! adjunction {
+    (
+        name: $name:ident,
+        left: $left:ty,
+        right: $right:ty,
+        citation: $citation:literal,
+        unit: $unit:expr,
+        counit: $counit:expr $(,)?
+    ) => {
+        pub struct $name;
+
+        impl $crate::category::Adjunction for $name {
+            type Left = $left;
+            type Right = $right;
+
+            fn unit(
+                obj: &<<$left as $crate::category::Functor>::Source as $crate::category::Category>::Object,
+            ) -> <<$left as $crate::category::Functor>::Source as $crate::category::Category>::Morphism {
+                let f: fn(
+                    &<<$left as $crate::category::Functor>::Source as $crate::category::Category>::Object,
+                ) -> <<$left as $crate::category::Functor>::Source as $crate::category::Category>::Morphism = $unit;
+                f(obj)
+            }
+
+            fn counit(
+                obj: &<<$left as $crate::category::Functor>::Target as $crate::category::Category>::Object,
+            ) -> <<$left as $crate::category::Functor>::Target as $crate::category::Category>::Morphism {
+                let f: fn(
+                    &<<$left as $crate::category::Functor>::Target as $crate::category::Category>::Object,
+                ) -> <<$left as $crate::category::Functor>::Target as $crate::category::Category>::Morphism = $counit;
+                f(obj)
+            }
+
+            fn meta() -> $crate::category::AdjunctionMeta {
+                $crate::category::AdjunctionMeta {
+                    name: $crate::ontology::meta::OntologyName::new_static(stringify!($name)),
+                    citation: $crate::ontology::meta::Citation::parse_static($citation),
+                    module_path: $crate::ontology::meta::ModulePath::new_static(module_path!()),
+                }
+            }
+        }
+    };
+}
+
+/// Declare a natural transformation η: F ⇒ G, with Lemon-style metadata.
+///
+/// Issue #148: natural transformations live *between* two functors — a
+/// distinct structural object. The macro emits a unit struct plus
+/// `impl NaturalTransformation` with the user's component function and
+/// `NaturalTransformationMeta`.
+///
+/// # Example
+///
+/// ```ignore
+/// pr4xis::natural_transformation! {
+///     name: Reflexivity,
+///     from: IdentityFunctor,
+///     to:   SyncolatorFunctor,
+///     citation: "Heim; von Foerster (1981) eigenform",
+///     component: |obj| { /* ... */ },
+/// }
+/// ```
+#[macro_export]
+macro_rules! natural_transformation {
+    (
+        name: $name:ident,
+        from: $from:ty,
+        to: $to:ty,
+        citation: $citation:literal,
+        component: $component:expr $(,)?
+    ) => {
+        pub struct $name;
+
+        impl $crate::category::NaturalTransformation for $name {
+            type SourceFunctor = $from;
+            type TargetFunctor = $to;
+
+            fn component(
+                obj: &<<$from as $crate::category::Functor>::Source as $crate::category::Category>::Object,
+            ) -> <<$from as $crate::category::Functor>::Target as $crate::category::Category>::Morphism {
+                let f: fn(
+                    &<<$from as $crate::category::Functor>::Source as $crate::category::Category>::Object,
+                ) -> <<$from as $crate::category::Functor>::Target as $crate::category::Category>::Morphism = $component;
+                f(obj)
+            }
+
+            fn meta() -> $crate::category::NaturalTransformationMeta {
+                $crate::category::NaturalTransformationMeta {
+                    name: $crate::ontology::meta::OntologyName::new_static(stringify!($name)),
+                    citation: $crate::ontology::meta::Citation::parse_static($citation),
+                    module_path: $crate::ontology::meta::ModulePath::new_static(module_path!()),
+                }
+            }
+        }
+    };
+}
