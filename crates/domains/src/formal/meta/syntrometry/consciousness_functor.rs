@@ -40,7 +40,7 @@ fn map_concept(c: &SyntrometryConcept) -> C1Concept {
     use C1Concept as C;
     use SyntrometryConcept as S;
     match c {
-        S::Maxime => C::Attention,
+        S::Maxim => C::Attention,
         S::Metroplex => C::GlobalWorkspace,
         _ => C::ConsciousAccess,
     }

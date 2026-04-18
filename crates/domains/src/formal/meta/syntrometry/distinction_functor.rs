@@ -17,8 +17,8 @@
 //!
 //! Most distinction primitives collapse to `Syntrix` (the top-level
 //! leveled-structure category) so every edge becomes a Syntrix self-loop;
-//! `ReEntry` goes to `Synkolator` (self-application = endofunctor) so the
-//! AppliesTo edges land on the declared `(Synkolator, Syntrix,
+//! `ReEntry` goes to `Syncolator` (self-application = endofunctor) so the
+//! AppliesTo edges land on the declared `(Syncolator, Syntrix,
 //! EndomorphismOn)` edge in Syntrometry.
 //!
 //! | Distinction | Syntrometry | Why |
@@ -28,12 +28,12 @@
 //! | `Boundary`      | `Syntrix` | Boundary = internal structure of the category |
 //! | `MarkedSpace`   | `Syntrix` | Space = the category itself |
 //! | `UnmarkedSpace` | `Syntrix` | Complement space, collapses |
-//! | `ReEntry`       | `Synkolator` | Self-applied distinction = endofunctor |
+//! | `ReEntry`       | `Syncolator` | Self-applied distinction = endofunctor |
 //!
 //! The 5:1 collapse to Syntrix is honest: Spencer-Brown's distinction
 //! calculus doesn't distinguish the levels of structure Heim's syntrometric
 //! logic adds. What matters for the lineage is that the one concept with
-//! self-reference — `ReEntry` — lands at `Synkolator` with the right edge
+//! self-reference — `ReEntry` — lands at `Syncolator` with the right edge
 //! structure preserved.
 
 use pr4xis::category::{Category, Functor};
@@ -50,7 +50,7 @@ fn map_concept(c: &DistinctionConcept) -> SyntrometryConcept {
     use SyntrometryConcept as S;
     match c {
         D::Void | D::Mark | D::Boundary | D::MarkedSpace | D::UnmarkedSpace => S::Syntrix,
-        D::ReEntry => S::Synkolator,
+        D::ReEntry => S::Syncolator,
     }
 }
 
@@ -96,7 +96,7 @@ impl Functor for DistinctionToSyntrometry {
                 } else {
                     // Cross-object — fall through to Composed. Under the
                     // current concept mapping, no declared edge lives
-                    // between the image endpoints (the (Synkolator, Syntrix,
+                    // between the image endpoints (the (Syncolator, Syntrix,
                     // EndomorphismOn) pair is exercised by a self-loop
                     // target here because we collapse Mark/Boundary to
                     // Syntrix — the F(ReEntry → Boundary) chain doesn't

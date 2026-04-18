@@ -20,7 +20,7 @@
 //!
 //! These traditions are compatible at the structural level we encode
 //! here: each names primitives of the opposition-resolution pattern,
-//! which is what pr4xis needs for `Syntrometry::Dialektik` and for
+//! which is what pr4xis needs for `Syntrometry::Dialectic` (Heim's *Dialektik*) and for
 //! dialectical reasoning in downstream ontologies.
 
 use pr4xis::category::Category;
