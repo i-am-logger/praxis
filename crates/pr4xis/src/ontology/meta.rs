@@ -720,7 +720,7 @@ impl Vocabulary {
     }
 
     /// Static Vocabulary — concepts/morphisms pulled from Category/Entity each call.
-    pub fn from_static<C: crate::category::Category, E: crate::category::entity::Entity>(
+    pub fn from_static<C: crate::category::Category, E: crate::category::entity::Concept>(
         name: impl Into<OntologyName>,
         module_path: impl Into<ModulePath>,
         source: impl Into<Citation>,
@@ -733,8 +733,8 @@ impl Vocabulary {
             being,
             source_of_truth: Source::Static {
                 concepts: || {
-                    use crate::category::Entity;
-                    <E as Entity>::variants()
+                    use crate::category::Concept;
+                    <E as Concept>::variants()
                         .iter()
                         .map(|v| {
                             let name = v.name();
@@ -748,7 +748,7 @@ impl Vocabulary {
                         .collect()
                 },
                 morphisms: || {
-                    use crate::category::{Entity, Relationship};
+                    use crate::category::{Concept, Relationship};
                     let name_of = |e: &<C as crate::category::Category>::Object| -> String {
                         let n = e.name();
                         if n.is_empty() {
@@ -794,7 +794,7 @@ impl Vocabulary {
     }
 
     /// Compatibility shim for `manual::<C, E>()` calls in descriptor.rs.
-    pub fn from_ontology<C: crate::category::Category, E: crate::category::entity::Entity>(
+    pub fn from_ontology<C: crate::category::Category, E: crate::category::entity::Concept>(
         name: impl Into<OntologyName>,
         module_path: impl Into<ModulePath>,
         source: impl Into<Citation>,

@@ -82,7 +82,7 @@ mod tests {
     use super::*;
     use crate::natural::biomedical::bioelectricity::ontology::BioelectricRelationKind;
     use pr4xis::category::validate::check_functor_laws;
-    use pr4xis::category::{Category, Entity};
+    use pr4xis::category::{Category, Concept};
     use pr4xis::ontology::reasoning::analogy::Analogy;
 
     #[test]

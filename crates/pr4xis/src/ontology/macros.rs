@@ -260,7 +260,7 @@ macro_rules! define_ontology {
         $(
             pub struct $tax_name;
             impl $crate::ontology::reasoning::taxonomy::TaxonomyDef for $tax_name {
-                type Entity = $entity;
+                type Concept = $entity;
                 fn relations() -> Vec<($entity, $entity)> {
                     #[allow(unused_imports)]
                     use $entity::*;
@@ -273,7 +273,7 @@ macro_rules! define_ontology {
         $(
             pub struct $mer_name;
             impl $crate::ontology::reasoning::mereology::MereologyDef for $mer_name {
-                type Entity = $entity;
+                type Concept = $entity;
                 fn relations() -> Vec<($entity, $entity)> {
                     #[allow(unused_imports)]
                     use $entity::*;
@@ -286,7 +286,7 @@ macro_rules! define_ontology {
         $(
             pub struct $caus_name;
             impl $crate::ontology::reasoning::causation::CausalDef for $caus_name {
-                type Entity = $caus_entity;
+                type Concept = $caus_entity;
                 fn relations() -> Vec<($caus_entity, $caus_entity)> {
                     #[allow(unused_imports)]
                     use $caus_entity::*;
@@ -299,7 +299,7 @@ macro_rules! define_ontology {
         $(
             pub struct $opp_name;
             impl $crate::ontology::reasoning::opposition::OppositionDef for $opp_name {
-                type Entity = $entity;
+                type Concept = $entity;
                 fn pairs() -> Vec<($entity, $entity)> {
                     #[allow(unused_imports)]
                     use $entity::*;

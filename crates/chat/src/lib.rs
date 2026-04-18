@@ -702,7 +702,7 @@ fn find_common_ancestor(
 
 pub fn extract_entity_name(sem: &montague::Sem) -> String {
     match sem {
-        montague::Sem::Entity { word, .. } => word.clone(),
+        montague::Sem::Concept { word, .. } => word.clone(),
         montague::Sem::Pred { word } => word.clone(),
         // For Func (e.g., "is" applied to "dog"), extract the content entity
         // from the body, not the function word itself.

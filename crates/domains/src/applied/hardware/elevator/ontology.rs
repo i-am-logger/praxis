@@ -1,4 +1,4 @@
-use pr4xis::category::Entity;
+use pr4xis::category::Concept;
 use pr4xis::define_ontology;
 use pr4xis::ontology::Quality;
 
@@ -17,7 +17,7 @@ impl Floor {
 /// Since Entity::variants() takes no args, we use a fixed 10-floor building.
 const MAX_FLOORS: usize = 10;
 
-impl Entity for Floor {
+impl Concept for Floor {
     fn variants() -> Vec<Self> {
         (0..MAX_FLOORS).map(Floor).collect()
     }

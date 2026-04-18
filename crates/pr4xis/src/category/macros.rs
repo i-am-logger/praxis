@@ -84,7 +84,7 @@ macro_rules! define_category {
             }
 
             fn morphisms() -> Vec<$relation> {
-                use $crate::category::Entity;
+                use $crate::category::Concept;
 
                 let mut m = Vec::new();
 
@@ -166,7 +166,7 @@ macro_rules! define_dense_category {
             }
 
             fn morphisms() -> Vec<$relation> {
-                use $crate::category::Entity;
+                use $crate::category::Concept;
                 let variants = $entity::variants();
                 variants.iter()
                     .flat_map(|&a| variants.iter().map(move |&b| $relation { from: a, to: b }))

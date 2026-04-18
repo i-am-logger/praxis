@@ -1,4 +1,4 @@
-use pr4xis::category::entity::Entity;
+use pr4xis::category::entity::Concept;
 use pr4xis::logic::Axiom;
 
 // Pregroup Grammar Ontology — parsing as group algebra.
@@ -36,7 +36,7 @@ pub enum BasicType {
     PP,
 }
 
-impl Entity for BasicType {
+impl Concept for BasicType {
     fn variants() -> Vec<Self> {
         vec![Self::S, Self::NP, Self::N, Self::PP]
     }

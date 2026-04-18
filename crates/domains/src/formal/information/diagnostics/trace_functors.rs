@@ -139,7 +139,7 @@ impl PipelineStep {
     ];
 }
 
-impl pr4xis::category::Entity for PipelineStep {
+impl pr4xis::category::Concept for PipelineStep {
     fn variants() -> Vec<Self> {
         Self::ALL.to_vec()
     }
@@ -487,7 +487,7 @@ impl PipelineTrace {
 mod tests {
     use super::*;
     use pr4xis::category::Monoid;
-    use pr4xis::category::entity::Entity;
+    use pr4xis::category::entity::Concept;
 
     // --- PipelineTrace Monoid laws ---
 

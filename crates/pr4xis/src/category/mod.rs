@@ -37,7 +37,7 @@ pub use applicative::Ap;
 pub use category::Category;
 pub use comonad::{Cofree, Focused};
 pub use endofunctor::Endofunctor;
-pub use entity::Entity;
+pub use entity::Concept;
 pub use free::Chain;
 pub use functor::Functor;
 pub use galois::GaloisConnection;
@@ -51,7 +51,7 @@ pub use morphism::{Morphism, compose_all, direct_morphisms};
 pub use op::{Op, OpMorphism};
 pub use optics::{Iso, Lens, Prism};
 #[doc(hidden)]
-pub use pr4xis_derive::Entity;
+pub use pr4xis_derive::Concept;
 pub use reader::Reader;
 pub use relationship::Relationship;
 pub use semigroup::{NonEmpty, Semigroup};

@@ -1,4 +1,4 @@
-use crate::category::Entity;
+use crate::category::Concept;
 use std::fmt::Debug;
 
 /// A quality that individuals can have — attributes, capabilities, metadata.
@@ -11,7 +11,7 @@ use std::fmt::Debug;
 /// inheres in another entity.
 pub trait Quality: Debug + Clone {
     /// The individual type this quality applies to.
-    type Individual: Entity;
+    type Individual: Concept;
 
     /// The value type of this quality.
     type Value: Debug + Clone + PartialEq;

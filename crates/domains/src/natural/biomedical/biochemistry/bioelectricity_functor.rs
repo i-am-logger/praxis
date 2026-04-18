@@ -82,7 +82,7 @@ pr4xis::register_functor!(BiochemistryToBioelectric);
 mod tests {
     use super::*;
     use pr4xis::category::validate::check_functor_laws;
-    use pr4xis::category::{Category, Entity};
+    use pr4xis::category::{Category, Concept};
     use pr4xis::ontology::reasoning::analogy::Analogy;
 
     #[test]

@@ -1,6 +1,6 @@
 use std::fmt::Debug;
 
-use super::entity::Entity;
+use super::entity::Concept;
 
 /// A relationship between entities — a morphism in a category.
 ///
@@ -16,7 +16,7 @@ use super::entity::Entity;
 /// (`formal::relations`) so structural axioms and the Lemon registry
 /// can reason about relation kinds uniformly.
 pub trait Relationship: Sized + Clone + Debug + Eq {
-    type Object: Entity;
+    type Object: Concept;
     type Kind: Copy + Debug + Eq;
 
     /// The entity this relationship originates from.

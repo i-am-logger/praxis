@@ -1,4 +1,4 @@
-use pr4xis::category::entity::Entity;
+use pr4xis::category::entity::Concept;
 use pr4xis::category::relationship::Relationship;
 use pr4xis::category::{Category, Functor};
 
@@ -33,7 +33,7 @@ pub enum ChessEvent {
     NotationRules,
 }
 
-impl Entity for ChessEvent {
+impl Concept for ChessEvent {
     fn variants() -> Vec<Self> {
         vec![
             Self::Move,

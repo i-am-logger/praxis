@@ -1,4 +1,4 @@
-use pr4xis::category::entity::Entity;
+use pr4xis::category::entity::Concept;
 use pr4xis::category::relationship::Relationship;
 use pr4xis::category::{Category, Functor};
 
@@ -48,7 +48,7 @@ pub enum EngineElement {
     EngineCycle,
 }
 
-impl Entity for EngineElement {
+impl Concept for EngineElement {
     fn variants() -> Vec<Self> {
         vec![
             Self::Situation,

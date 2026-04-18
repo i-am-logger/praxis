@@ -1,4 +1,4 @@
-use crate::category::entity::Entity;
+use crate::category::entity::Concept;
 use crate::category::relationship::Relationship;
 use crate::category::{Category, Functor};
 
@@ -8,7 +8,7 @@ use super::category::{DolceCategory, OntologicalRelation, RelationKind};
 /// The workspace's own meta-category: our current type system modeled as a category.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum OwnType {
-    Entity,
+    Concept,
     Situation,
     Action,
     Quality,
@@ -17,10 +17,10 @@ pub enum OwnType {
     Proposition,
 }
 
-impl Entity for OwnType {
+impl Concept for OwnType {
     fn variants() -> Vec<Self> {
         vec![
-            Self::Entity,
+            Self::Concept,
             Self::Situation,
             Self::Action,
             Self::Quality,
@@ -95,7 +95,7 @@ impl Category for OwnMetaCategory {
         });
         m.push(OwnRelation {
             from: OwnType::Quality,
-            to: OwnType::Entity,
+            to: OwnType::Concept,
             name: "inheres_in",
         });
         m.push(OwnRelation {
@@ -105,13 +105,13 @@ impl Category for OwnMetaCategory {
         });
         m.push(OwnRelation {
             from: OwnType::Proposition,
-            to: OwnType::Entity,
+            to: OwnType::Concept,
             name: "evaluates",
         });
         // Composed morphisms for closure
         m.push(OwnRelation {
             from: OwnType::Action,
-            to: OwnType::Entity,
+            to: OwnType::Concept,
             name: "composed",
         });
         m
@@ -130,7 +130,7 @@ impl Functor for OwnToDolce {
 
     fn map_object(obj: &OwnType) -> Being {
         match obj {
-            OwnType::Entity => Being::AbstractObject,
+            OwnType::Concept => Being::AbstractObject,
             OwnType::Situation => Being::SocialObject,
             OwnType::Action => Being::Event,
             OwnType::Quality => Being::Quality,

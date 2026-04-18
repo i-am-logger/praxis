@@ -26,7 +26,7 @@ pub struct ConceptNode {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum ConceptKind {
     /// A type/entity (e.g., ColorSlot, Mode, SchemeType)
-    Entity,
+    Concept,
     /// A relationship/morphism (e.g., bright-variant-of, mode transition)
     Relationship,
     /// An axiom/rule (e.g., LuminanceMonotonicity, WcagForegroundContrast)
@@ -196,13 +196,13 @@ pub fn theming_ontology_graph() -> OntologyGraph {
     let mut g = OntologyGraph::new();
 
     // Entities
-    g.add_node("color_slot", "ColorSlot", ConceptKind::Entity);
-    g.add_node("scheme_type", "SchemeType", ConceptKind::Entity);
-    g.add_node("polarity", "Polarity", ConceptKind::Entity);
-    g.add_node("palette", "Palette", ConceptKind::Entity);
-    g.add_node("semantic_role", "SemanticRole", ConceptKind::Entity);
-    g.add_node("vogix16", "Vogix16Semantic", ConceptKind::Entity);
-    g.add_node("ansi16", "Ansi16Color", ConceptKind::Entity);
+    g.add_node("color_slot", "ColorSlot", ConceptKind::Concept);
+    g.add_node("scheme_type", "SchemeType", ConceptKind::Concept);
+    g.add_node("polarity", "Polarity", ConceptKind::Concept);
+    g.add_node("palette", "Palette", ConceptKind::Concept);
+    g.add_node("semantic_role", "SemanticRole", ConceptKind::Concept);
+    g.add_node("vogix16", "Vogix16Semantic", ConceptKind::Concept);
+    g.add_node("ansi16", "Ansi16Color", ConceptKind::Concept);
 
     // Values
     for i in 0..=7 {
@@ -542,7 +542,7 @@ svg {{ width:100%; height:100%; }}
 </div>
 
 <div class="legend">
-  <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div>Entity</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div>Concept</div>
   <div class="legend-item"><div class="legend-dot" style="background:var(--warn)"></div>Axiom</div>
   <div class="legend-item"><div class="legend-dot" style="background:var(--pass)"></div>Quality</div>
   <div class="legend-item"><div class="legend-dot" style="background:var(--fg2)"></div>Value</div>
@@ -772,7 +772,7 @@ function playTrace() {{
 
 fn kind_str(k: ConceptKind) -> &'static str {
     match k {
-        ConceptKind::Entity => "entity",
+        ConceptKind::Concept => "entity",
         ConceptKind::Relationship => "relationship",
         ConceptKind::AxiomNode => "axiom",
         ConceptKind::Quality => "quality",
@@ -878,7 +878,7 @@ mod tests {
         let entity_count = g
             .nodes
             .iter()
-            .filter(|n| n.kind == ConceptKind::Entity)
+            .filter(|n| n.kind == ConceptKind::Concept)
             .count();
         let axiom_count = g
             .nodes

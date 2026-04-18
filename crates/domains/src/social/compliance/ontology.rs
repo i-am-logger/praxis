@@ -1,4 +1,4 @@
-use pr4xis::category::{Category, Entity, Relationship};
+use pr4xis::category::{Category, Concept, Relationship};
 use pr4xis::ontology::{Axiom, Ontology, Quality};
 
 use crate::social::compliance::escalation::EscalationLevel;

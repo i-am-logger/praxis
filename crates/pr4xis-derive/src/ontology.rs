@@ -660,7 +660,7 @@ pub fn generate(def: OntologyDef) -> TokenStream {
                 }
 
                 fn morphisms() -> Vec<#relation_name> {
-                    use #pr4xis::category::Entity;
+                    use #pr4xis::category::Concept;
                     let mut m = Vec::new();
                     for c in #entity_name::variants() {
                         m.push(#relation_name { from: c, to: c, kind: #kind_name::Identity });
@@ -681,7 +681,7 @@ pub fn generate(def: OntologyDef) -> TokenStream {
         quote! {
             pub struct #tax_name;
             impl #pr4xis::ontology::reasoning::taxonomy::TaxonomyDef for #tax_name {
-                type Entity = #entity_name;
+                type Concept = #entity_name;
                 fn relations() -> Vec<(#entity_name, #entity_name)> {
                     vec![#(#tax_pairs),*]
                 }
@@ -695,7 +695,7 @@ pub fn generate(def: OntologyDef) -> TokenStream {
         quote! {
             pub struct #mer_name;
             impl #pr4xis::ontology::reasoning::mereology::MereologyDef for #mer_name {
-                type Entity = #entity_name;
+                type Concept = #entity_name;
                 fn relations() -> Vec<(#entity_name, #entity_name)> {
                     vec![#(#mer_pairs),*]
                 }
@@ -709,7 +709,7 @@ pub fn generate(def: OntologyDef) -> TokenStream {
         quote! {
             pub struct #caus_name;
             impl #pr4xis::ontology::reasoning::causation::CausalDef for #caus_name {
-                type Entity = #entity_name;
+                type Concept = #entity_name;
                 fn relations() -> Vec<(#entity_name, #entity_name)> {
                     vec![#(#caus_pairs),*]
                 }
@@ -723,7 +723,7 @@ pub fn generate(def: OntologyDef) -> TokenStream {
         quote! {
             pub struct #opp_name;
             impl #pr4xis::ontology::reasoning::opposition::OppositionDef for #opp_name {
-                type Entity = #entity_name;
+                type Concept = #entity_name;
                 fn pairs() -> Vec<(#entity_name, #entity_name)> {
                     vec![#(#opp_pairs),*]
                 }
@@ -849,7 +849,7 @@ pub fn generate(def: OntologyDef) -> TokenStream {
         .collect();
 
     quote! {
-        #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, #pr4xis::category::Entity)]
+        #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, #pr4xis::category::Concept)]
         pub enum #entity_name {
             #(#concept_idents,)*
         }

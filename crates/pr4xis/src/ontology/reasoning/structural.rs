@@ -352,7 +352,7 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::category::Entity;
+    use crate::category::Concept;
 
     // A tiny test category with kinded morphisms.
     #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -362,7 +362,7 @@ mod tests {
         C,
     }
 
-    impl Entity for TestObj {
+    impl Concept for TestObj {
         fn variants() -> Vec<Self> {
             vec![TestObj::A, TestObj::B, TestObj::C]
         }

@@ -5,7 +5,7 @@
 use super::base16::{ColorSlot, Polarity, SemanticRole};
 use crate::natural::colors::rgb::Rgb;
 use crate::natural::colors::srgb;
-use pr4xis::category::{Category, Entity, Relationship};
+use pr4xis::category::{Category, Concept, Relationship};
 use pr4xis::ontology::upper::being::Being;
 use pr4xis::ontology::upper::classify::Classified;
 use pr4xis::ontology::{Axiom, Quality};

@@ -1,5 +1,5 @@
 use crate::category::Category;
-use crate::category::entity::Entity;
+use crate::category::entity::Concept;
 use crate::category::relationship::Relationship;
 
 use super::being::Being;

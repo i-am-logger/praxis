@@ -1,5 +1,5 @@
 use super::category::Category;
-use super::entity::Entity;
+use super::entity::Concept;
 
 // Yoneda lemma — the deepest result in category theory.
 //
@@ -134,7 +134,7 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::category::entity::Entity as EntityTrait;
+    use crate::category::entity::Concept as EntityTrait;
     use crate::category::relationship::Relationship;
 
     #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]

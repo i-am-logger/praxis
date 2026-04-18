@@ -62,14 +62,14 @@ where
 mod tests {
     use super::*;
     use crate::category::validate::check_functor_laws;
-    use crate::category::{Entity, Relationship};
+    use crate::category::{Concept, Relationship};
 
     #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
     enum Light {
         Red,
         Green,
     }
-    impl Entity for Light {
+    impl Concept for Light {
         fn variants() -> Vec<Self> {
             vec![Light::Red, Light::Green]
         }
