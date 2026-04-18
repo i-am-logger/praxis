@@ -17,12 +17,12 @@ pub use meta::{
     Citation, ConceptName, Definition, Grade, Label, LanguageCode, Lexical, ModulePath, Morphism,
     MorphismKind, OntologyName, RelationshipMeta, SynkolationLevel, Vocabulary, Year,
 };
-pub use property::Quality;
+pub use property::{Quality, QualityKind};
 #[cfg(not(target_arch = "wasm32"))]
 pub use registry::{ADJUNCTIONS, AXIOMS, FUNCTORS, NATURAL_TRANSFORMATIONS, VOCABULARIES};
 pub use registry::{
-    describe_adjunctions, describe_axioms, describe_functors, describe_knowledge_base,
-    describe_natural_transformations,
+    describe_adjunctions, describe_all_arrows, describe_axioms, describe_functors,
+    describe_knowledge_base, describe_natural_transformations,
 };
 
 #[cfg(test)]

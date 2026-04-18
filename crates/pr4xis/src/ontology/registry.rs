@@ -107,6 +107,22 @@ pub fn describe_natural_transformations() -> Vec<RelationshipMeta> {
     Vec::new()
 }
 
+/// Every arrow in the workspace, flattened across the three cell-dimensions
+/// of the 2-category Cat (Mac Lane XII.3): 1-cell functors, 2-cell natural
+/// transformations, and structured-2-cell-pair adjunctions.
+///
+/// Consumers that don't need to discriminate by dimension get a single
+/// list; consumers that do keep using `describe_functors()` /
+/// `describe_adjunctions()` / `describe_natural_transformations()`
+/// directly. All entries share the unified [`RelationshipMeta`] shape
+/// (`Arrow::meta` — issue #155).
+pub fn describe_all_arrows() -> Vec<RelationshipMeta> {
+    let mut arrows = describe_functors();
+    arrows.extend(describe_adjunctions());
+    arrows.extend(describe_natural_transformations());
+    arrows
+}
+
 #[cfg(all(test, not(target_arch = "wasm32")))]
 mod tests {
     use super::*;
